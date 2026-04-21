@@ -1,0 +1,53 @@
+{
+  "name": "discuss",
+  "version": "1.0.0",
+  "description": "A self-hosted, lightweight SQLite comment system for static sites.",
+  "main": "src/server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.11.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node src/server.js",
+    "dev": "NODE_ENV=development node --watch src/server.js",
+    "setup": "node src/setup.js",
+    "build:css": "tailwindcss -c tailwind.admin.config.js -i ./src/design-system/globals.css -o ./public/admin/admin.css --minify",
+    "build:client:css": "node scripts/build-client-css.cjs",
+    "build:client:inject": "node scripts/build-client.js",
+    "build:client": "npm run build:client:css && npm run build:client:inject",
+    "build": "npm run build:css && npm run build:client",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarthikeyanKC/discuss.git"
+  },
+  "keywords": [
+    "comments",
+    "self-hosted",
+    "sqlite",
+    "jamstack",
+    "comment-engine"
+  ],
+  "author": "Karthikeyan KC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KarthikeyanKC/discuss/issues"
+  },
+  "homepage": "https://github.com/KarthikeyanKC/discuss#readme",
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "better-sqlite3": "^12.9.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "markdown-it": "^14.1.1",
+    "sanitize-html": "^2.17.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "postcss-prefix-selector": "^2.1.1",
+    "tailwindcss": "^3.4.19"
+  }
+}

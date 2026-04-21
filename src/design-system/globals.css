@@ -1,0 +1,944 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════
+   BASE
+═══════════════════════════════════ */
+@layer base {
+  :root {
+    /* Brand scale mirrors tailwind.config.js so CSS variable consumers stay in sync
+       when the primary palette is replaced at build time. */
+    --b50: theme('colors.primary.50');
+    --b100: theme('colors.primary.100');
+    --b200: theme('colors.primary.200');
+    --b300: theme('colors.primary.300');
+    --b400: theme('colors.primary.400');
+    --b500: theme('colors.primary.500');
+    --b600: theme('colors.primary.600');
+    --b700: theme('colors.primary.700');
+    --b800: theme('colors.primary.800');
+    --b900: theme('colors.primary.900');
+
+    /* Semantic light-theme defaults. Apps can override these directly or swap them
+       at runtime when they implement deriveThemeTokens()-style dark mode logic. */
+    --t1: theme('colors.neutral.900');
+    --t2: theme('colors.neutral.700');
+    --t3: theme('colors.neutral.600');
+    --t4: theme('colors.neutral.500');
+    --t5: theme('colors.neutral.400');
+
+    --s1: #ffffff;
+    --s2: theme('colors.neutral.50');
+    --s3: theme('colors.neutral.100');
+
+    --bd: theme('colors.neutral.300');
+    --bds: theme('colors.neutral.200');
+    --bd-control: theme('colors.neutral.300');
+    --bd-button: theme('colors.neutral.200');
+    --bd-strong: theme('colors.neutral.400');
+    --shell-divider: theme('colors.neutral.200');
+
+    --accent-fg: theme('colors.primary.700');
+    --accent-surface: theme('colors.primary.50');
+    --focus-ring: theme('colors.primary.700');
+
+    --success-fill: theme('colors.success.600');
+    --success-fill-hover: theme('colors.success.700');
+    --danger-fg: theme('colors.danger.600');
+    --danger-border: theme('colors.danger.600');
+
+    --on-primary: #ffffff;
+    --on-success: #ffffff;
+    --on-danger: #ffffff;
+
+    --surface-shadow: theme('boxShadow.sm');
+    --surface-shadow-md: theme('boxShadow.md');
+    --surface-shadow-lg: theme('boxShadow.lg');
+
+    --tooltip-bg: theme('colors.neutral.900');
+    --tooltip-fg: #ffffff;
+    --toast-bg: theme('colors.neutral.900');
+    --toast-fg: #ffffff;
+    --modal-backdrop: rgba(0, 0, 0, 0.45);
+  }
+
+  /* Fallback dark token set for the default blue theme. Apps with runtime token
+     derivation can still override these variables after toggling .dark. */
+  .dark {
+    --t1: theme('colors.neutral.50');
+    --t2: theme('colors.neutral.200');
+    --t3: theme('colors.neutral.300');
+    --t4: theme('colors.neutral.400');
+    --t5: theme('colors.neutral.500');
+
+    --s1: theme('colors.neutral.900');
+    --s2: theme('colors.neutral.950');
+    --s3: theme('colors.neutral.800');
+
+    --bd: theme('colors.neutral.600');
+    --bds: theme('colors.neutral.700');
+    --bd-control: theme('colors.neutral.600');
+    --bd-button: theme('colors.neutral.700');
+    --bd-strong: theme('colors.neutral.400');
+    --shell-divider: theme('colors.neutral.700');
+
+    --accent-fg: theme('colors.primary.300');
+    --accent-surface: color-mix(in srgb, theme('colors.primary.800') 32%, theme('colors.neutral.900'));
+    --focus-ring: theme('colors.primary.300');
+
+    --success-fill: theme('colors.success.600');
+    --success-fill-hover: theme('colors.success.700');
+    --danger-fg: theme('colors.danger.500');
+    --danger-border: theme('colors.danger.500');
+
+    --surface-shadow: 0 0 0 1px var(--bds), 0 1px 3px rgba(0, 0, 0, 0.45);
+    --surface-shadow-md: 0 0 0 1px var(--bds), 0 4px 8px rgba(0, 0, 0, 0.42);
+    --surface-shadow-lg: 0 0 0 1px var(--bds), 0 12px 24px rgba(0, 0, 0, 0.55);
+
+    --tooltip-bg: var(--t1);
+    --tooltip-fg: var(--s2);
+    --toast-bg: var(--t1);
+    --toast-fg: var(--s2);
+    --modal-backdrop: rgba(0, 0, 0, 0.72);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    /* #f8fafc — neutral-50 cool-tinted canvas. Coheres with the cool blue-gray
+       neutral palette used for text, borders, and surfaces. */
+    @apply font-sans text-base antialiased;
+    color: var(--t1);
+    background-color: var(--s2);
+  }
+
+  /* Headings: font sizes now on the 8px grid (32/40/48px for 3xl/4xl/5xl).
+     Line-heights come from tailwind.config fontSize — no leading-* override needed. */
+  h1 { @apply text-4xl font-semibold; color: var(--t1); }  /* 40px / lh 44px */
+  h2 { @apply text-3xl font-semibold; color: var(--t1); }  /* 32px / lh 40px */
+  h3 { @apply text-2xl font-semibold; color: var(--t1); }  /* 24px / lh 32px */
+  h4 { @apply text-xl  font-semibold; color: var(--t1); }  /* 20px / lh 28px */
+  h5 { @apply text-lg  font-medium; color: var(--t1); }    /* 18px / lh 26px */
+  h6 { @apply text-base font-medium; color: var(--t1); }   /* 16px / lh 26px */
+
+  /* WCAG 1.4.8 (AAA): max line length ≤ 80ch. Best practice: 45–75ch.
+     Use max-w-prose (65ch) on containers holding long-form text. */
+  p  { @apply leading-relaxed; }
+
+  a {
+    color: var(--accent-fg);
+    text-decoration: none;
+  }
+  a:hover { text-decoration: underline; }
+
+  strong { @apply font-semibold; }
+
+  code {
+    @apply font-mono text-xs px-1.5 py-0.5 rounded;
+    background-color: var(--s3);
+    color: var(--t2);
+  }
+
+  pre {
+    @apply font-mono text-xs rounded-lg p-4 overflow-x-auto;
+    background-color: var(--t1);
+    color: var(--s2);
+  }
+  pre code { @apply bg-transparent text-inherit p-0 rounded-none; }
+
+  hr {
+    @apply border-0 border-t my-6;
+    border-color: var(--bds);
+  }
+}
+
+/* ═══════════════════════════════════
+   COMPONENTS
+═══════════════════════════════════ */
+@layer components {
+
+  /* ── Button ─────────────────────── */
+  /*
+   * Scale from web standards (8px grid, iOS-safe 16px floor):
+   *   sm  → 14px font, 32px height  (py-2    + leading-4)
+   *   md  → 16px font, 40px height  (py-3    + leading-4)  ← default
+   *   lg  → 18px font, 48px height  (py-4    + leading-4)
+   * Inputs share the same md scale so they sit flush side-by-side.
+   */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2
+           px-5 py-3 text-base font-medium leading-4
+           rounded-md border transition-[background-color,border-color,box-shadow,transform] duration-[120ms] ease-[cubic-bezier(0.4,0,0.2,1)]
+           cursor-pointer select-none whitespace-nowrap
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn:active:not(:disabled) { transform: scale(0.97); transition-duration: 75ms; }
+  .btn:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+    outline: none;
+  }
+  .btn svg,
+  .btn i[data-lucide] {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+  }
+  i[data-lucide] { display: inline-flex; }
+
+  .btn-primary {
+    background-color: var(--b600);
+    color: var(--on-primary);
+    border-color: var(--b600);
+  }
+  .btn-primary:hover { background-color: var(--b700); border-color: var(--b700); }
+  .btn-primary:active:not(:disabled) { background-color: var(--b800); border-color: var(--b800); }
+
+  .btn-secondary {
+    background-color: var(--s1);
+    color: var(--t2);
+    border-color: var(--bd-button);
+  }
+  .btn-secondary:hover { background-color: var(--s3); border-color: var(--bd-control); }
+  .btn-secondary:active:not(:disabled) { background-color: var(--s2); border-color: var(--bd-control); }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--t3);
+    border-color: var(--bd-button);
+  }
+  .btn-ghost:hover { background-color: var(--s3); color: var(--t1); border-color: var(--bd-control); }
+  .btn-ghost:active:not(:disabled) { background-color: var(--s2); border-color: var(--bd-control); }
+
+  .btn-danger {
+    background-color: var(--danger-border);
+    color: var(--on-danger);
+    border-color: var(--danger-border);
+  }
+  .btn-danger:hover { background-color: theme('colors.danger.700'); border-color: theme('colors.danger.700'); }
+  .btn-danger:active:not(:disabled) { background-color: theme('colors.danger.800'); border-color: theme('colors.danger.800'); }
+
+  .btn-success {
+    background-color: var(--success-fill);
+    color: var(--on-success);
+    border-color: var(--success-fill);
+  }
+  .btn-success:hover { background-color: var(--success-fill-hover); border-color: var(--success-fill-hover); }
+
+
+  .btn-sm { @apply px-3.5 py-2 text-sm leading-4; }
+  .btn-lg { @apply px-8 py-4 text-lg leading-4; }
+
+  .btn-icon {
+    @apply px-2.5 py-2.5;
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--t3);
+  }
+  .btn-icon:hover { background-color: var(--s3); color: var(--t2); }
+
+
+  /* ── Form ───────────────────────── */
+  .label {
+    @apply block text-sm font-medium mb-1;
+    color: var(--t2);
+  }
+  .label-required::after {
+    content: ' *';
+    @apply text-danger-500;
+  }
+
+  /* Overline / section group label.
+     0.75rem + neutral-600 = ~5.5:1 vs white, ~5:1 vs #f5f5f5 — passes WCAG AA.
+     0.7rem (11.2px) would fail the WCAG 12px floor — never go below xs (0.75rem). */
+  .label-overline {
+    @apply block text-xs font-semibold uppercase tracking-widest mb-2;
+    color: var(--t4);
+  }
+
+  /* ── Label mono — monospace class/token reference label ── */
+  .label-mono {
+    @apply font-mono text-xs mt-1;
+    color: var(--t4);
+  }
+
+  /* ── Section title / description ─────────────────────── */
+  .section-title {
+    @apply text-lg font-semibold mb-1;
+    color: var(--t1);
+  }
+  .section-desc  {
+    @apply text-sm mb-6;
+    color: var(--t3);
+  }
+
+  /* 16px font = iOS auto-zoom safe. py-3 + leading-4 = 40px, flush with .btn default. */
+  .input {
+    @apply block w-full px-3 py-3
+           text-base leading-4 border rounded-md
+           transition-[border-color,box-shadow] duration-[120ms] ease-[cubic-bezier(0.4,0,0.2,1)]
+           disabled:cursor-not-allowed;
+    color: var(--t1);
+    background-color: var(--s1);
+    border-color: var(--bd-control);
+  }
+  .input::placeholder { color: var(--t5); }
+  .input:focus,
+  .input:focus-visible {
+    border-color: var(--focus-ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+    outline: none;
+  }
+  .input:disabled {
+    background-color: var(--s2);
+    color: var(--t5);
+  }
+  .input-error { border-color: var(--danger-border); }
+  .input-error:focus,
+  .input-error:focus-visible { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25); }
+  .input-success { border-color: theme('colors.success.600'); }
+  .input-success:focus,
+  .input-success:focus-visible { box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25); }
+
+  .textarea { @apply resize-y min-h-[80px]; }
+
+  .select {
+    @apply appearance-none cursor-pointer pr-8;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+  }
+
+  /* Animated checkbox — checkmark draws in via stroke-dashoffset */
+  /* position:relative is required — .checkbox-input is sr-only (position:absolute) and anchors
+     to the nearest positioned ancestor. Without it the browser scrolls the document to reveal
+     the hidden input on focus, shifting the layout unexpectedly. */
+  .checkbox-label { @apply relative inline-flex items-center gap-2 cursor-pointer select-none; }
+  .checkbox-input { @apply sr-only; }
+  .checkbox-box {
+    @apply w-4 h-4 rounded flex items-center justify-center flex-shrink-0
+           transition-[background-color,border-color] duration-[120ms] ease-[cubic-bezier(0.4,0,0.2,1)];
+    border: 2px solid var(--bd-control);
+    background-color: var(--s1);
+    color: var(--on-primary);
+  }
+  .checkbox-input:checked + .checkbox-box {
+    background-color: var(--b600);
+    border-color: var(--b600);
+    animation: checkbox-pop 250ms cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  .checkbox-input:focus-visible + .checkbox-box {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .checkbox-input:disabled + .checkbox-box     { @apply opacity-50 cursor-not-allowed; }
+  .checkbox-icon { width: 0.625rem; height: 0.625rem; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .checkbox-icon path { stroke-dasharray: 14; stroke-dashoffset: 14; transition: stroke-dashoffset 150ms ease-out; }
+  .checkbox-input:checked + .checkbox-box .checkbox-icon path { stroke-dashoffset: 0; transition: stroke-dashoffset 150ms ease-out 80ms; }
+
+  /* Animated radio — inner dot scales in with spring */
+  /* Same position:relative requirement as .checkbox-label — see note above. */
+  .radio-label { @apply relative inline-flex items-center gap-2 cursor-pointer select-none; }
+  .radio-input  { @apply sr-only; }
+  .radio-box {
+    @apply w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0
+           transition-[border-color] duration-[120ms] ease-[cubic-bezier(0.4,0,0.2,1)];
+    border: 2px solid var(--bd-control);
+    background-color: var(--s1);
+  }
+  .radio-input:checked   + .radio-box { border-color: var(--b600); }
+  .radio-input:focus-visible + .radio-box {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .radio-input:disabled  + .radio-box { @apply opacity-50 cursor-not-allowed; }
+  .radio-dot {
+    @apply w-1.5 h-1.5 rounded-full;
+    background-color: var(--b600);
+    transform: scale(0);
+    transition: transform 100ms ease-in;
+  }
+  .radio-input:checked + .radio-box .radio-dot { transform: scale(1); transition: transform 200ms cubic-bezier(0.16,1,0.3,1); }
+
+  .field-group      { @apply flex flex-col gap-1 mb-4; }
+  .field-help-text  { @apply text-xs; color: var(--t4); }
+  .field-error-text { @apply text-xs; color: var(--danger-fg); }
+
+
+  /* ── Card ───────────────────────── */
+  /* shadow-sm = three-layer resting shadow. No border. See CLAUDE.md. */
+  .card {
+    @apply rounded-lg overflow-hidden;
+    background-color: var(--s1);
+    box-shadow: var(--surface-shadow);
+  }
+  .card-header {
+    @apply px-5 py-4 border-b font-medium;
+    border-color: var(--bds);
+    color: var(--t1);
+  }
+  .card-body   { @apply px-5 py-4; }
+  .card-footer {
+    @apply px-5 py-3 border-t;
+    border-color: var(--bds);
+    background-color: var(--s3);
+  }
+
+
+  /* ── Badge ──────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full;
+  }
+  /* badge-info uses fixed blue — semantic signal must hold regardless of brand hue */
+  .badge-info    { background: #dbeafe; color: #1e40af; }
+  .badge-neutral { background: var(--s3); color: var(--t2); }
+  .badge-success { @apply bg-success-100 text-success-700; }
+  .badge-warning { @apply bg-warning-100 text-warning-700; }
+  .badge-danger  { @apply bg-danger-100  text-danger-700;  }
+
+
+  /* ── Alert ──────────────────────── */
+  .alert         { @apply flex gap-3 px-4 py-3 rounded-lg border text-sm; }
+  /* alert-info uses fixed blue — same reason as badge-info */
+  .alert-info    { background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a; }
+  .alert-success { @apply bg-success-50 border-success-200 text-success-700; }
+  .alert-warning { @apply bg-warning-50 border-warning-200 text-warning-700; }
+  .alert-danger  { @apply bg-danger-50  border-danger-200  text-danger-700;  }
+
+
+  /* ── Table ──────────────────────── */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table { @apply w-full text-sm text-left border-collapse; }
+
+  .table thead {
+    @apply border-b;
+    background-color: var(--s3);
+    border-color: var(--bds);
+  }
+  .table th {
+    @apply px-4 py-3 text-xs font-semibold uppercase tracking-wide;
+    color: var(--t4);
+  }
+  .table tbody tr {
+    @apply border-b transition-colors duration-100;
+    border-color: var(--bds);
+  }
+  .table tbody tr:hover { background-color: var(--s2); }
+  .table tbody tr:last-child { @apply border-b-0; }
+  .table td {
+    @apply px-4 py-3;
+    color: var(--t2);
+  }
+
+
+  /* ── Avatar ─────────────────────── */
+  .avatar {
+    @apply inline-flex items-center justify-center rounded-full font-medium overflow-hidden flex-shrink-0;
+    background-color: var(--s3);
+    color: var(--t3);
+  }
+  .avatar-xs { @apply w-6  h-6  text-xs; }
+  .avatar-sm { @apply w-8  h-8  text-xs; }
+  .avatar-md { @apply w-10 h-10 text-sm; }
+  .avatar-lg { @apply w-12 h-12 text-base; }
+  .avatar-xl { @apply w-16 h-16 text-xl; }
+
+
+  /* ── Spinner ────────────────────── */
+  .spinner {
+    @apply inline-block rounded-full border-2 border-current border-t-transparent animate-spin opacity-75;
+  }
+  .spinner-sm { @apply w-3 h-3; }
+  .spinner-md { @apply w-4 h-4; }
+  .spinner-lg { @apply w-6 h-6 border-[3px]; }
+
+
+  /* ── Skeleton ───────────────────── */
+  .skeleton {
+    @apply rounded animate-pulse;
+    background-color: var(--s3);
+  }
+  .skeleton-sm { @apply h-3; }
+  .skeleton-md { @apply h-4; }
+  .skeleton-lg { @apply h-6; }
+
+
+  /* ── Divider ────────────────────── */
+  .divider {
+    @apply flex items-center gap-3 text-xs my-4;
+    color: var(--t4);
+  }
+  .divider::before,
+  .divider::after {
+    content: '';
+    @apply flex-1 h-px;
+    background-color: var(--bds);
+  }
+
+
+  /* ── Tooltip (CSS-only) ─────────── */
+  .tooltip { @apply relative inline-block; }
+  .tooltip-content {
+    @apply absolute z-10 bottom-full mb-2
+           px-2.5 py-1.5 text-xs rounded-md whitespace-nowrap opacity-0 invisible;
+    left: 50%;
+    /* start slightly toward trigger, rise away on enter */
+    color: var(--tooltip-fg);
+    background-color: var(--tooltip-bg);
+    transform: translateX(-50%) translateY(4px);
+    transition: opacity 150ms ease-in, transform 150ms ease-in, visibility 0ms 150ms;
+  }
+  .tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--tooltip-bg);
+  }
+  .tooltip:hover .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1), visibility 0ms;
+  }
+
+
+  /* ── Tabs with sliding indicator ─── */
+  .tabs {
+    @apply flex border-b relative;
+    border-color: var(--bds);
+    gap: 0;
+  }
+  .tab  {
+    @apply px-4 py-2.5 text-sm cursor-pointer no-underline whitespace-nowrap transition-colors duration-100;
+    color: var(--t4);
+  }
+  .tab:hover  { color: var(--t1); }
+  .tab:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+    border-radius: 4px;
+    outline: none;
+  }
+  .tab.active {
+    color: var(--accent-fg);
+    font-weight: 500;
+  }
+  /* Single element slides between tabs — set left/width via JS */
+  .tab-indicator {
+    @apply absolute;
+    background-color: var(--accent-fg);
+    bottom: -1px; height: 2px;
+    border-radius: 2px 2px 0 0;
+    pointer-events: none;
+    transition: left 200ms cubic-bezier(0.4,0,0.2,1), width 200ms cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── Dropdown ─────────────────────── */
+  .dropdown      { @apply relative inline-block; }
+  .dropdown-menu {
+    @apply absolute z-50 min-w-[180px] rounded-lg p-1;
+    top: calc(100% + 4px); left: 0;
+    background-color: var(--s1);
+    box-shadow: var(--surface-shadow-md);
+    opacity: 0; visibility: hidden;
+    transform: translateY(-4px);
+    /* ease-in on exit — gets out of the way quickly */
+    transition: opacity 150ms ease-in, transform 150ms ease-in, visibility 0ms 150ms;
+  }
+  .dropdown-menu.open {
+    opacity: 1; visibility: visible;
+    transform: translateY(0);
+    /* ease-out-expo on enter — lands softly */
+    transition: opacity 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1), visibility 0ms;
+  }
+  .dropdown-item  {
+    @apply flex items-center gap-2 px-3 py-2 text-sm rounded-md cursor-pointer no-underline transition-colors duration-75;
+    color: var(--t2);
+  }
+  .dropdown-item:hover { background-color: var(--s3); }
+  .dropdown-item:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+    outline: none;
+  }
+  .dropdown-item.danger { color: var(--danger-fg); }
+  .dropdown-item.danger:hover { @apply bg-danger-50; }
+  .dropdown-divider {
+    @apply h-px my-1;
+    background-color: var(--bds);
+  }
+  .dropdown-header  {
+    @apply px-3 py-1 text-xs font-semibold uppercase tracking-wide;
+    color: var(--t4);
+  }
+
+  /* ── Page layout helpers ─────────── */
+  .page-container { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+  .section        { @apply py-8 sm:py-12; }
+
+  /* ── Composite components ───────── */
+  .navbar {
+    @apply flex items-center gap-2 rounded-lg;
+    padding: 0.625rem 1.25rem;
+    background-color: var(--s1);
+    box-shadow: var(--surface-shadow);
+  }
+  .navbar-brand {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--t1);
+    margin-right: 0.75rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .navbar-menu {
+    @apply flex items-center flex-1;
+    gap: 0.125rem;
+  }
+  .navbar-item {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1rem;
+    color: var(--t4);
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 120ms, background-color 100ms, box-shadow 120ms;
+  }
+  .navbar-item:hover {
+    background-color: var(--accent-surface);
+    color: var(--t1);
+  }
+  .navbar-item:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+    outline: none;
+  }
+  .navbar-item.active {
+    background-color: var(--accent-surface);
+    color: var(--accent-fg);
+    font-weight: 600;
+  }
+  .navbar-end {
+    @apply flex items-center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .stat-card {
+    @apply rounded-lg;
+    padding: 1.25rem;
+    background-color: var(--s1);
+    box-shadow: var(--surface-shadow);
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--t4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.375rem;
+  }
+  .stat-value {
+    font-size: 1.875rem;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--t1);
+    margin-bottom: 0.375rem;
+  }
+  .stat-delta {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .stat-delta.up { color: theme('colors.success.600'); }
+  .stat-delta.down { color: theme('colors.danger.600'); }
+  .stat-delta.flat { color: var(--t4); }
+
+  .page-header {
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--bds);
+  }
+  .breadcrumb {
+    @apply flex items-center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: var(--t4);
+    margin-bottom: 0.5rem;
+  }
+  .breadcrumb a {
+    color: var(--t4);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover { color: var(--accent-fg); }
+  .breadcrumb-sep {
+    @apply inline-flex items-center;
+    color: var(--bds);
+  }
+  .breadcrumb-sep svg { display: block; }
+  .page-title-row {
+    @apply flex items-center justify-between flex-wrap;
+    gap: 1rem;
+  }
+  .page-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--t1);
+  }
+  .page-actions {
+    @apply flex;
+    gap: 0.5rem;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: var(--modal-backdrop);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 200ms, visibility 0ms 200ms;
+    z-index: 200;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 200ms, visibility 0ms;
+  }
+  .modal {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 12px;
+    background-color: var(--s1);
+    box-shadow: var(--surface-shadow-lg);
+    transform: translateY(6px);
+    transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    z-index: 201;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    @apply flex items-center justify-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--bds);
+  }
+  .modal-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--t1);
+  }
+  .modal-body {
+    padding: 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--t2);
+  }
+  .modal-footer {
+    @apply flex justify-end;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--bds);
+    border-radius: 0 0 12px 12px;
+    background-color: var(--s3);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+  }
+  .empty-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .empty-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--t1);
+    margin-bottom: 0.375rem;
+  }
+  .empty-desc {
+    max-width: 320px;
+    margin: 0 auto 1.25rem;
+    font-size: 0.875rem;
+    color: var(--t4);
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--s2);
+  }
+  .app-navbar {
+    @apply flex items-center;
+    height: 52px;
+    flex-shrink: 0;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    background-color: var(--s1);
+    box-shadow: 0 1px 0 var(--shell-divider);
+    z-index: 100;
+  }
+  .app-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+  .app-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    background-color: var(--s1);
+    box-shadow: 1px 0 0 var(--shell-divider);
+    z-index: 1;
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .app-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  .app-content-page {
+    min-height: 100%;
+    background-color: var(--s1);
+  }
+  .app-content-inner {
+    padding: 1.5rem;
+  }
+  .sidebar-group-label {
+    padding: 0.5rem 0.5rem 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--t4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .sidebar-item {
+    @apply flex items-center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1rem;
+    color: var(--t4);
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 100ms, color 100ms, box-shadow 120ms;
+  }
+  .sidebar-item svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+  .sidebar-item:hover,
+  .sidebar-item:focus,
+  .sidebar-item:active,
+  .sidebar-item:visited {
+    text-decoration: none;
+  }
+  .sidebar-item:hover {
+    background-color: var(--accent-surface);
+    color: var(--t1);
+  }
+  .sidebar-item:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+    outline: none;
+  }
+  .sidebar-item.active {
+    background-color: var(--accent-surface);
+    color: var(--accent-fg);
+    font-weight: 600;
+  }
+  .sidebar-item--danger {
+    color: var(--danger-fg);
+  }
+  .sidebar-item--danger:hover {
+    background-color: color-mix(in srgb, var(--danger-fg) 8%, transparent);
+    color: var(--danger-fg);
+  }
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 200ms, visibility 0ms 200ms;
+    z-index: 10;
+  }
+  .sidebar-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 200ms, visibility 0ms;
+  }
+  @media (max-width: 767px) {
+    .app-navbar { padding: 0 0.75rem; }
+    .app-sidebar {
+      position: fixed;
+      top: 52px;
+      right: 0;
+      left: auto;
+      height: calc(100vh - 52px);
+      transform: translateX(100%);
+      z-index: 50;
+      box-shadow: -2px 0 8px rgba(15, 23, 42, 0.08);
+    }
+    .app-sidebar.open { transform: translateX(0); }
+    .sidebar-backdrop {
+      display: block;
+      top: 52px;
+    }
+  }
+  @media (min-width: 768px) {
+    .app-content-inner {
+      padding: 2rem;
+    }
+  }
+}
+
+/* ── Motion keyframes ─────────────────────────────────── */
+@keyframes checkbox-pop {
+  0%   { transform: scale(0.8); }
+  60%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.dark .badge-info    { background: #1e1b4b; color: #93c5fd; }
+.dark .badge-neutral { background: theme('colors.neutral.800'); color: theme('colors.neutral.400'); }
+.dark .badge-success { background: #14532d; color: #4ade80; }
+.dark .badge-warning { background: #451a03; color: #fbbf24; }
+.dark .badge-danger  { background: #450a0a; color: #f87171; }
+
+.dark .alert-info    { background: #1e1b4b; border-color: #312e81; color: #93c5fd; }
+.dark .alert-success { background: #14532d; border-color: #166534; color: #4ade80; }
+.dark .alert-warning { background: #451a03; border-color: #78350f; color: #fbbf24; }
+.dark .alert-danger  { background: #450a0a; border-color: #7f1d1d; color: #f87171; }
+.dark .dropdown-item.danger:hover { background: #450a0a; }
+
+/* ── Accessibility: reduced motion (WCAG 2.3.3 AAA) ─── */
+/* Respect the OS-level prefers-reduced-motion: reduce signal.
+   Kill transitions and slow spinner to near-stop. Skeleton loses pulse
+   (static skeleton is acceptable — content is still indicated). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:       0.01ms !important;
+    animation-iteration-count: 1     !important;
+    transition-duration:       0.01ms !important;
+  }
+}

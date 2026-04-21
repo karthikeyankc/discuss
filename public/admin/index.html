@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discuss Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body class="bg-neutral-50 text-neutral-900">
+    
+    <!-- Login Section -->
+    <div id="login-section" class="min-h-screen flex items-center justify-center p-4">
+        <div class="card w-full max-w-md">
+            <div class="card-header text-center">
+                <h1 class="text-2xl font-bold text-neutral-900">Discuss Admin</h1>
+            </div>
+            <div class="card-body">
+                <form id="login-form" class="space-y-4">
+                    <div class="field-group">
+                        <label class="label">Username</label>
+                        <input type="text" id="login-username" class="input" required>
+                    </div>
+                    <div class="field-group">
+                        <label class="label">Password</label>
+                        <input type="password" id="login-password" class="input" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Shell (Hidden initially) -->
+    <div id="app-shell" class="app hidden">
+        <header class="app-navbar bg-white">
+            <a class="navbar-brand font-bold text-xl flex items-center gap-2" href="#">
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <rect width="32" height="32" rx="8" fill="var(--b600)"/>
+                    <path d="M11 8v16M11 16l11-8M11 16l11 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Discuss
+            </a>
+            <button class="btn btn-icon ml-auto md:hidden" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="sidebarNav">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+        
+        <div class="app-body">
+        <nav class="app-sidebar" id="sidebarNav">
+            <a class="sidebar-item active" href="#" onclick="app.showSection('domains'); return false;" id="nav-domains">
+                <i data-lucide="globe"></i>
+                Domains
+            </a>
+            <a class="sidebar-item" href="#" onclick="app.showSection('comments'); return false;" id="nav-comments">
+                <i data-lucide="message-square"></i>
+                Comments
+            </a>
+            <div style="flex:1"></div>
+            <hr style="border:none; border-top:1px solid var(--shell-divider); margin:0.5rem 0">
+            <a class="sidebar-item sidebar-item--danger" href="#" onclick="app.logout(); return false;">
+                <i data-lucide="log-out"></i>
+                Logout
+            </a>
+        </nav>
+            
+            <main class="app-content bg-neutral-50">
+                
+                <!-- Domains Section -->
+                <div id="domains-section" class="app-content-inner hidden">
+                    <div class="page-header mb-6">
+                        <h1 class="page-title text-2xl font-bold">Domains</h1>
+                        <p class="text-neutral-500 text-sm mt-1">Manage sites that can use this discuss instance.</p>
+                    </div>
+
+                    <div class="card mb-8">
+                        <div class="card-header font-semibold">Add New Domain</div>
+                        <div class="card-body">
+                            <form id="add-domain-form" class="space-y-4 max-w-2xl">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="field-group mb-0">
+                                        <label class="label">Domain <span class="text-neutral-400 font-normal">(e.g. example.com)</span></label>
+                                        <input type="text" id="domain-name" class="input" required>
+                                    </div>
+                                    <div class="field-group mb-0">
+                                        <label class="label">Site Name</label>
+                                        <input type="text" id="domain-site-name" class="input" required>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="field-group mb-0">
+                                        <label class="label">Honeypot Question <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                                        <input type="text" id="domain-hq" class="input" placeholder="e.g. Leave this blank">
+                                    </div>
+                                    <div class="field-group mb-0">
+                                        <label class="label">Honeypot Answer <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                                        <input type="text" id="domain-ha" class="input" placeholder="e.g. ">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-4">Add Domain</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-wrap">
+                            <table class="table w-full text-left" id="domains-table">
+                                <thead>
+                                    <tr class="border-b border-neutral-200 text-sm text-neutral-500">
+                                        <th class="p-3 font-medium">Domain</th>
+                                        <th class="p-3 font-medium">Site Name</th>
+                                        <th class="p-3 font-medium text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <div id="comments-section" class="app-content-inner hidden">
+                    <div class="page-header mb-6">
+                        <h1 class="page-title text-2xl font-bold">Comments Moderation</h1>
+                        <p class="text-neutral-500 text-sm mt-1">Review, approve, and manage comments across all domains.</p>
+                    </div>
+
+                    <div class="space-y-4" id="comments-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/admin/app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

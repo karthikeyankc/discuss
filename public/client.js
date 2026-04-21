@@ -1,0 +1,395 @@
+(function () {
+    const scripts = document.getElementsByTagName('script');
+    const currentScript = scripts[scripts.length - 1];
+    const serverUrl = new URL(currentScript.src).origin;
+
+    const container = document.getElementById('discuss-comments');
+    if (!container) return;
+
+    const postUrl = window.location.pathname;
+    let config = {};
+
+    /* INJECT_CSS_START */
+    const injectedCss = "#discuss-comments *, #discuss-comments ::before, #discuss-comments ::after {\n    --tw-border-spacing-x: 0;\n    --tw-border-spacing-y: 0;\n    --tw-translate-x: 0;\n    --tw-translate-y: 0;\n    --tw-rotate: 0;\n    --tw-skew-x: 0;\n    --tw-skew-y: 0;\n    --tw-scale-x: 1;\n    --tw-scale-y: 1;\n    --tw-pan-x:  ;\n    --tw-pan-y:  ;\n    --tw-pinch-zoom:  ;\n    --tw-scroll-snap-strictness: proximity;\n    --tw-gradient-from-position:  ;\n    --tw-gradient-via-position:  ;\n    --tw-gradient-to-position:  ;\n    --tw-ordinal:  ;\n    --tw-slashed-zero:  ;\n    --tw-numeric-figure:  ;\n    --tw-numeric-spacing:  ;\n    --tw-numeric-fraction:  ;\n    --tw-ring-inset:  ;\n    --tw-ring-offset-width: 0px;\n    --tw-ring-offset-color: #fff;\n    --tw-ring-color: rgb(59 130 246 / 0.5);\n    --tw-ring-offset-shadow: 0 0 #0000;\n    --tw-ring-shadow: 0 0 #0000;\n    --tw-shadow: 0 0 #0000;\n    --tw-shadow-colored: 0 0 #0000;\n    --tw-blur:  ;\n    --tw-brightness:  ;\n    --tw-contrast:  ;\n    --tw-grayscale:  ;\n    --tw-hue-rotate:  ;\n    --tw-invert:  ;\n    --tw-saturate:  ;\n    --tw-sepia:  ;\n    --tw-drop-shadow:  ;\n    --tw-backdrop-blur:  ;\n    --tw-backdrop-brightness:  ;\n    --tw-backdrop-contrast:  ;\n    --tw-backdrop-grayscale:  ;\n    --tw-backdrop-hue-rotate:  ;\n    --tw-backdrop-invert:  ;\n    --tw-backdrop-opacity:  ;\n    --tw-backdrop-saturate:  ;\n    --tw-backdrop-sepia:  ;\n    --tw-contain-size:  ;\n    --tw-contain-layout:  ;\n    --tw-contain-paint:  ;\n    --tw-contain-style:  ;\n}\n#discuss-comments ::backdrop {\n    --tw-border-spacing-x: 0;\n    --tw-border-spacing-y: 0;\n    --tw-translate-x: 0;\n    --tw-translate-y: 0;\n    --tw-rotate: 0;\n    --tw-skew-x: 0;\n    --tw-skew-y: 0;\n    --tw-scale-x: 1;\n    --tw-scale-y: 1;\n    --tw-pan-x:  ;\n    --tw-pan-y:  ;\n    --tw-pinch-zoom:  ;\n    --tw-scroll-snap-strictness: proximity;\n    --tw-gradient-from-position:  ;\n    --tw-gradient-via-position:  ;\n    --tw-gradient-to-position:  ;\n    --tw-ordinal:  ;\n    --tw-slashed-zero:  ;\n    --tw-numeric-figure:  ;\n    --tw-numeric-spacing:  ;\n    --tw-numeric-fraction:  ;\n    --tw-ring-inset:  ;\n    --tw-ring-offset-width: 0px;\n    --tw-ring-offset-color: #fff;\n    --tw-ring-color: rgb(59 130 246 / 0.5);\n    --tw-ring-offset-shadow: 0 0 #0000;\n    --tw-ring-shadow: 0 0 #0000;\n    --tw-shadow: 0 0 #0000;\n    --tw-shadow-colored: 0 0 #0000;\n    --tw-blur:  ;\n    --tw-brightness:  ;\n    --tw-contrast:  ;\n    --tw-grayscale:  ;\n    --tw-hue-rotate:  ;\n    --tw-invert:  ;\n    --tw-saturate:  ;\n    --tw-sepia:  ;\n    --tw-drop-shadow:  ;\n    --tw-backdrop-blur:  ;\n    --tw-backdrop-brightness:  ;\n    --tw-backdrop-contrast:  ;\n    --tw-backdrop-grayscale:  ;\n    --tw-backdrop-hue-rotate:  ;\n    --tw-backdrop-invert:  ;\n    --tw-backdrop-opacity:  ;\n    --tw-backdrop-saturate:  ;\n    --tw-backdrop-sepia:  ;\n    --tw-contain-size:  ;\n    --tw-contain-layout:  ;\n    --tw-contain-paint:  ;\n    --tw-contain-style:  ;\n}\n  #discuss-comments {\n    /* Brand scale mirrors tailwind.config.js so CSS variable consumers stay in sync\n       when the primary palette is replaced at build time. */\n    --b50: #ecf0f5;\n    --b100: #dee7f3;\n    --b200: #c7d9f0;\n    --b300: #abc9ef;\n    --b400: #86b5ef;\n    --b500: #589bed;\n    --b600: #0d4891;\n    --b700: #10417f;\n    --b800: #143b6c;\n    --b900: #193557;\n\n    /* Semantic light-theme defaults. Apps can override these directly or swap them\n       at runtime when they implement deriveThemeTokens()-style dark mode logic. */\n    --t1: #111827;\n    --t2: #334155;\n    --t3: #475569;\n    --t4: #64748b;\n    --t5: #94a3b8;\n\n    --s1: #ffffff;\n    --s2: #f8fafc;\n    --s3: #f1f5f9;\n\n    --bd: #cbd5e1;\n    --bds: #e2e8f0;\n    --bd-control: #cbd5e1;\n    --bd-button: #e2e8f0;\n    --bd-strong: #94a3b8;\n    --shell-divider: #e2e8f0;\n\n    --accent-fg: #10417f;\n    --accent-surface: #ecf0f5;\n    --focus-ring: #10417f;\n\n    --success-fill: #16a34a;\n    --success-fill-hover: #15803d;\n    --danger-fg: #dc2626;\n    --danger-border: #dc2626;\n\n    --on-primary: #ffffff;\n    --on-success: #ffffff;\n    --on-danger: #ffffff;\n\n    --surface-shadow: 0 0 0 1px rgba(15,23,42,0.04),0 1px 2px -0.5px rgba(15,23,42,0.06),0 2px 4px rgba(15,23,42,0.035);\n    --surface-shadow-md: 0 0 0 1px rgba(15,23,42,0.05),0 4px 8px -2px rgba(15,23,42,0.08),0 8px 16px rgba(15,23,42,0.055);\n    --surface-shadow-lg: 0 0 0 1px rgba(15,23,42,0.05),0 8px 16px -4px rgba(15,23,42,0.10),0 16px 32px rgba(15,23,42,0.07);\n\n    --tooltip-bg: #111827;\n    --tooltip-fg: #ffffff;\n    --toast-bg: #111827;\n    --toast-fg: #ffffff;\n    --modal-backdrop: rgba(0, 0, 0, 0.45);\n  }\n\n  /* Fallback dark token set for the default blue theme. Apps with runtime token\n     derivation can still override these variables after toggling .dark. */\n\n  #discuss-comments *, #discuss-comments *::before, #discuss-comments *::after { box-sizing: border-box; }\n\n  #discuss-comments {\n    /* #f8fafc — neutral-50 cool-tinted canvas. Coheres with the cool blue-gray\n       neutral palette used for text, borders, and surfaces. */\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif;\n    font-size: 1rem;\n    line-height: 1.5rem;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    color: var(--t1);\n    background-color: var(--s2);\n  }\n\n  /* Headings: font sizes now on the 8px grid (32/40/48px for 3xl/4xl/5xl).\n     Line-heights come from tailwind.config fontSize — no leading-* override needed. */\n  #discuss-comments h1 {\n    font-size: 2.25rem;\n    line-height: 2.5rem;\n    font-weight: 600; color: var(--t1);\n}  /* 40px / lh 44px */\n  #discuss-comments h2 {\n    font-size: 1.875rem;\n    line-height: 2.25rem;\n    font-weight: 600; color: var(--t1);\n}  /* 32px / lh 40px */\n  #discuss-comments h3 {\n    font-size: 1.5rem;\n    line-height: 2rem;\n    font-weight: 600; color: var(--t1);\n}  /* 24px / lh 32px */\n  #discuss-comments h4 {\n    font-size: 1.25rem;\n    line-height: 1.75rem;\n    font-weight: 600; color: var(--t1);\n}  /* 20px / lh 28px */\n  #discuss-comments h5 {\n    font-size: 1.125rem;\n    line-height: 1.75rem;\n    font-weight: 500; color: var(--t1);\n}    /* 18px / lh 26px */\n  #discuss-comments h6 {\n    font-size: 1rem;\n    line-height: 1.5rem;\n    font-weight: 500; color: var(--t1);\n}   /* 16px / lh 26px */\n\n  /* WCAG 1.4.8 (AAA): max line length ≤ 80ch. Best practice: 45–75ch.\n     Use max-w-prose (65ch) on containers holding long-form text. */\n  #discuss-comments p {\n    line-height: 1.625;\n}\n\n  #discuss-comments a {\n    color: var(--accent-fg);\n    text-decoration: none;\n  }\n  #discuss-comments a:hover { text-decoration: underline; }\n\n  #discuss-comments strong {\n    font-weight: 600;\n}\n\n  #discuss-comments code {\n    border-radius: 6px;\n    padding-left: 0.375rem;\n    padding-right: 0.375rem;\n    padding-top: 0.125rem;\n    padding-bottom: 0.125rem;\n    font-family: \"SFMono-Regular\", Consolas, \"Liberation Mono\", Menlo, monospace;\n    font-size: 0.75rem;\n    line-height: 1rem;\n    background-color: var(--s3);\n    color: var(--t2);\n}\n\n  #discuss-comments pre {\n    overflow-x: auto;\n    border-radius: 8px;\n    padding: 1rem;\n    font-family: \"SFMono-Regular\", Consolas, \"Liberation Mono\", Menlo, monospace;\n    font-size: 0.75rem;\n    line-height: 1rem;\n    background-color: var(--t1);\n    color: var(--s2);\n}\n  #discuss-comments pre code {\n    border-radius: 0;\n    background-color: transparent;\n    padding: 0px;\n    color: inherit;\n}\n\n  #discuss-comments hr {\n    margin-top: 1.5rem;\n    margin-bottom: 1.5rem;\n    border-width: 0px;\n    border-top-width: 1px;\n    border-color: var(--bds);\n}\n#discuss-comments .discuss-\\!container {\n    width: 100% !important;\n}\n#discuss-comments .discuss-container {\n    width: 100%;\n}\n@media (min-width: 640px) {\n    #discuss-comments .discuss-\\!container {\n        max-width: 640px !important;\n    }\n    #discuss-comments .discuss-container {\n        max-width: 640px;\n    }\n}\n@media (min-width: 768px) {\n    #discuss-comments .discuss-\\!container {\n        max-width: 768px !important;\n    }\n    #discuss-comments .discuss-container {\n        max-width: 768px;\n    }\n}\n@media (min-width: 1024px) {\n    #discuss-comments .discuss-\\!container {\n        max-width: 1024px !important;\n    }\n    #discuss-comments .discuss-container {\n        max-width: 1024px;\n    }\n}\n@media (min-width: 1280px) {\n    #discuss-comments .discuss-\\!container {\n        max-width: 1280px !important;\n    }\n    #discuss-comments .discuss-container {\n        max-width: 1280px;\n    }\n}\n@media (min-width: 1536px) {\n    #discuss-comments .discuss-\\!container {\n        max-width: 1536px !important;\n    }\n    #discuss-comments .discuss-container {\n        max-width: 1536px;\n    }\n}\n/* ── Button ─────────────────────── */\n/*\n   * Scale from web standards (8px grid, iOS-safe 16px floor):\n   *   sm  → 14px font, 32px height  (py-2    + leading-4)\n   *   md  → 16px font, 40px height  (py-3    + leading-4)  ← default\n   *   lg  → 18px font, 48px height  (py-4    + leading-4)\n   * Inputs share the same md scale so they sit flush side-by-side.\n   */\n#discuss-comments .discuss-btn {\n    display: inline-flex;\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n            user-select: none;\n    align-items: center;\n    justify-content: center;\n    gap: 0.5rem;\n    white-space: nowrap;\n    border-radius: 6px;\n    border-width: 1px;\n    padding-left: 1.25rem;\n    padding-right: 1.25rem;\n    padding-top: 0.75rem;\n    padding-bottom: 0.75rem;\n    font-size: 1rem;\n    font-weight: 500;\n    line-height: 1rem;\n    transition-property: background-color,border-color,box-shadow,transform;\n    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n    transition-duration: 120ms;\n    transition-timing-function: cubic-bezier(0.4,0,0.2,1);\n}\n#discuss-comments .discuss-btn:disabled {\n    cursor: not-allowed;\n    opacity: 0.5;\n}\n#discuss-comments .discuss-btn:active:not(:disabled) { transform: scale(0.97); transition-duration: 75ms; }\n#discuss-comments .discuss-btn:focus-visible {\n    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);\n    outline: none;\n  }\n#discuss-comments .discuss-btn svg,\n  #discuss-comments .discuss-btn i[data-lucide] {\n    width: 1em;\n    height: 1em;\n    flex-shrink: 0;\n  }\n#discuss-comments i[data-lucide] { display: inline-flex; }\n/* ── Form ───────────────────────── */\n#discuss-comments .discuss-label {\n    margin-bottom: 0.25rem;\n    display: block;\n    font-size: 0.875rem;\n    line-height: 1.25rem;\n    font-weight: 500;\n    color: var(--t2);\n}\n/* Overline / section group label.\n     0.75rem + neutral-600 = ~5.5:1 vs white, ~5:1 vs #f5f5f5 — passes WCAG AA.\n     0.7rem (11.2px) would fail the WCAG 12px floor — never go below xs (0.75rem). */\n/* ── Label mono — monospace class/token reference label ── */\n/* ── Section title / description ─────────────────────── */\n/* 16px font = iOS auto-zoom safe. py-3 + leading-4 = 40px, flush with .btn default. */\n#discuss-comments .discuss-input {\n    display: block;\n    width: 100%;\n    border-radius: 6px;\n    border-width: 1px;\n    padding-left: 0.75rem;\n    padding-right: 0.75rem;\n    padding-top: 0.75rem;\n    padding-bottom: 0.75rem;\n    font-size: 1rem;\n    line-height: 1rem;\n    transition-property: border-color,box-shadow;\n    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n    transition-duration: 120ms;\n    transition-timing-function: cubic-bezier(0.4,0,0.2,1);\n}\n#discuss-comments .discuss-input:disabled {\n    cursor: not-allowed;\n}\n#discuss-comments .discuss-input {\n    color: var(--t1);\n    background-color: var(--s1);\n    border-color: var(--bd-control);\n  }\n#discuss-comments .discuss-input::-moz-placeholder { color: var(--t5); }\n#discuss-comments .discuss-input::placeholder { color: var(--t5); }\n#discuss-comments .discuss-input:focus,\n  #discuss-comments .discuss-input:focus-visible {\n    border-color: var(--focus-ring);\n    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);\n    outline: none;\n  }\n#discuss-comments .discuss-input:disabled {\n    background-color: var(--s2);\n    color: var(--t5);\n  }\n#discuss-comments .discuss-textarea {\n    min-height: 80px;\n    resize: vertical;\n}\n/* Animated checkbox — checkmark draws in via stroke-dashoffset */\n/* position:relative is required — .checkbox-input is sr-only (position:absolute) and anchors\n     to the nearest positioned ancestor. Without it the browser scrolls the document to reveal\n     the hidden input on focus, shifting the layout unexpectedly. */\n/* Animated radio — inner dot scales in with spring */\n/* Same position:relative requirement as .checkbox-label — see note above. */\n/* ── Card ───────────────────────── */\n/* shadow-sm = three-layer resting shadow. No border. See CLAUDE.md. */\n/* ── Badge ──────────────────────── */\n/* badge-info uses fixed blue — semantic signal must hold regardless of brand hue */\n/* ── Alert ──────────────────────── */\n#discuss-comments .discuss-alert {\n    display: flex;\n    gap: 0.75rem;\n    border-radius: 8px;\n    border-width: 1px;\n    padding-left: 1rem;\n    padding-right: 1rem;\n    padding-top: 0.75rem;\n    padding-bottom: 0.75rem;\n    font-size: 0.875rem;\n    line-height: 1.25rem;\n}\n/* alert-info uses fixed blue — same reason as badge-info */\n/* ── Table ──────────────────────── */\n/* ── Avatar ─────────────────────── */\n#discuss-comments .discuss-avatar {\n    display: inline-flex;\n    flex-shrink: 0;\n    align-items: center;\n    justify-content: center;\n    overflow: hidden;\n    border-radius: 9999px;\n    font-weight: 500;\n    background-color: var(--s3);\n    color: var(--t3);\n}\n/* ── Spinner ────────────────────── */\n/* ── Skeleton ───────────────────── */\n/* ── Divider ────────────────────── */\n/* ── Tooltip (CSS-only) ─────────── */\n/* ── Tabs with sliding indicator ─── */\n/* Single element slides between tabs — set left/width via JS */\n/* ── Dropdown ─────────────────────── */\n/* ── Page layout helpers ─────────── */\n/* ── Composite components ───────── */\n#discuss-comments .discuss-block {\n    display: block;\n}\n#discuss-comments .discuss-flex {\n    display: flex;\n}\n#discuss-comments .discuss-w-full {\n    width: 100%;\n}\n#discuss-comments .discuss-flex-shrink {\n    flex-shrink: 1;\n}\n#discuss-comments .discuss-flex-wrap {\n    flex-wrap: wrap;\n}\n#discuss-comments .discuss-border {\n    border-width: 1px;\n}\n#discuss-comments .discuss-transition {\n    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;\n    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n    transition-duration: 150ms;\n}\n\n/* ═══════════════════════════════════\n   BASE\n═══════════════════════════════════ */\n\n/* ═══════════════════════════════════\n   COMPONENTS\n═══════════════════════════════════ */\n\n/* ── Motion keyframes ─────────────────────────────────── */\n@keyframes checkbox-pop {\n  0%   { transform: scale(0.8); }\n  60%  { transform: scale(1.12); }\n  100% { transform: scale(1); }\n}\n\n#discuss-comments .discuss-dark .badge-info    { background: #1e1b4b; color: #93c5fd; }\n#discuss-comments .discuss-dark .badge-neutral { background: #1e293b; color: #94a3b8; }\n#discuss-comments .discuss-dark .badge-success { background: #14532d; color: #4ade80; }\n#discuss-comments .discuss-dark .badge-warning { background: #451a03; color: #fbbf24; }\n#discuss-comments .discuss-dark .badge-danger  { background: #450a0a; color: #f87171; }\n\n#discuss-comments .discuss-dark .alert-info    { background: #1e1b4b; border-color: #312e81; color: #93c5fd; }\n#discuss-comments .discuss-dark .alert-success { background: #14532d; border-color: #166534; color: #4ade80; }\n#discuss-comments .discuss-dark .alert-warning { background: #451a03; border-color: #78350f; color: #fbbf24; }\n#discuss-comments .discuss-dark .alert-danger  { background: #450a0a; border-color: #7f1d1d; color: #f87171; }\n#discuss-comments .discuss-dark .dropdown-item.danger:hover { background: #450a0a; }\n\n/* ── Accessibility: reduced motion (WCAG 2.3.3 AAA) ─── */\n/* Respect the OS-level prefers-reduced-motion: reduce signal.\n   Kill transitions and slow spinner to near-stop. Skeleton loses pulse\n   (static skeleton is acceptable — content is still indicated). */\n@media (prefers-reduced-motion: reduce) {\n  #discuss-comments *, #discuss-comments *::before, #discuss-comments *::after {\n    animation-duration:       0.01ms !important;\n    animation-iteration-count: 1     !important;\n    transition-duration:       0.01ms !important;\n  }\n}\n";
+    /* INJECT_CSS_END */
+
+    // Extra scoped resets + rules that Tailwind's scanner can't detect due to the discuss- prefix
+    const cssContent = injectedCss + `
+        #discuss-comments { text-align: left; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: transparent; }
+        #discuss-comments * { box-sizing: inherit; }
+
+        /* ── Visibility utilities (Tailwind purges these because it sees discuss-hidden, not hidden) ── */
+        #discuss-comments .discuss-hidden { display: none !important; }
+        #discuss-comments .discuss-flex-1 { flex: 1 1 0%; }
+        #discuss-comments .discuss-flex-shrink-0 { flex-shrink: 0; }
+        #discuss-comments .discuss-items-center { align-items: center; }
+        #discuss-comments .discuss-justify-end { justify-content: flex-end; }
+        #discuss-comments .discuss-gap-2 { gap: 0.5rem; }
+        #discuss-comments .discuss-gap-4 { gap: 1rem; }
+        #discuss-comments .discuss-gap-6 { gap: 1.5rem; }
+        #discuss-comments .discuss-flex-col { flex-direction: column; }
+        #discuss-comments .discuss-flex-wrap { flex-wrap: wrap; }
+        #discuss-comments .discuss-font-semibold { font-weight: 600; }
+        #discuss-comments .discuss-font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        #discuss-comments .discuss-text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        #discuss-comments .discuss-text-xs { font-size: 0.75rem; line-height: 1rem; }
+        #discuss-comments .discuss-text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        #discuss-comments .discuss-uppercase { text-transform: uppercase; }
+        #discuss-comments .discuss-tracking-wide { letter-spacing: 0.025em; }
+        #discuss-comments .discuss-mb-10 { margin-bottom: 2.5rem; }
+
+        /* ── Button variants (Tailwind only generates .btn, not .discuss-btn-primary) ── */
+        #discuss-comments .discuss-btn-primary {
+            background-color: var(--b600);
+            color: var(--on-primary);
+            border-color: var(--b600);
+        }
+        #discuss-comments .discuss-btn-primary:hover { background-color: var(--b700); border-color: var(--b700); }
+        #discuss-comments .discuss-btn-primary:active:not(:disabled) { background-color: var(--b800); border-color: var(--b800); }
+        #discuss-comments .discuss-btn-secondary {
+            background-color: var(--s1);
+            color: var(--t2);
+            border-color: var(--bd-button);
+        }
+        #discuss-comments .discuss-btn-secondary:hover { background-color: var(--s3); }
+
+        /* ── Avatar: enforce dimensions and clip the image ── */
+        #discuss-comments .discuss-avatar {
+            flex-shrink: 0;
+            min-width: 2.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        #discuss-comments .discuss-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ── Comment content column: min-width:0 is required for text to wrap in flex ── */
+        #discuss-comments .discuss-comment-content {
+            min-width: 0;
+            flex: 1;
+        }
+
+        /* ── Comment body prose ── */
+        #discuss-comments .discuss-comment-body {
+            font-size: 0.9375rem;
+            line-height: 1.65;
+            color: var(--t2);
+            margin: 0 0 0.75rem;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        #discuss-comments .discuss-comment-body p { margin: 0 0 0.5em; }
+        #discuss-comments .discuss-comment-body p:last-child { margin-bottom: 0; }
+
+        /* ── Badge (also purged by scanner) ── */
+        /* ── Badge — exact DS spec: inline-flex gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full ── */
+        #discuss-comments .discuss-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;          /* gap-1 */
+            padding: 0.125rem 0.625rem; /* py-0.5 px-2.5 */
+            font-size: 0.75rem;    /* text-xs */
+            line-height: 1rem;     /* text-xs — critical: without this it inherits 1.5rem from parent */
+            font-weight: 500;      /* font-medium */
+            border-radius: 9999px; /* rounded-full */
+        }
+        #discuss-comments .discuss-badge-info    { background: #dbeafe; color: #1e40af; }
+        #discuss-comments .discuss-badge-success { background: #dcfce7; color: #15803d; }
+
+        /* ── Name/email flex row ── */
+        #discuss-comments .discuss-name-email-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        #discuss-comments .discuss-name-email-row .discuss-field-group {
+            flex: 1;
+            min-width: 180px;
+            margin-bottom: 0;
+        }
+        #discuss-comments form { width: 100%; }
+        #discuss-comments .discuss-field-group { margin-bottom: 1rem; }
+
+        /* ── Nested comment indent ── */
+        #discuss-comments .discuss-nested {
+            padding-left: 1rem;
+            border-left: 2px solid var(--bds);
+            margin-top: 1rem;
+        }
+
+        /* ── Action buttons (Reply / Share) ── */
+        #discuss-comments .discuss-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.625rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            line-height: 1.25rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--bd-button);
+            background: transparent;
+            color: var(--t4);
+            cursor: pointer;
+            transition: background-color 120ms, color 120ms, border-color 120ms;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        #discuss-comments .discuss-action-btn:hover {
+            background-color: var(--s3);
+            color: var(--t1);
+            border-color: var(--bd-control);
+        }
+        #discuss-comments .discuss-action-btn svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+    `;
+
+    // SVG Icons — exact Lucide paths (reply + forward), stroke-width 2.5 for solid/bold weight
+    const ICONS = {
+        // Lucide "reply" — https://lucide.dev/icons/reply
+        reply: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>`,
+        // Lucide "forward" — https://lucide.dev/icons/forward (the curved-right-arrow share icon)
+        share: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 17 5-5-5-5"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg>`
+    };
+
+    function injectStyles() {
+        if (document.getElementById('discuss-styles')) return;
+        const style = document.createElement('style');
+        style.id = 'discuss-styles';
+        style.textContent = cssContent;
+        document.head.appendChild(style);
+    }
+
+    async function init() {
+        injectStyles();
+        container.innerHTML = '<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments…</div>';
+
+        try {
+            const configRes = await fetch(`${serverUrl}/api/comments/config`);
+            if (configRes.ok) config = await configRes.json();
+
+            const commentsRes = await fetch(`${serverUrl}/api/comments?post_url=${encodeURIComponent(postUrl)}`);
+            if (!commentsRes.ok) throw new Error('Failed to load comments');
+            const comments = await commentsRes.json();
+
+            render(comments);
+        } catch (err) {
+            container.innerHTML = '<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>';
+            console.error('[Discuss]', err);
+        }
+    }
+
+    function buildTree(comments) {
+        const map = {};
+        const roots = [];
+        comments.forEach(c => { c.children = []; map[c.id] = c; });
+        comments.forEach(c => {
+            if (c.parent_id === 0 || !map[c.parent_id]) {
+                roots.push(c);
+            } else {
+                map[c.parent_id].children.push(c);
+            }
+        });
+        return roots;
+    }
+
+    function render(comments) {
+        const roots = buildTree(comments);
+
+        container.innerHTML = `
+            <div class="discuss-font-sans" style="color:var(--t1)">
+                <div class="discuss-mb-10">
+                    <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
+                    ${renderForm(0)}
+                </div>
+                ${roots.length > 0 ? `
+                <div>
+                    <h4 class="discuss-text-sm discuss-font-semibold discuss-uppercase discuss-tracking-wide" style="margin:0 0 1.25rem;color:var(--t4)">${roots.length} Comment${roots.length !== 1 ? 's' : ''}</h4>
+                    <div class="discuss-flex discuss-flex-col discuss-gap-6">
+                        ${roots.map(c => renderComment(c)).join('')}
+                    </div>
+                </div>` : ''}
+            </div>
+        `;
+
+        // Bind events
+        container.querySelectorAll('form[data-parent]').forEach(form => {
+            form.addEventListener('submit', handleSubmit);
+        });
+
+        container.querySelectorAll('.discuss-reply-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const id = e.currentTarget.dataset.id;
+                const wrapper = document.getElementById(`discuss-reply-form-${id}`);
+                if (wrapper) wrapper.classList.toggle('discuss-hidden');
+            });
+        });
+
+        container.querySelectorAll('.discuss-share-btn').forEach(btn => {
+            btn.addEventListener('click', async e => {
+                const shareBtn = e.currentTarget;
+                const id = shareBtn.dataset.id;
+                const url = `${window.location.origin}${window.location.pathname}#comment-${id}`;
+
+                // Web Share API: works on iOS, Android, macOS Safari/Chrome, Windows Chrome
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ title: document.title, url });
+                    } catch (err) {
+                        if (err.name === 'AbortError') return; // user cancelled sheet — do nothing
+                        // share() threw for another reason — fall through to clipboard
+                        await copyToClipboard(shareBtn, url);
+                    }
+                    return;
+                }
+
+                // Desktop fallback: copy to clipboard
+                await copyToClipboard(shareBtn, url);
+            });
+        });
+
+        async function copyToClipboard(btn, url) {
+            try {
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(url);
+                } else {
+                    // Ancient browser / insecure context
+                    window.prompt('Copy link:', url);
+                    return;
+                }
+                btn.innerHTML = `${ICONS.share} <span>Copied!</span>`;
+                setTimeout(() => { btn.innerHTML = `${ICONS.share} <span>Share</span>`; }, 2000);
+            } catch (err) {
+                window.prompt('Copy link:', url);
+            }
+        }
+    }
+
+    function renderComment(c, depth) {
+        depth = depth || 0;
+        const pinBadge = c.is_pinned ? `<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>` : '';
+        const authorBadge = c.is_author ? `<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>` : '';
+        const dateStr = new Date(c.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+
+        return `
+            <div class="discuss-flex discuss-gap-4" id="comment-${c.id}">
+                <span class="discuss-avatar discuss-avatar-md discuss-flex-shrink-0">
+                    <img src="${c.avatar}" alt="${c.name}" />
+                </span>
+                <div class="discuss-comment-content" style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:0.375rem;flex-wrap:wrap;margin-bottom:0.375rem">
+                        <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${c.name}</span>
+                        ${authorBadge}${pinBadge}
+                        <span style="color:var(--t5);font-size:0.75rem">·</span>
+                        <span style="font-size:0.8125rem;color:var(--t4)">${dateStr}</span>
+                    </div>
+                    <div class="discuss-comment-body">${c.content}</div>
+                    <div class="discuss-flex discuss-gap-2 discuss-items-center">
+                        <button class="discuss-action-btn discuss-reply-btn" data-id="${c.id}">
+                            ${ICONS.reply} <span>Reply</span>
+                        </button>
+                        <button class="discuss-action-btn discuss-share-btn" data-id="${c.id}">
+                            ${ICONS.share} <span>Share</span>
+                        </button>
+                    </div>
+
+                    <div class="discuss-hidden" id="discuss-reply-form-${c.id}" style="margin-top:1rem">
+                        ${renderForm(c.id)}
+                    </div>
+
+                    ${c.children.length > 0 ? `
+                        <div class="discuss-nested discuss-flex discuss-flex-col discuss-gap-4">
+                            ${c.children.map(child => renderComment(child, depth + 1)).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderForm(parentId) {
+        const hpInput = config.honeypot_question
+            ? `<input type="text" name="honeypot_answer_given" placeholder="${config.honeypot_question}" style="display:none" tabindex="-1" autocomplete="off">`
+            : '';
+
+        return `
+            <form data-parent="${parentId}" style="width:100%">
+                <div class="discuss-name-email-row">
+                    <div class="discuss-field-group">
+                        <label class="discuss-label">Name</label>
+                        <input type="text" name="name" class="discuss-input" placeholder="Your name" required>
+                    </div>
+                    <div class="discuss-field-group">
+                        <label class="discuss-label">Email <span style="font-weight:400;color:var(--t4);font-size:0.75rem">(not published)</span></label>
+                        <input type="email" name="email" class="discuss-input" placeholder="your@email.com" required>
+                    </div>
+                </div>
+                <input type="text" name="honeypot_field" style="display:none" tabindex="-1" autocomplete="off">
+                ${hpInput}
+                <div class="discuss-field-group">
+                    <label class="discuss-label">Comment <span style="font-weight:400;color:var(--t4);font-size:0.75rem">Markdown supported</span></label>
+                    <textarea name="content" class="discuss-input discuss-textarea" rows="4" placeholder="Share your thoughts…" required></textarea>
+                </div>
+                <div class="discuss-flex discuss-justify-end">
+                    <button type="submit" class="discuss-btn discuss-btn-primary">Post Comment</button>
+                </div>
+            </form>
+        `;
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        const parentId = form.dataset.parent;
+        const btn = form.querySelector('[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting…';
+
+        const payload = {
+            name: form.name.value.trim(),
+            email: form.email.value.trim(),
+            content: form.content.value.trim(),
+            post_url: postUrl,
+            parent_id: parseInt(parentId, 10),
+            honeypot_field: form.honeypot_field.value,
+            honeypot_answer_given: form.honeypot_answer_given ? form.honeypot_answer_given.value : undefined
+        };
+
+        try {
+            const res = await fetch(`${serverUrl}/api/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                form.reset();
+                // If it's a reply form, hide it again after submit
+                if (parseInt(parentId, 10) !== 0) {
+                    const wrapper = document.getElementById(`discuss-reply-form-${parentId}`);
+                    if (wrapper) wrapper.classList.add('discuss-hidden');
+                }
+                init();
+            } else {
+                const err = await res.json();
+                alert(err.error || 'Failed to post comment.');
+            }
+        } catch (err) {
+            console.error('[Discuss]', err);
+            alert('Network error. Please try again.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Post Comment';
+        }
+    }
+
+    init();
+})();

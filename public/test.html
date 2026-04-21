@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page — Discuss Comments Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="http://localhost:3000/admin/admin.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #ffffff;
+            color: var(--t1, #111827);
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+        .post-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bds, #e2e8f0);
+        }
+        .post-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-fg, #10417f);
+            margin-bottom: 0.75rem;
+        }
+        .post-title {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--t1, #111827);
+            margin: 0 0 0.75rem;
+        }
+        .post-meta {
+            font-size: 0.875rem;
+            color: var(--t4, #64748b);
+        }
+        .post-body {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--t2, #334155);
+            margin-bottom: 3rem;
+        }
+        .post-body p { margin: 0 0 1.25rem; }
+        .comments-section {
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--bds, #e2e8f0);
+        }
+        .comments-heading {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--t1, #111827);
+            margin: 0 0 1.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <article>
+            <header class="post-header">
+                <span class="post-tag">Design Systems</span>
+                <h1 class="post-title">Building a Self-Hosted Comment System with SQLite</h1>
+                <p class="post-meta">April 21, 2025 · 5 min read</p>
+            </header>
+
+            <div class="post-body">
+                <p>This is a demo page for testing the Discuss embedded comment widget. The widget below is fully self-contained — its styles are scoped to the <code>#discuss-comments</code> container so they won't bleed into the host page.</p>
+                <p>Try posting a comment, replying to one, or sharing a link. The form includes a honeypot field to catch bots, and all content is rendered as sanitized Markdown.</p>
+            </div>
+        </article>
+
+        <section class="comments-section">
+            <div id="discuss-comments"></div>
+        </section>
+    </div>
+
+    <script src="http://localhost:3000/client.js"></script>
+</body>
+</html>
