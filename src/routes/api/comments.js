@@ -33,10 +33,10 @@ function getDomainOrError(req, res) {
     return domain || null;
 }
 
-// Generate Gravatar URL
+// Generate Gravatar URL (returns 404 if no image exists to allow client-side fallback)
 function getGravatarUrl(email) {
     const hash = crypto.createHash('md5').update(email.trim().toLowerCase()).digest('hex');
-    return `https://www.gravatar.com/avatar/${hash}?d=identicon`;
+    return `https://www.gravatar.com/avatar/${hash}?d=404`;
 }
 
 router.get('/', (req, res) => {

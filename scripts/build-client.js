@@ -1,3 +1,4 @@
+import esbuild from 'esbuild';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -6,34 +7,30 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const cssPath = path.join(__dirname, '../public/client.css');
-const jsPath = path.join(__dirname, '../public/client.js');
 
-try {
-    const css = fs.readFileSync(cssPath, 'utf8');
-    let js = fs.readFileSync(jsPath, 'utf8');
+async function build() {
+    try {
+        const css = fs.readFileSync(cssPath, 'utf8');
 
-    const startMarker = '/* INJECT_CSS_START */';
-    const endMarker = '/* INJECT_CSS_END */';
-    
-    const startIndex = js.indexOf(startMarker);
-    const endIndex = js.indexOf(endMarker);
+        await esbuild.build({
+            entryPoints: {
+                'client': path.join(__dirname, '../src/client/core.js'),
+                'client-admin': path.join(__dirname, '../src/client/admin.js')
+            },
+            outdir: path.join(__dirname, '../public'),
+            bundle: true,
+            minify: true,
+            format: 'iife',
+            define: {
+                'INJECTED_CSS_CONTENT': JSON.stringify(css)
+            }
+        });
 
-    if (startIndex !== -1 && endIndex !== -1) {
-        // Stringify the CSS to make it a safe JavaScript string literal
-        const replacement = '\n    const injectedCss = ' + JSON.stringify(css) + ';\n    ';
-        
-        js = js.substring(0, startIndex + startMarker.length) + replacement + js.substring(endIndex);
-        
-        // Ensure cssContent definition references injectedCss
-        if (!js.includes('const cssContent = injectedCss + `')) {
-            js = js.replace('const cssContent = `', 'const cssContent = injectedCss + `');
-        }
-
-        fs.writeFileSync(jsPath, js);
-        console.log('Successfully injected client.css into client.js');
-    } else {
-        console.error('Could not find injection markers in client.js');
+        console.log('Successfully bundled and minified client scripts with esbuild.');
+    } catch (err) {
+        console.error('Build failed:', err);
+        process.exit(1);
     }
-} catch (err) {
-    console.error('Error injecting CSS:', err);
 }
+
+build();
