@@ -51,8 +51,9 @@ app.use('/api/admin', adminRoutes);
 
 // SPA entry-point: intercept admin routes before static files to handle SPA paths
 app.use('/admin', (req, res, next) => {
-    // If request is for a file (contains a dot), skip to static middleware
-    if (req.url.includes('.')) return next();
+    // If request is for a static asset, skip to static middleware
+    const isAsset = /\.(js|css|png|jpg|jpeg|gif|svg|ico)$/i.test(req.path);
+    if (isAsset) return next();
     
     const adminIndex = path.join(__dirname, '../public/admin/index.html');
     res.setHeader('Cache-Control', 'no-store');

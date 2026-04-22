@@ -3,6 +3,9 @@ import db from '../../db/index.js';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key';
 
 const router = express.Router();
 const md = new MarkdownIt({
@@ -99,14 +102,31 @@ router.post('/', (req, res) => {
             }
         });
 
-        const avatar = getGravatarUrl(email);
+        let isAuthor = 0;
+        let finalAvatar = getGravatarUrl(email);
+
+        if (req.cookies && req.cookies.admin_token) {
+            try {
+                const decoded = jwt.verify(req.cookies.admin_token, JWT_SECRET);
+                if (decoded && decoded.id === domain.admin_id) {
+                    isAuthor = 1;
+                    const adminProfile = db.prepare('SELECT email, avatar_url FROM admins WHERE id = ?').get(decoded.id);
+                    if (adminProfile && adminProfile.avatar_url) {
+                        finalAvatar = adminProfile.avatar_url;
+                    } else if (adminProfile) {
+                        finalAvatar = getGravatarUrl(adminProfile.email);
+                    }
+                }
+            } catch (err) {}
+        }
+
         const now = Date.now();
         const pId = parent_id ? parseInt(parent_id) : 0;
 
         const info = db.prepare(`
-            INSERT INTO comments (name, email, avatar, content, created_at, updated_at, parent_id, post_url, domain_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(name, email, avatar, cleanHtml, now, now, pId, post_url, domain.id);
+            INSERT INTO comments (name, email, avatar, content, created_at, updated_at, parent_id, post_url, domain_id, is_author)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(name, email, finalAvatar, cleanHtml, now, now, pId, post_url, domain.id, isAuthor);
 
         // If parent_id, update reply count
         if (pId > 0) {

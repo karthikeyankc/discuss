@@ -6,6 +6,11 @@ Built with **Node.js + Express**, **SQLite** (via `better-sqlite3`), and a scope
 
 ---
 
+## Project Rules
+- **SPA Routing**: Always use fully contextual, path-based hierarchical routing for SPAs (e.g. `/admin/domains/:domain/posts/:post/comments`) instead of generic section-based slugs or local storage fallback routing. Ensure Express servers correctly serve the `index.html` on deep links containing dots, ignoring only known asset extensions.
+
+---
+
 ## Features
 
 - **Single script embed** — one `<script>` tag, zero dependencies on the host page

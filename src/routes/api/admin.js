@@ -98,9 +98,31 @@ router.delete('/domains/:id', (req, res) => {
     }
 });
 
+router.get('/domains/:id/posts', (req, res) => {
+    try {
+        // Ensure the domain belongs to the admin
+        const domain = db.prepare('SELECT id, domain FROM domains WHERE id = ? AND admin_id = ?').get(req.params.id, req.adminId);
+        if (!domain) {
+            return res.status(404).json({ error: 'Domain not found or unauthorized' });
+        }
+
+        const posts = db.prepare(`
+            SELECT post_url, count(*) as comment_count, max(created_at) as last_comment_at
+            FROM comments
+            WHERE domain_id = ? AND is_deleted = 0
+            GROUP BY post_url
+            ORDER BY last_comment_at DESC
+        `).all(domain.id);
+        
+        res.json({ domain: domain.domain, posts });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch posts' });
+    }
+});
+
 // --- Comment Moderation ---
 router.get('/comments', (req, res) => {
-    const { domain_id } = req.query;
+    const { domain_id, post_url } = req.query;
     try {
         // Only fetch comments for domains owned by this admin
         let query = `
@@ -115,8 +137,13 @@ router.get('/comments', (req, res) => {
             query += ' AND d.id = ?';
             params.push(domain_id);
         }
+        
+        if (post_url) {
+            query += ' AND c.post_url = ?';
+            params.push(post_url);
+        }
 
-        query += ' ORDER BY c.created_at DESC LIMIT 100';
+        query += ' ORDER BY c.is_pinned DESC, c.created_at ASC';
 
         const comments = db.prepare(query).all(...params);
         res.json(comments);

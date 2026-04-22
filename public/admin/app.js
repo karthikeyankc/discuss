@@ -1,4 +1,7 @@
 const app = {
+    currentDomainId: null,
+    currentDomainName: null,
+    currentPostUrl: null,
     async init() {
         document.getElementById('login-form').addEventListener('submit', this.handleLogin.bind(this));
         document.getElementById('add-domain-form').addEventListener('submit', this.handleAddDomain.bind(this));
@@ -35,6 +38,7 @@ const app = {
         try {
             const res = await fetch('/api/admin/domains');
             if (res.ok) {
+                this.domains = await res.json();
                 // Land on whatever section the URL path says, defaulting to domains
                 this.showSection(this._pathSection() || 'domains');
             } else {
@@ -47,9 +51,27 @@ const app = {
 
     // Returns the section name from the current path, or null if unrecognised
     _pathSection() {
-        const parts = window.location.pathname.replace(/\/$/, '').split('/');
-        const last = parts[parts.length - 1];
-        return ['domains', 'comments'].includes(last) ? last : null;
+        const path = window.location.pathname.replace(/\/$/, '');
+        const parts = path.split('/');
+        
+        if (parts.includes('comments')) {
+            const dIdx = parts.indexOf('domains');
+            const pIdx = parts.indexOf('posts');
+            if (dIdx !== -1 && pIdx !== -1) {
+                this.currentDomainId = parts[dIdx + 1];
+                this.currentPostUrl = decodeURIComponent(parts[pIdx + 1]);
+            }
+            return 'comments';
+        } else if (parts.includes('posts')) {
+            const dIdx = parts.indexOf('domains');
+            if (dIdx !== -1) {
+                this.currentDomainId = parts[dIdx + 1];
+            }
+            return 'posts';
+        } else if (parts.includes('domains')) {
+            return 'domains';
+        }
+        return null;
     },
 
     async handleLogin(e) {
@@ -85,6 +107,7 @@ const app = {
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('app-shell').classList.add('hidden');
         document.getElementById('domains-section').classList.add('hidden');
+        document.getElementById('posts-section').classList.add('hidden');
         document.getElementById('comments-section').classList.add('hidden');
         
         if (sectionId === 'login') {
@@ -95,12 +118,18 @@ const app = {
 
             // Update URL to the real path so sections are bookmarkable / survive reload
             if (pushHistory) {
-                history.pushState(null, '', `/admin/${sectionId}`);
+                let path = `/admin/${sectionId}`;
+                if (sectionId === 'posts' && this.currentDomainId) {
+                    path = `/admin/domains/${this.currentDomainId}/posts`;
+                } else if (sectionId === 'comments' && this.currentDomainId && this.currentPostUrl) {
+                    path = `/admin/domains/${this.currentDomainId}/posts/${encodeURIComponent(this.currentPostUrl)}/comments`;
+                }
+                history.pushState(null, '', path);
             }
             
-            // Update active nav item
+            // Update active nav item (always highlight domains since comments/posts are nested inside it)
             document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-            const activeNav = document.getElementById(`nav-${sectionId}`);
+            const activeNav = document.getElementById('nav-domains');
             if (activeNav) activeNav.classList.add('active');
 
             // Close mobile sidebar if open
@@ -112,20 +141,32 @@ const app = {
             }
 
             if (sectionId === 'domains') this.loadDomains();
+            if (sectionId === 'posts') this.loadPosts();
             if (sectionId === 'comments') this.loadComments();
         }
+    },
+
+    getDomainName(id) {
+        if (!this.domains) return id;
+        const d = this.domains.find(d => d.id == id);
+        return d ? d.domain : id;
     },
 
     async loadDomains() {
         try {
             const res = await fetch('/api/admin/domains');
             if (!res.ok) return this.logout();
-            const domains = await res.json();
+            this.domains = await res.json();
             const tbody = document.querySelector('#domains-table tbody');
             tbody.innerHTML = '';
-            domains.forEach(d => {
+            this.domains.forEach(d => {
                 const tr = document.createElement('tr');
-                tr.className = 'border-b border-neutral-100 last:border-0 hover:bg-neutral-50/50 transition-colors';
+                tr.className = 'border-b border-neutral-100 last:border-0 hover:bg-neutral-50/50 transition-colors cursor-pointer';
+                tr.onclick = (e) => {
+                    if (!e.target.closest('button')) {
+                        this.selectDomain(d.id, d.domain);
+                    }
+                };
                 tr.innerHTML = `
                     <td class="p-3 text-neutral-900">${d.domain}</td>
                     <td class="p-3 text-neutral-600">${d.site_name}</td>
@@ -141,6 +182,56 @@ const app = {
         } catch (err) {
             console.error(err);
         }
+    },
+
+    selectDomain(id, name) {
+        this.currentDomainId = id;
+        this.currentDomainName = name;
+        this.showSection('posts');
+    },
+
+    async loadPosts() {
+        if (!this.currentDomainId) {
+            this.showSection('domains');
+            return;
+        }
+
+        const domainName = this.getDomainName(this.currentDomainId);
+        document.getElementById('posts-breadcrumb-domain').textContent = domainName;
+        document.getElementById('comments-breadcrumb-domain').textContent = domainName;
+
+        try {
+            const res = await fetch(`/api/admin/domains/${this.currentDomainId}/posts`);
+            if (!res.ok) return this.showSection('domains');
+            const data = await res.json();
+            
+            const tbody = document.querySelector('#posts-table tbody');
+            tbody.innerHTML = '';
+            
+            if (data.posts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-neutral-500">No posts found for this domain yet.</td></tr>`;
+                return;
+            }
+
+            data.posts.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-neutral-100 last:border-0 hover:bg-neutral-50/50 transition-colors cursor-pointer';
+                tr.onclick = () => this.selectPost(p.post_url);
+                tr.innerHTML = `
+                    <td class="p-3 text-neutral-900 font-medium truncate max-w-xs" title="${p.post_url}">${p.post_url}</td>
+                    <td class="p-3 text-neutral-600">${p.comment_count}</td>
+                    <td class="p-3 text-neutral-500 text-sm">${new Date(p.last_comment_at).toLocaleString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    },
+
+    selectPost(postUrl) {
+        this.currentPostUrl = postUrl;
+        this.showSection('comments');
     },
 
     async handleAddDomain(e) {
@@ -179,207 +270,25 @@ const app = {
     },
 
     async loadComments() {
+        if (!this.currentDomainId || !this.currentPostUrl) {
+            this.showSection('domains');
+            return;
+        }
+
+        document.getElementById('comments-subtitle').textContent = `Post: ${this.currentPostUrl}`;
+
         try {
-            const res = await fetch('/api/admin/comments');
-            if (!res.ok) return this.logout();
-            const comments = await res.json();
             const list = document.getElementById('comments-list');
-            list.innerHTML = '';
+            list.innerHTML = '<div id="discuss-comments" data-is-admin="true"></div>';
 
-            if (comments.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state py-12">
-                        <div class="empty-icon text-4xl mb-3 opacity-50">📭</div>
-                        <div class="empty-title text-lg font-semibold text-neutral-900">No comments yet</div>
-                        <div class="empty-desc text-neutral-500">Comments will appear here once users post them.</div>
-                    </div>
-                `;
-                return;
-            }
-
-            // Build a flat id→comment map so replies can reference their parent's name
-            const commentMap = new Map(comments.map(c => [c.id, c]));
-
-            // Group by post_url, preserving insertion order of latest comment per group
-            const grouped = new Map();
-            comments.forEach(c => {
-                if (!grouped.has(c.post_url)) grouped.set(c.post_url, { domain: c.domain, comments: [] });
-                grouped.get(c.post_url).comments.push(c);
-            });
-
-            // Sort groups by the most recent comment in each
-            const sortedGroups = [...grouped.entries()].sort((a, b) => {
-                const latestA = Math.max(...a[1].comments.map(c => new Date(c.created_at).getTime()));
-                const latestB = Math.max(...b[1].comments.map(c => new Date(c.created_at).getTime()));
-                return latestB - latestA;
-            });
-
-            sortedGroups.forEach(([postUrl, { domain, comments: group }], idx) => {
-                const pendingCount = group.filter(c => !c.is_approved).length;
-                const isOpen = idx === 0;
-
-                const urlDisplay = postUrl.length > 70 ? postUrl.slice(0, 70) + '…' : postUrl;
-
-                const groupEl = document.createElement('div');
-                groupEl.className = 'card mb-4';
-                groupEl.innerHTML = `
-                    <button class="post-group-header card-header flex justify-between items-center w-full text-left"
-                            aria-expanded="${isOpen}"
-                            style="cursor:pointer;user-select:none">
-                        <div class="flex items-center gap-3" style="min-width:0">
-                            <i data-lucide="file-text" class="w-4 h-4 flex-shrink-0 text-neutral-400"></i>
-                            <div style="min-width:0">
-                                <div class="text-sm font-medium text-neutral-900" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${urlDisplay}</div>
-                                <div class="text-xs text-neutral-400">${domain}</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 ml-4">
-                            ${pendingCount > 0 ? `<span class="badge badge-warning">${pendingCount} pending</span>` : ''}
-                            <span class="badge badge-neutral">${group.length} comment${group.length !== 1 ? 's' : ''}</span>
-                            <a href="${postUrl}" target="_blank"
-                               onclick="event.stopPropagation()"
-                               class="btn btn-ghost btn-sm text-neutral-400 hover:text-primary-600"
-                               title="Open post">
-                                <i data-lucide="external-link" class="w-3 h-3"></i>
-                            </a>
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-neutral-400 flex-shrink-0 group-chevron" style="transition:transform 200ms;${isOpen ? 'transform:rotate(180deg)' : ''}"></i>
-                        </div>
-                    </button>
-                    <div class="post-group-body${isOpen ? '' : ' hidden'}">
-                        ${group.map((c, i) => this.renderCommentRow(c, i === group.length - 1, commentMap)).join('')}
-                    </div>
-                `;
-
-                groupEl.querySelector('.post-group-header').addEventListener('click', () => {
-                    const body = groupEl.querySelector('.post-group-body');
-                    const chevron = groupEl.querySelector('.group-chevron');
-                    const btn = groupEl.querySelector('.post-group-header');
-                    const willOpen = body.classList.contains('hidden');
-                    body.classList.toggle('hidden');
-                    chevron.style.transform = willOpen ? 'rotate(180deg)' : '';
-                    btn.setAttribute('aria-expanded', String(willOpen));
-                });
-
-                list.appendChild(groupEl);
+            new window.DiscussWidget({
+                container: document.getElementById('discuss-comments'),
+                postUrl: this.currentPostUrl,
+                fetchUrl: `/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`,
+                isAdmin: true
             });
 
             if (window.lucide) lucide.createIcons();
-        } catch (err) {
-            console.error(err);
-        }
-    },
-
-    renderCommentRow(c, isLast, commentMap) {
-        const approved = c.is_approved;
-        const pinned   = c.is_pinned;
-        const date = new Date(c.created_at).toLocaleString(undefined, {
-            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-        });
-
-        const statusBadge = approved
-            ? '<span class="badge badge-success">Approved</span>'
-            : '<span class="badge badge-warning">Pending</span>';
-        const pinnedBadge = pinned
-            ? '<span class="badge badge-info">Pinned</span>'
-            : '';
-
-        // Inline "Replying to" shown after date with a middot prefix
-        const parent = (c.parent_id && commentMap) ? commentMap.get(c.parent_id) : null;
-        const replyRef = parent ? `
-            <span style="color:var(--t5);font-size:0.75rem;margin:0 0.125rem">&middot;</span>
-            <span style="display:inline-flex;align-items:center;gap:0.25rem;font-size:0.75rem;color:var(--t4)">
-                <i data-lucide="corner-up-left" style="width:0.6875rem;height:0.6875rem;flex-shrink:0"></i>
-                Replying to <strong style="color:var(--t3);font-weight:600">${parent.name}</strong>
-            </span>` : '';
-
-        return `
-            <div style="display:flex;gap:0.875rem;padding:1.125rem 1.25rem;${isLast ? '' : 'border-bottom:1px solid var(--bds)'}">
-
-                <!-- Avatar -->
-                <img src="${c.avatar}" alt="${c.name}"
-                     style="width:2.25rem;height:2.25rem;border-radius:50%;object-fit:cover;flex-shrink:0;margin-top:0.125rem;background:var(--s3)">
-
-                <!-- Body -->
-                <div style="flex:1;min-width:0">
-
-                    <!-- Single meta line: name · [✉] · badges · · date [· ↩ reply] -->
-                    <div style="display:flex;align-items:center;gap:0.375rem;flex-wrap:wrap;margin-bottom:0.4rem">
-                        <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${c.name}</span>
-                        <span style="position:relative;display:inline-flex;align-items:center;color:var(--t5);cursor:help;padding:0.125rem;line-height:0"
-                              onmouseenter="this.querySelector('.em-tip').style.opacity='1';this.querySelector('.em-tip').style.visibility='visible'"
-                              onmouseleave="this.querySelector('.em-tip').style.opacity='0';this.querySelector('.em-tip').style.visibility='hidden'">
-                            <i data-lucide="mail" style="width:0.8125rem;height:0.8125rem;pointer-events:none"></i>
-                            <span class="em-tip" style="opacity:0;visibility:hidden;transition:opacity 120ms;position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#1e293b;color:#f8fafc;font-size:0.6875rem;padding:3px 7px;border-radius:4px;white-space:nowrap;z-index:100;pointer-events:none">${c.email}</span>
-                        </span>
-                        ${statusBadge}
-                        ${pinnedBadge}
-                        <span style="color:var(--t5);font-size:0.75rem;margin:0 0.125rem">&middot;</span>
-                        <span style="font-size:0.8125rem;color:var(--t4)">${date}</span>
-                        ${replyRef}
-                    </div>
-
-                    <!-- Comment body -->
-                    <div style="font-size:0.875rem;color:var(--t2);line-height:1.6;margin-bottom:0.625rem">${c.content}</div>
-
-                    <!-- Action bar -->
-                    <div style="display:flex;align-items:center;gap:0.125rem">
-                        <button onclick="app.toggleApprove(${c.id}, ${!approved})"
-                                class="btn btn-ghost btn-sm ${approved ? '' : 'text-success-600'}"
-                                style="padding-left:0.5rem;padding-right:0.625rem">
-                            <i data-lucide="${approved ? 'x' : 'check'}" class="w-3.5 h-3.5 mr-1"></i>
-                            ${approved ? 'Unapprove' : 'Approve'}
-                        </button>
-                        <button onclick="app.togglePin(${c.id}, ${!pinned})"
-                                class="btn btn-ghost btn-sm"
-                                style="padding-left:0.5rem;padding-right:0.625rem">
-                            <i data-lucide="${pinned ? 'pin-off' : 'pin'}" class="w-3.5 h-3.5 mr-1"></i>
-                            ${pinned ? 'Unpin' : 'Pin'}
-                        </button>
-                        <button onclick="app.deleteComment(${c.id})"
-                                class="btn btn-ghost btn-sm text-danger-600"
-                                style="padding-left:0.5rem;padding-right:0.625rem">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5 mr-1"></i>
-                            Delete
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-        `;
-    },
-
-
-    async toggleApprove(id, is_approved) {
-        try {
-            await fetch(`/api/admin/comments/${id}/approve`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ is_approved })
-            });
-            this.loadComments();
-        } catch (err) {
-            console.error(err);
-        }
-    },
-
-    async togglePin(id, is_pinned) {
-        try {
-            await fetch(`/api/admin/comments/${id}/pin`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ is_pinned })
-            });
-            this.loadComments();
-        } catch (err) {
-            console.error(err);
-        }
-    },
-
-    async deleteComment(id) {
-        if (!confirm('Are you sure you want to delete this comment?')) return;
-        try {
-            await fetch(`/api/admin/comments/${id}`, { method: 'DELETE' });
-            this.loadComments();
         } catch (err) {
             console.error(err);
         }

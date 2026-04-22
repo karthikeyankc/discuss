@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discuss Admin</title>
     <link rel="stylesheet" href="/admin/admin.css">
+    <script src="/client.js"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -53,10 +54,6 @@
             <a class="sidebar-item active" href="#" onclick="app.showSection('domains'); return false;" id="nav-domains">
                 <i data-lucide="globe"></i>
                 Domains
-            </a>
-            <a class="sidebar-item" href="#" onclick="app.showSection('comments'); return false;" id="nav-comments">
-                <i data-lucide="message-square"></i>
-                Comments
             </a>
             <div style="flex:1"></div>
             <hr style="border:none; border-top:1px solid var(--shell-divider); margin:0.5rem 0">
@@ -122,11 +119,44 @@
                     </div>
                 </div>
 
+                <!-- Posts Section -->
+                <div id="posts-section" class="app-content-inner hidden">
+                    <div class="page-header mb-6">
+                        <div class="text-sm text-neutral-500 mb-2">
+                            <a href="#" onclick="app.showSection('domains'); return false;" class="hover:text-primary-600">Domains</a> / <span id="posts-breadcrumb-domain" class="font-medium text-neutral-900"></span>
+                        </div>
+                        <h1 class="page-title text-2xl font-bold">Posts</h1>
+                        <p class="text-neutral-500 text-sm mt-1">Select a post to moderate its comments.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-wrap">
+                            <table class="table w-full text-left" id="posts-table">
+                                <thead>
+                                    <tr class="border-b border-neutral-200 text-sm text-neutral-500">
+                                        <th class="p-3 font-medium">Post URL</th>
+                                        <th class="p-3 font-medium">Comments</th>
+                                        <th class="p-3 font-medium">Last Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Comments Section -->
                 <div id="comments-section" class="app-content-inner hidden">
                     <div class="page-header mb-6">
+                        <div class="text-sm text-neutral-500 mb-2">
+                            <a href="#" onclick="app.showSection('domains'); return false;" class="hover:text-primary-600">Domains</a> / 
+                            <a href="#" onclick="app.showSection('posts'); return false;" class="hover:text-primary-600" id="comments-breadcrumb-domain"></a> / 
+                            <span class="font-medium text-neutral-900">Comments</span>
+                        </div>
                         <h1 class="page-title text-2xl font-bold">Comments Moderation</h1>
-                        <p class="text-neutral-500 text-sm mt-1">Review, approve, and manage comments across all domains.</p>
+                        <p class="text-neutral-500 text-sm mt-1 truncate" id="comments-subtitle">Review, approve, and manage comments.</p>
                     </div>
 
                     <div class="space-y-4" id="comments-list">
