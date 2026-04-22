@@ -59,11 +59,14 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const { name, email, content, post_url, parent_id, honeypot_answer_given, honeypot_field } = req.body;
+    let { name, email, content, post_url, parent_id, honeypot_answer_given, honeypot_field } = req.body;
 
-    if (!name || !email || !content || !post_url) {
-        return res.status(400).json({ error: 'Name, email, content, and post_url are required' });
+    if (!name || !content || !post_url) {
+        return res.status(400).json({ error: 'Name, content, and post_url are required' });
     }
+
+    name = name.trim();
+    email = email && email.trim() ? email.trim() : '';
 
     // Simple Honeypot: A hidden field that bots might fill
     if (honeypot_field) {
@@ -90,7 +93,7 @@ router.post('/', (req, res) => {
         // Render markdown and sanitize
         const rawHtml = md.render(content);
         const cleanHtml = sanitizeHtml(rawHtml, {
-            allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'code', 'pre' ],
+            allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'code', 'pre', 'blockquote' ],
             allowedAttributes: {
                 'a': [ 'href' ]
             }

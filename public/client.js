@@ -53,12 +53,26 @@
         }
         #discuss-comments .discuss-btn-secondary:hover { background-color: var(--s3); }
 
-        /* ── Avatar: enforce dimensions and clip the image ── */
+        /* ── Responsive Avatar & Thread Spacing ── */
+        #discuss-comments .discuss-comment-row {
+            --avatar-size: 2rem;
+            --avatar-gap: 0.75rem;
+            gap: var(--avatar-gap);
+            position: relative;
+            transition: box-shadow 300ms ease;
+        }
+        @media (min-width: 640px) {
+            #discuss-comments .discuss-comment-row {
+                --avatar-size: 2.5rem;
+                --avatar-gap: 1rem;
+            }
+        }
+
         #discuss-comments .discuss-avatar {
             flex-shrink: 0;
-            min-width: 2.5rem;
-            width: 2.5rem;
-            height: 2.5rem;
+            min-width: var(--avatar-size);
+            width: var(--avatar-size);
+            height: var(--avatar-size);
         }
         #discuss-comments .discuss-avatar img {
             width: 100%;
@@ -84,6 +98,13 @@
         }
         #discuss-comments .discuss-comment-body p { margin: 0 0 0.5em; }
         #discuss-comments .discuss-comment-body p:last-child { margin-bottom: 0; }
+        #discuss-comments .discuss-comment-body blockquote {
+            border-left: 3px solid var(--bds);
+            padding-left: 1rem;
+            margin: 0.5rem 0;
+            color: var(--t4);
+            font-style: italic;
+        }
 
         /* ── Badge (also purged by scanner) ── */
         /* ── Badge — exact DS spec: inline-flex gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full ── */
@@ -100,26 +121,161 @@
         #discuss-comments .discuss-badge-info    { background: #dbeafe; color: #1e40af; }
         #discuss-comments .discuss-badge-success { background: #dcfce7; color: #15803d; }
 
-        /* ── Name/email flex row ── */
-        #discuss-comments .discuss-name-email-row {
+        /* ── Reply Tag ── */
+        #discuss-comments .discuss-reply-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            background-color: var(--accent-surface);
+            color: var(--accent-fg);
+            margin-right: 0.375rem;
+            text-decoration: none !important;
+            transition: background-color 150ms, opacity 150ms;
+            vertical-align: baseline;
+        }
+        #discuss-comments .discuss-reply-tag:hover {
+            opacity: 0.8;
+            text-decoration: none !important;
+        }
+        #discuss-comments .discuss-reply-tag:focus-visible {
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+            outline: none;
+        }
+
+        /* ── New Comment Form UI ── */
+        #discuss-comments .discuss-form-container {
+            border: 1px solid var(--bd-control);
+            border-radius: 0.5rem;
+            background-color: var(--s1);
+            overflow: hidden;
+            transition: border-color 150ms, box-shadow 150ms;
+        }
+        #discuss-comments .discuss-form-container:focus-within {
+            border-color: var(--focus-ring);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+        }
+        #discuss-comments .discuss-form-textarea {
+            display: block;
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 1rem;
+            min-height: 80px;
+            resize: vertical;
+            font-size: 0.9375rem;
+            line-height: 1.5;
+            color: var(--t1);
+            outline: none;
+            box-shadow: none;
+        }
+        #discuss-comments .discuss-form-textarea::placeholder { color: var(--t5); }
+        #discuss-comments .discuss-form-bottom {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem;
+            background-color: var(--s2);
+            border-top: 1px solid var(--bds);
         }
-        #discuss-comments .discuss-name-email-row .discuss-field-group {
+        #discuss-comments .discuss-form-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+        }
+        #discuss-comments .discuss-form-actions {
+            display: flex;
+            width: 100%;
+        }
+        #discuss-comments .discuss-form-actions .discuss-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            #discuss-comments .discuss-form-bottom {
+                flex-direction: row;
+                align-items: center;
+            }
+            #discuss-comments .discuss-form-inputs {
+                flex-direction: row;
+                flex: 1;
+            }
+            #discuss-comments .discuss-form-actions {
+                width: auto;
+                margin-left: auto;
+            }
+            #discuss-comments .discuss-form-actions .discuss-btn {
+                width: auto;
+            }
+        }
+
+        #discuss-comments .discuss-form-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
             flex: 1;
-            min-width: 180px;
-            margin-bottom: 0;
+            min-width: 120px;
         }
-        #discuss-comments form { width: 100%; }
-        #discuss-comments .discuss-field-group { margin-bottom: 1rem; }
+        #discuss-comments .discuss-form-input-wrapper svg {
+            position: absolute;
+            left: 0.75rem;
+            width: 1rem;
+            height: 1rem;
+            color: var(--t4);
+            pointer-events: none;
+        }
+        #discuss-comments .discuss-form-input {
+            width: 100%;
+            border: 1px solid var(--bd-control);
+            border-radius: 6px;
+            padding: 0.75rem 0.75rem 0.75rem 2.25rem;
+            font-size: 1rem;
+            line-height: 1rem;
+            background-color: var(--s1);
+            color: var(--t1);
+            outline: none;
+            transition: border-color 120ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 120ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #discuss-comments .discuss-form-input:focus {
+            border-color: var(--focus-ring);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+            outline: none;
+        }
+        #discuss-comments .discuss-form-input::placeholder { color: var(--t5); }
+
 
         /* ── Nested comment indent ── */
         #discuss-comments .discuss-nested {
-            padding-left: 1rem;
-            border-left: 2px solid var(--bds);
             margin-top: 1rem;
+            /* Indentation is now naturally handled by flex gaps and missing left borders */
+        }
+
+        /* ── Thread line (Clickable) ── */
+        #discuss-comments .discuss-collapse-line {
+            position: absolute;
+            top: calc(var(--avatar-size) + 0.25rem);
+            bottom: 0.5rem;
+            left: calc(var(--avatar-size) / 2);
+            width: 1.5rem;
+            transform: translateX(-50%);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+        }
+        #discuss-comments .discuss-collapse-line:hover .discuss-thread-line {
+            background-color: var(--b400); /* Highlight on hover */
+        }
+        #discuss-comments .discuss-thread-line {
+            width: 2px;
+            height: 100%;
+            background-color: var(--bds);
+            transition: background-color 150ms;
         }
 
         /* ── Action buttons (Reply / Share) ── */
@@ -136,19 +292,30 @@
             background: transparent;
             color: var(--t4);
             cursor: pointer;
-            transition: background-color 120ms, color 120ms, border-color 120ms;
+            transition: background-color 120ms, color 120ms, border-color 120ms, box-shadow 120ms;
             white-space: nowrap;
             text-decoration: none;
+            outline: none;
         }
         #discuss-comments .discuss-action-btn:hover {
             background-color: var(--s3);
             color: var(--t1);
             border-color: var(--bd-control);
         }
+        #discuss-comments .discuss-action-btn:focus-visible {
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+        }
         #discuss-comments .discuss-action-btn svg {
             width: 13px;
             height: 13px;
             flex-shrink: 0;
+        }
+
+        /* ── Comment Row Target Highlight ── */
+        #discuss-comments .discuss-comment-row:target {
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+            border-radius: 0.5rem;
+            transition: box-shadow 300ms ease;
         }
     `;
 
@@ -157,7 +324,10 @@
         // Lucide "reply" — https://lucide.dev/icons/reply
         reply: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>`,
         // Lucide "forward" — https://lucide.dev/icons/forward (the curved-right-arrow share icon)
-        share: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 17 5-5-5-5"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg>`
+        share: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`,
+        user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+        mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+        send: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>`
     };
 
     function injectStyles() {
@@ -233,6 +403,38 @@
             });
         });
 
+        // Add collapse functionality
+        const collapseAction = (e) => {
+            const id = e.currentTarget.dataset.id;
+            let isHidden = false;
+            
+            const targetDiv = document.getElementById(`discuss-collapse-target-${id}`);
+            if (targetDiv) {
+                isHidden = targetDiv.classList.toggle('discuss-hidden');
+            }
+            
+            const childrenDiv = document.getElementById(`discuss-children-${id}`);
+            if (childrenDiv) {
+                if (!targetDiv) {
+                    isHidden = childrenDiv.classList.toggle('discuss-hidden');
+                } else {
+                    childrenDiv.classList.toggle('discuss-hidden', isHidden);
+                }
+            }
+            
+            const btn = document.querySelector(`.discuss-collapse-btn[data-id="${id}"]`);
+            if (btn) {
+                const svg = btn.querySelector('svg');
+                if (svg) {
+                    svg.style.transform = isHidden ? 'rotate(-90deg)' : 'rotate(0deg)';
+                }
+            }
+        };
+
+        container.querySelectorAll('.discuss-collapse-btn, .discuss-collapse-line').forEach(el => {
+            el.addEventListener('click', collapseAction);
+        });
+
         container.querySelectorAll('.discuss-share-btn').forEach(btn => {
             btn.addEventListener('click', async e => {
                 const shareBtn = e.currentTarget;
@@ -273,15 +475,57 @@
         }
     }
 
-    function renderComment(c, depth) {
+    function renderComment(c, depth, replyToName, replyToId) {
         depth = depth || 0;
         const pinBadge = c.is_pinned ? `<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>` : '';
         const authorBadge = c.is_author ? `<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>` : '';
         const dateStr = new Date(c.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 
-        return `
-            <div class="discuss-flex discuss-gap-4" id="comment-${c.id}">
-                <span class="discuss-avatar discuss-avatar-md discuss-flex-shrink-0">
+        const replyTag = replyToName ? `<a href="#comment-${replyToId}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${replyToName}</a>` : '';
+
+        const chevron = `
+            <button class="discuss-collapse-btn" data-id="${c.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--t4);display:inline-flex;align-items:center;margin-left:0.25rem;">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+        `;
+
+        let childrenHtml = '';
+        if (c.children.length > 0) {
+            if (depth >= 3) {
+                const flattenedHtml = c.children.map(child => renderComment(child, 3, c.name, c.id)).join('');
+                childrenHtml = `
+                    <div id="discuss-children-${c.id}" style="display:contents">
+                        ${flattenedHtml}
+                    </div>
+                `;
+            } else {
+                childrenHtml = `
+                    <div class="discuss-nested discuss-flex discuss-flex-col discuss-gap-4" id="discuss-children-${c.id}">
+                        ${c.children.map(child => renderComment(child, depth + 1)).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        let contentHtml = c.content;
+        if (replyTag) {
+            if (contentHtml.startsWith('<p>')) {
+                contentHtml = contentHtml.replace('<p>', `<p>${replyTag}`);
+            } else {
+                contentHtml = replyTag + contentHtml;
+            }
+        }
+
+        const threadLine = (c.children.length > 0 && depth < 3) ? `
+            <div class="discuss-collapse-line" data-id="${c.id}" aria-label="Collapse thread">
+                <div class="discuss-thread-line"></div>
+            </div>
+        ` : '';
+
+        const mainHtml = `
+            <div class="discuss-flex discuss-comment-row" id="comment-${c.id}">
+                ${threadLine}
+                <span class="discuss-avatar discuss-avatar-md discuss-flex-shrink-0" style="position:relative;z-index:20;">
                     <img src="${c.avatar}" alt="${c.name}" />
                 </span>
                 <div class="discuss-comment-content" style="min-width:0">
@@ -290,29 +534,31 @@
                         ${authorBadge}${pinBadge}
                         <span style="color:var(--t5);font-size:0.75rem">·</span>
                         <span style="font-size:0.8125rem;color:var(--t4)">${dateStr}</span>
+                        ${chevron}
                     </div>
-                    <div class="discuss-comment-body">${c.content}</div>
-                    <div class="discuss-flex discuss-gap-2 discuss-items-center">
-                        <button class="discuss-action-btn discuss-reply-btn" data-id="${c.id}">
-                            ${ICONS.reply} <span>Reply</span>
-                        </button>
-                        <button class="discuss-action-btn discuss-share-btn" data-id="${c.id}">
-                            ${ICONS.share} <span>Share</span>
-                        </button>
-                    </div>
-
-                    <div class="discuss-hidden" id="discuss-reply-form-${c.id}" style="margin-top:1rem">
-                        ${renderForm(c.id)}
-                    </div>
-
-                    ${c.children.length > 0 ? `
-                        <div class="discuss-nested discuss-flex discuss-flex-col discuss-gap-4">
-                            ${c.children.map(child => renderComment(child, depth + 1)).join('')}
+                    
+                    <div id="discuss-collapse-target-${c.id}">
+                        <div class="discuss-comment-body">${contentHtml}</div>
+                        <div class="discuss-flex discuss-gap-2 discuss-items-center">
+                            <button class="discuss-action-btn discuss-reply-btn" data-id="${c.id}">
+                                ${ICONS.reply} <span>Reply</span>
+                            </button>
+                            <button class="discuss-action-btn discuss-share-btn" data-id="${c.id}">
+                                ${ICONS.share} <span>Share</span>
+                            </button>
                         </div>
-                    ` : ''}
+
+                        <div class="discuss-hidden" id="discuss-reply-form-${c.id}" style="margin-top:1rem">
+                            ${renderForm(c.id)}
+                        </div>
+
+                        ${depth < 3 ? childrenHtml : ''}
+                    </div>
                 </div>
             </div>
         `;
+
+        return depth < 3 ? mainHtml : mainHtml + childrenHtml;
     }
 
     function renderForm(parentId) {
@@ -322,24 +568,30 @@
 
         return `
             <form data-parent="${parentId}" style="width:100%">
-                <div class="discuss-name-email-row">
-                    <div class="discuss-field-group">
-                        <label class="discuss-label">Name</label>
-                        <input type="text" name="name" class="discuss-input" placeholder="Your name" required>
+                <div class="discuss-form-container">
+                    <textarea name="content" class="discuss-form-textarea" placeholder="Share your thoughts... (*markdown* supported)" required></textarea>
+                    
+                    <input type="text" name="honeypot_field" style="display:none" tabindex="-1" autocomplete="off">
+                    ${hpInput}
+                    
+                    <div class="discuss-form-bottom">
+                        <div class="discuss-form-inputs">
+                            <div class="discuss-form-input-wrapper">
+                                ${ICONS.user}
+                                <input type="text" name="name" class="discuss-form-input" placeholder="Name" required>
+                            </div>
+                            <div class="discuss-form-input-wrapper">
+                                ${ICONS.mail}
+                                <input type="email" name="email" class="discuss-form-input" placeholder="Email (optional)">
+                            </div>
+                        </div>
+                        
+                        <div class="discuss-form-actions">
+                            <button type="submit" class="discuss-btn discuss-btn-primary">
+                                ${ICONS.send} Post
+                            </button>
+                        </div>
                     </div>
-                    <div class="discuss-field-group">
-                        <label class="discuss-label">Email <span style="font-weight:400;color:var(--t4);font-size:0.75rem">(not published)</span></label>
-                        <input type="email" name="email" class="discuss-input" placeholder="your@email.com" required>
-                    </div>
-                </div>
-                <input type="text" name="honeypot_field" style="display:none" tabindex="-1" autocomplete="off">
-                ${hpInput}
-                <div class="discuss-field-group">
-                    <label class="discuss-label">Comment <span style="font-weight:400;color:var(--t4);font-size:0.75rem">Markdown supported</span></label>
-                    <textarea name="content" class="discuss-input discuss-textarea" rows="4" placeholder="Share your thoughts…" required></textarea>
-                </div>
-                <div class="discuss-flex discuss-justify-end">
-                    <button type="submit" class="discuss-btn discuss-btn-primary">Post Comment</button>
                 </div>
             </form>
         `;

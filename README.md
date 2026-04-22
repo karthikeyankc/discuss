@@ -105,6 +105,29 @@ server {
 
 ---
 
+## Apache Reverse Proxy
+
+Ensure you have the `proxy` and `proxy_http` modules enabled (`sudo a2enmod proxy proxy_http headers`).
+
+```apache
+<VirtualHost *:443>
+    ServerName discuss.yourdomain.com
+
+    # SSL Configuration here
+    SSLEngine on
+    # SSLCertificateFile /path/to/cert.pem
+    # SSLCertificateKeyFile /path/to/privkey.pem
+
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:3000/
+    ProxyPassReverse / http://127.0.0.1:3000/
+
+    RequestHeader set X-Forwarded-Proto "https"
+</VirtualHost>
+```
+
+---
+
 ## Admin Dashboard
 
 Visit `/admin` on your Discuss server (e.g. `https://discuss.yourdomain.com/admin`) to:
