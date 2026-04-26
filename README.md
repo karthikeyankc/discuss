@@ -183,13 +183,32 @@ sudo systemctl start discuss
 
 ## Upgrading
 
+### Steps
+
 ```bash
-git pull
+git pull origin main
 npm install --production
-npm start
+npm start   # or: sudo systemctl restart discuss
 ```
 
-The SQLite database schema is managed automatically — no migration scripts needed for patch releases.
+That's it. No manual SQL, no migration scripts.
+
+### How it works
+
+The server runs schema migrations automatically on startup (`src/db/index.js`). Each migration is wrapped in a `try/catch` so it's safe to run against a database that already has the column — the error is silently ignored.
+
+### What changed between versions
+
+#### v0.0.0 → current
+
+Two new columns were added to the `domains` table:
+
+| Column | Type | Default | Purpose |
+|---|---|---|---|
+| `primary_color` | `TEXT` | `NULL` | Brand colour for widget theming (hex, e.g. `#2563eb`) |
+| `blocked_words` | `TEXT` | `NULL` | JSON array of words that silently queue matching comments for moderation |
+
+Existing domains will have `NULL` for both columns. This is safe — the widget falls back to its default blue palette when `primary_color` is `NULL`, and no word-filtering is applied when `blocked_words` is `NULL`. You can configure both per-domain at any time from **Admin → Domains → Settings**.
 
 ---
 
