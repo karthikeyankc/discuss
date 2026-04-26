@@ -123,10 +123,25 @@ router.post('/', (req, res) => {
         const now = Date.now();
         const pId = parent_id ? parseInt(parent_id) : 0;
 
+        // Blocked-word check — match against raw content (case-insensitive, word boundary)
+        let isApproved = 1;
+        if (domain.blocked_words) {
+            try {
+                const words = JSON.parse(domain.blocked_words);
+                const haystack = content.toLowerCase();
+                const hit = words.some(w => {
+                    if (!w) return false;
+                    const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    return new RegExp(`\\b${escaped}\\b`).test(haystack);
+                });
+                if (hit) isApproved = 0;
+            } catch {}
+        }
+
         const info = db.prepare(`
-            INSERT INTO comments (name, email, avatar, content, created_at, updated_at, parent_id, post_url, domain_id, is_author)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(name, email, finalAvatar, cleanHtml, now, now, pId, post_url, domain.id, isAuthor);
+            INSERT INTO comments (name, email, avatar, content, created_at, updated_at, parent_id, post_url, domain_id, is_author, is_approved)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(name, email, finalAvatar, cleanHtml, now, now, pId, post_url, domain.id, isAuthor, isApproved);
 
         // If parent_id, update reply count
         if (pId > 0) {
@@ -148,7 +163,8 @@ router.get('/config', (req, res) => {
     }
 
     res.json({
-        honeypot_question: domain.honeypot_question || null
+        honeypot_question: domain.honeypot_question || null,
+        primary_color: domain.primary_color || null,
     });
 });
 

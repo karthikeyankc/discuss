@@ -20,4 +20,8 @@ const schemaPath = path.join(__dirname, 'schema.sql');
 const schema = fs.readFileSync(schemaPath, 'utf8');
 db.exec(schema);
 
+// Migrations
+try { db.exec('ALTER TABLE domains ADD COLUMN primary_color TEXT'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN blocked_words TEXT'); } catch {}
+
 export default db;

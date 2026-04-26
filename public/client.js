@@ -1,4 +1,4 @@
-(()=>{var d={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var y=document.getElementsByTagName("script"),w=y[y.length-1],C=w?new URL(w.src).origin:window.location.origin,T=`#discuss-comments *, #discuss-comments ::before, #discuss-comments ::after {
+(()=>{var m={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var w=document.getElementsByTagName("script"),x=w[w.length-1],$=x?new URL(x.src).origin:window.location.origin,T=`#discuss-comments *, #discuss-comments ::before, #discuss-comments ::after {
     --tw-border-spacing-x: 0;
     --tw-border-spacing-y: 0;
     --tw-translate-x: 0;
@@ -107,16 +107,16 @@
   #discuss-comments {
     /* Brand scale mirrors tailwind.config.js so CSS variable consumers stay in sync
        when the primary palette is replaced at build time. */
-    --b50: #ecf0f5;
-    --b100: #dee7f3;
-    --b200: #c7d9f0;
-    --b300: #abc9ef;
-    --b400: #86b5ef;
-    --b500: #589bed;
-    --b600: #0d4891;
-    --b700: #10417f;
-    --b800: #143b6c;
-    --b900: #193557;
+    --b50: #eff6ff;
+    --b100: #dbeafe;
+    --b200: #bfdbfe;
+    --b300: #93c5fd;
+    --b400: #60a5fa;
+    --b500: #3b82f6;
+    --b600: #2563eb;
+    --b700: #1d4ed8;
+    --b800: #1e40af;
+    --b900: #1e3a8a;
 
     /* Semantic light-theme defaults. Apps can override these directly or swap them
        at runtime when they implement deriveThemeTokens()-style dark mode logic. */
@@ -137,9 +137,9 @@
     --bd-strong: #94a3b8;
     --shell-divider: #e2e8f0;
 
-    --accent-fg: #10417f;
-    --accent-surface: #ecf0f5;
-    --focus-ring: #10417f;
+    --accent-fg: #1d4ed8;
+    --accent-surface: #eff6ff;
+    --focus-ring: #1d4ed8;
 
     --success-fill: #16a34a;
     --success-fill-hover: #15803d;
@@ -181,9 +181,9 @@
     --bd-strong: #94a3b8;
     --shell-divider: #334155;
 
-    --accent-fg: #abc9ef;
-    --accent-surface: color-mix(in srgb, #143b6c 32%, #111827);
-    --focus-ring: #abc9ef;
+    --accent-fg: #93c5fd;
+    --accent-surface: color-mix(in srgb, #1e40af 32%, #111827);
+    --focus-ring: #93c5fd;
 
     --success-fill: #16a34a;
     --success-fill-hover: #15803d;
@@ -401,7 +401,7 @@
     display: block;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--t2);
 }
 /* Overline / section group label.
@@ -475,6 +475,22 @@
     white-space: nowrap;
     border-width: 0;
 }
+#discuss-comments .discuss-checkbox-box {
+    display: flex;
+    height: 1rem;
+    width: 1rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition-property: background-color,border-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 120ms;
+    transition-timing-function: cubic-bezier(0.4,0,0.2,1);
+    border: 2px solid var(--bd-control);
+    background-color: var(--s1);
+    color: var(--on-primary);
+}
 #discuss-comments .discuss-checkbox-input:checked + .checkbox-box {
     background-color: var(--b600);
     border-color: var(--b600);
@@ -488,25 +504,14 @@
     cursor: not-allowed;
     opacity: 0.5;
 }
+#discuss-comments .discuss-checkbox-icon { width: 0.625rem; height: 0.625rem; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+#discuss-comments .discuss-checkbox-icon path { stroke-dasharray: 14; stroke-dashoffset: 14; transition: stroke-dashoffset 150ms ease-out; }
 #discuss-comments .discuss-checkbox-input:checked + .checkbox-box .checkbox-icon path { stroke-dashoffset: 0; transition: stroke-dashoffset 150ms ease-out 80ms; }
 /* Animated radio \u2014 inner dot scales in with spring */
 /* Same position:relative requirement as .checkbox-label \u2014 see note above. */
 /* \u2500\u2500 Card \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
 /* shadow-sm = three-layer resting shadow. No border. See CLAUDE.md. */
 /* \u2500\u2500 Badge \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    border-radius: 9999px;
-    padding-left: 0.625rem;
-    padding-right: 0.625rem;
-    padding-top: 0.125rem;
-    padding-bottom: 0.125rem;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 500;
-}
 /* badge-info uses fixed blue \u2014 semantic signal must hold regardless of brand hue */
 #discuss-comments .discuss-badge-info    { background: #dbeafe; color: #1e40af; }
 #discuss-comments .discuss-badge-neutral { background: var(--s3); color: var(--t2); }
@@ -798,6 +803,9 @@
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
+}
+#discuss-comments .discuss-ease-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
@@ -1144,7 +1152,7 @@
         border-radius: 0.5rem;
         transition: box-shadow 300ms ease;
     }
-`;function E(){if(document.getElementById("discuss-styles"))return;let u=document.createElement("style");u.id="discuss-styles",u.textContent=S,document.head.appendChild(u)}var h=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||window.location.pathname,this.serverUrl=s.serverUrl||C,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.init())}async init(){E(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json());let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let n=await e.json();this.render(n)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},n=[];return s.forEach(t=>{t.children=[],e[t.id]=t}),s.forEach(t=>{t.parent_id===0||!e[t.parent_id]?n.push(t):e[t.parent_id].children.push(t)}),n}render(s){let e=this.buildTree(s);this.container.innerHTML=`
+`;function E(){if(document.getElementById("discuss-styles"))return;let c=document.createElement("style");c.id="discuss-styles",c.textContent=S,document.head.appendChild(c)}function _(c){let s=parseInt(c.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function z(c,s,e){return"#"+[c,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function B(c,s,e){c/=255,s/=255,e/=255;let t=Math.max(c,s,e),i=Math.min(c,s,e),a,r,n=(t+i)/2;if(t===i)a=r=0;else{let o=t-i;switch(r=n>.5?o/(2-t-i):o/(t+i),t){case c:a=((s-e)/o+(s<e?6:0))/6;break;case s:a=((e-c)/o+2)/6;break;default:a=((c-s)/o+4)/6}}return[a*360,r,n]}function I(c,s,e){c/=360;let t=(r,n,o)=>(o<0&&(o+=1),o>1&&(o-=1),o<1/6?r+(n-r)*6*o:o<1/2?n:o<2/3?r+(n-r)*(2/3-o)*6:r);if(s===0){let r=Math.round(e*255);return[r,r,r]}let i=e<.5?e*(1+s):e+s-e*s,a=2*e-i;return[t(a,i,c+1/3),t(a,i,c),t(a,i,c-1/3)].map(r=>Math.round(r*255))}function j(c){let[s,e,t]=_(c),[i,a]=B(s,e,t),r={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},n={};for(let[o,d]of Object.entries(r)){let[l,p,f]=I(i,Math.min(a,.85),d);n[o]=z(l,p,f)}return n}var g=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||window.location.pathname,this.serverUrl=s.serverUrl||$,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=j(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){E(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
                     <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
@@ -1154,11 +1162,11 @@
                 <div>
                     <h4 class="discuss-text-sm discuss-font-semibold discuss-uppercase discuss-tracking-wide" style="margin:0 0 1.25rem;color:var(--t4)">${e.length} Comment${e.length!==1?"s":""}</h4>
                     <div class="discuss-flex discuss-flex-col discuss-gap-6">
-                        ${e.map(t=>this.renderComment(t)).join("")}
+                        ${e.map(i=>this.renderComment(i)).join("")}
                     </div>
                 </div>`:""}
             </div>
-        `,this.container.querySelectorAll("form[data-parent]").forEach(t=>{t.addEventListener("submit",this.handleSubmit)}),this.container.querySelectorAll(".discuss-reply-tag").forEach(t=>{t.addEventListener("click",a=>{a.preventDefault();let i=a.currentTarget.getAttribute("href"),r=i.startsWith("#")?i.substring(1):i,o=document.getElementById(r);if(o){o.scrollIntoView({behavior:"smooth",block:"center"});let c=o.style.backgroundColor,l=document.documentElement.classList.contains("dark")||document.body.classList.contains("dark");o.style.backgroundColor=l?"#1e293b":"var(--b50)",o.style.borderRadius="8px",setTimeout(()=>{o.style.transition="background-color 500ms ease",o.style.backgroundColor=c,setTimeout(()=>{o.style.transition="",o.style.borderRadius=""},500)},1500)}})}),this.container.querySelectorAll(".discuss-reply-btn").forEach(t=>{t.addEventListener("click",a=>{let i=a.currentTarget.dataset.id,r=document.getElementById(`discuss-reply-form-${i}`);r&&r.classList.toggle("discuss-hidden")})});let n=t=>{let a=t.currentTarget.dataset.id,i=!1,r=document.getElementById(`discuss-collapse-target-${a}`);r&&(i=r.classList.toggle("discuss-hidden"));let o=document.getElementById(`discuss-children-${a}`);o&&(r?o.classList.toggle("discuss-hidden",i):i=o.classList.toggle("discuss-hidden"));let c=document.querySelector(`.discuss-collapse-btn[data-id="${a}"]`);if(c){let l=c.querySelector("svg");l&&(l.style.transform=i?"rotate(-90deg)":"rotate(0deg)")}};this.container.querySelectorAll(".discuss-collapse-btn, .discuss-collapse-line").forEach(t=>{t.addEventListener("click",n)}),this.container.querySelectorAll(".discuss-share-btn").forEach(t=>{t.addEventListener("click",async a=>{let i=a.currentTarget,r=i.dataset.id,o=`${window.location.origin}${window.location.pathname}#comment-${r}`;if(navigator.share){try{await navigator.share({title:document.title,url:o})}catch(c){if(c.name==="AbortError")return;await this.copyToClipboard(i,o)}return}await this.copyToClipboard(i,o)})})}async copyToClipboard(s,e){try{if(navigator.clipboard)await navigator.clipboard.writeText(e);else{window.prompt("Copy link:",e);return}s.innerHTML=`${d.share} <span>Copied!</span>`,setTimeout(()=>{s.innerHTML=`${d.share} <span>Share</span>`},2e3)}catch{window.prompt("Copy link:",e)}}getInitialsColor(s){let e=["#0d4891","#16a34a","#b45309","#1e40af","#dc2626","#6b21a8","#be185d","#0369a1"],n=0;for(let t=0;t<s.length;t++)n=s.charCodeAt(t)+((n<<5)-n);return e[Math.abs(n)%e.length]}getAvatarHtml(s){let e=s.name?s.name.charAt(0).toUpperCase():"U";return`
+        `,this.container.querySelectorAll("form[data-parent]").forEach(i=>{i.addEventListener("submit",this.handleSubmit)}),this.container.querySelectorAll(".discuss-reply-tag").forEach(i=>{i.addEventListener("click",a=>{a.preventDefault();let r=a.currentTarget.getAttribute("href"),n=r.startsWith("#")?r.substring(1):r,o=document.getElementById(n);if(o){o.scrollIntoView({behavior:"smooth",block:"center"});let d=o.style.backgroundColor,l=document.documentElement.classList.contains("dark")||document.body.classList.contains("dark");o.style.backgroundColor=l?"#1e293b":"var(--b50)",o.style.borderRadius="8px",setTimeout(()=>{o.style.transition="background-color 500ms ease",o.style.backgroundColor=d,setTimeout(()=>{o.style.transition="",o.style.borderRadius=""},500)},1500)}})}),this.container.querySelectorAll(".discuss-reply-btn").forEach(i=>{i.addEventListener("click",a=>{let r=a.currentTarget.dataset.id,n=document.getElementById(`discuss-reply-form-${r}`);n&&n.classList.toggle("discuss-hidden")})});let t=i=>{let a=i.currentTarget.dataset.id,r=!1,n=document.getElementById(`discuss-collapse-target-${a}`);n&&(r=n.classList.toggle("discuss-hidden"));let o=document.getElementById(`discuss-children-${a}`);o&&(n?o.classList.toggle("discuss-hidden",r):r=o.classList.toggle("discuss-hidden"));let d=document.querySelector(`.discuss-collapse-btn[data-id="${a}"]`);if(d){let l=d.querySelector("svg");l&&(l.style.transform=r?"rotate(-90deg)":"rotate(0deg)")}};this.container.querySelectorAll(".discuss-collapse-btn, .discuss-collapse-line").forEach(i=>{i.addEventListener("click",t)}),this.container.querySelectorAll(".discuss-share-btn").forEach(i=>{i.addEventListener("click",async a=>{let r=a.currentTarget,n=r.dataset.id,o=`${window.location.origin}${window.location.pathname}#comment-${n}`;if(navigator.share){try{await navigator.share({title:document.title,url:o})}catch(d){if(d.name==="AbortError")return;await this.copyToClipboard(r,o)}return}await this.copyToClipboard(r,o)})})}async copyToClipboard(s,e){try{if(navigator.clipboard)await navigator.clipboard.writeText(e);else{window.prompt("Copy link:",e);return}s.innerHTML=`${m.share} <span>Copied!</span>`,setTimeout(()=>{s.innerHTML=`${m.share} <span>Share</span>`},2e3)}catch{window.prompt("Copy link:",e)}}getInitialsColor(s){let e=["#0d4891","#16a34a","#b45309","#1e40af","#dc2626","#6b21a8","#be185d","#0369a1"],t=0;for(let i=0;i<s.length;i++)t=s.charCodeAt(i)+((t<<5)-t);return e[Math.abs(t)%e.length]}getAvatarHtml(s){let e=s.name?s.name.charAt(0).toUpperCase():"U";return`
             <div style="width:100%;height:100%;background-color:${this.getInitialsColor(s.name||"")};display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.875rem;position:relative;overflow:hidden;border-radius:inherit;">
                 ${e}
                 <img src="${s.avatar}" alt="${s.name}" 
@@ -1166,23 +1174,23 @@
                      onload="this.style.opacity='1';this.style.visibility='visible'" 
                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;visibility:hidden;transition:opacity 0.2s;" />
             </div>
-        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,n,t){e=e||0;let a=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",i=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",r=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),o=this.getAdminBadges(s),c=this.getAdminTooltip(s),l=this.getAdminControls(s),g=n?`<a href="#comment-${t}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${n}</a>`:"",x=`
+        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,t,i){e=e||0;let a=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",r=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",n=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),o=this.getAdminBadges(s),d=this.getAdminTooltip(s),l=this.getAdminControls(s),p=t?`<a href="#comment-${i}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${t}</a>`:"",f=`
             <button class="discuss-collapse-btn" data-id="${s.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--t4);display:inline-flex;align-items:center;margin-left:0.25rem;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;"><path d="m6 9 6 6 6-6"/></svg>
             </button>
-        `,p="";if(s.children.length>0)if(e>=3){let f=s.children.map($=>this.renderComment($,3,s.name,s.id)).join("");p=`
+        `,h="";if(s.children.length>0)if(e>=3){let b=s.children.map(C=>this.renderComment(C,3,s.name,s.id)).join("");h=`
                     <div id="discuss-children-${s.id}" style="display:contents">
-                        ${f}
+                        ${b}
                     </div>
-                `}else p=`
+                `}else h=`
                     <div class="discuss-nested discuss-flex discuss-flex-col discuss-gap-4" id="discuss-children-${s.id}">
-                        ${s.children.map(f=>this.renderComment(f,e+1)).join("")}
+                        ${s.children.map(b=>this.renderComment(b,e+1)).join("")}
                     </div>
-                `;let m=s.content;g&&(m.startsWith("<p>")?m=m.replace("<p>",`<p>${g}`):m=g+m);let k=s.children.length>0&&e<3?`
+                `;let u=s.content;p&&(u.startsWith("<p>")?u=u.replace("<p>",`<p>${p}`):u=p+u);let k=s.children.length>0&&e<3?`
             <div class="discuss-collapse-line" data-id="${s.id}" aria-label="Collapse thread">
                 <div class="discuss-thread-line"></div>
             </div>
-        `:"",v=`
+        `:"",y=`
             <div class="discuss-flex discuss-comment-row" id="comment-${s.id}">
                 ${k}
                 <span class="discuss-avatar discuss-avatar-md discuss-flex-shrink-0" style="position:relative;z-index:20;overflow:hidden">
@@ -1191,20 +1199,20 @@
                 <div class="discuss-comment-content" style="min-width:0">
                     <div style="display:flex;align-items:center;gap:0.375rem;flex-wrap:wrap;margin-bottom:0.375rem">
                         <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${s.name}</span>
-                        ${i}${a}${o}${c}
+                        ${r}${a}${o}${d}
                         <span style="color:var(--t5);font-size:0.75rem">\xB7</span>
-                        <span style="font-size:0.8125rem;color:var(--t4)">${r}</span>
-                        ${x}
+                        <span style="font-size:0.8125rem;color:var(--t4)">${n}</span>
+                        ${f}
                     </div>
                     
                     <div id="discuss-collapse-target-${s.id}">
-                        <div class="discuss-comment-body">${m}</div>
+                        <div class="discuss-comment-body">${u}</div>
                         <div class="discuss-flex discuss-gap-2 discuss-items-center" style="flex-wrap:wrap">
                             <button class="discuss-action-btn discuss-reply-btn" data-id="${s.id}">
-                                ${d.reply} <span>Reply</span>
+                                ${m.reply} <span>Reply</span>
                             </button>
                             <button class="discuss-action-btn discuss-share-btn" data-id="${s.id}">
-                                ${d.share} <span>Share</span>
+                                ${m.share} <span>Share</span>
                             </button>
                             ${l}
                         </div>
@@ -1213,11 +1221,11 @@
                             ${this.renderForm(s.id)}
                         </div>
 
-                        ${e<3?p:""}
+                        ${e<3?h:""}
                     </div>
                 </div>
             </div>
-        `;return e<3?v:v+p}renderForm(s){let e=this.config.honeypot_question?`<input type="text" name="honeypot_answer_given" placeholder="${this.config.honeypot_question}" style="display:none" tabindex="-1" autocomplete="off">`:"";return`
+        `;return e<3?y:y+h}renderForm(s){let e=this.config.honeypot_question?`<input type="text" name="honeypot_answer_given" placeholder="${this.config.honeypot_question}" style="display:none" tabindex="-1" autocomplete="off">`:"";return`
             <form data-parent="${s}" style="width:100%">
                 <div class="discuss-form-container">
                     <textarea name="content" class="discuss-form-textarea" placeholder="Share your thoughts... (*markdown* supported)" required></textarea>
@@ -1228,21 +1236,21 @@
                     <div class="discuss-form-bottom">
                         <div class="discuss-form-inputs">
                             <div class="discuss-form-input-wrapper">
-                                ${d.user}
+                                ${m.user}
                                 <input type="text" name="name" class="discuss-form-input" placeholder="Name" required>
                             </div>
                             <div class="discuss-form-input-wrapper">
-                                ${d.mail}
+                                ${m.mail}
                                 <input type="email" name="email" class="discuss-form-input" placeholder="Email (optional)">
                             </div>
                         </div>
                         
                         <div class="discuss-form-actions">
                             <button type="submit" class="discuss-btn discuss-btn-primary">
-                                ${d.send} Post
+                                ${m.send} Post
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
-        `}async handleSubmit(s){s.preventDefault();let e=s.target,n=e.dataset.parent,t=e.querySelector('[type="submit"]');t.disabled=!0,t.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let a={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(n,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0};try{let i=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(a)});if(i.ok){if(e.reset(),parseInt(n,10)!==0){let r=document.getElementById(`discuss-reply-form-${n}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await i.json();alert(r.error||"Failed to post comment.")}}catch(i){console.error("[Discuss]",i),alert("Network error. Please try again.")}finally{t.disabled=!1,t.textContent="Post Comment"}}};window.DiscussWidget=h;var b=document.getElementById("discuss-comments");b&&b.dataset.isAdmin!=="true"&&new h({container:b});})();
+        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let a={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0};try{let r=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(a)});if(r.ok){if(e.reset(),parseInt(t,10)!==0){let n=document.getElementById(`discuss-reply-form-${t}`);n&&n.classList.add("discuss-hidden")}this.init()}else{let n=await r.json();alert(n.error||"Failed to post comment.")}}catch(r){console.error("[Discuss]",r),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=g;var v=document.getElementById("discuss-comments");v&&v.dataset.isAdmin!=="true"&&new g({container:v});})();

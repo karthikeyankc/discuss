@@ -240,7 +240,7 @@
 
   /* ── Form ───────────────────────── */
   .label {
-    @apply block text-sm font-medium mb-1;
+    @apply block text-sm font-semibold mb-1;
     color: var(--t2);
   }
   .label-required::after {
@@ -678,7 +678,7 @@
   .breadcrumb a:hover { color: var(--accent-fg); }
   .breadcrumb-sep {
     @apply inline-flex items-center;
-    color: var(--bds);
+    color: var(--t5);
   }
   .breadcrumb-sep svg { display: block; }
   .page-title-row {
@@ -835,7 +835,7 @@
     padding: 0.75rem;
     font-size: 0.875rem;
     line-height: 1rem;
-    color: var(--t4);
+    color: var(--t2);
     border-radius: 8px;
     cursor: pointer;
     text-decoration: none;

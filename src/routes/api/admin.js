@@ -54,10 +54,48 @@ router.post('/logout', (req, res) => {
 // Protect all routes below this middleware
 router.use(authenticateAdmin);
 
+// --- Me ---
+router.get('/me', (req, res) => {
+    try {
+        const admin = db.prepare('SELECT id, username FROM admins WHERE id = ?').get(req.adminId);
+        if (!admin) return res.status(404).json({ error: 'Not found' });
+        res.json({ id: admin.id, username: admin.username });
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// --- Stats ---
+router.get('/stats', (req, res) => {
+    try {
+        const stats = db.prepare(`
+            SELECT
+                COUNT(CASE WHEN c.is_deleted = 0 THEN 1 END)                          AS total_comments,
+                COUNT(CASE WHEN c.is_approved = 0 AND c.is_deleted = 0 THEN 1 END)    AS pending_comments,
+                COUNT(CASE WHEN c.is_approved = 1 AND c.is_deleted = 0 THEN 1 END)    AS approved_comments
+            FROM comments c
+            JOIN domains d ON c.domain_id = d.id
+            WHERE d.admin_id = ?
+        `).get(req.adminId);
+        const domainCount = db.prepare('SELECT COUNT(*) AS count FROM domains WHERE admin_id = ?').get(req.adminId);
+        res.json({ ...stats, domain_count: domainCount.count });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch stats' });
+    }
+});
+
 // --- Domain Management ---
 router.get('/domains', (req, res) => {
     try {
-        const domains = db.prepare('SELECT * FROM domains WHERE admin_id = ?').all(req.adminId);
+        const domains = db.prepare(`
+            SELECT d.*,
+                COUNT(CASE WHEN c.is_approved = 0 AND c.is_deleted = 0 THEN 1 END) AS pending_count,
+                COUNT(CASE WHEN c.is_deleted = 0 THEN 1 END)                        AS total_count
+            FROM domains d
+            LEFT JOIN comments c ON c.domain_id = d.id
+            WHERE d.admin_id = ?
+            GROUP BY d.id
+        `).all(req.adminId);
         res.json(domains);
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch domains' });
@@ -83,6 +121,46 @@ router.post('/domains', (req, res) => {
             return res.status(400).json({ error: 'Domain already exists' });
         }
         res.status(500).json({ error: 'Failed to add domain' });
+    }
+});
+
+router.get('/domains/:id', (req, res) => {
+    try {
+        const domain = db.prepare('SELECT * FROM domains WHERE id = ? AND admin_id = ?').get(req.params.id, req.adminId);
+        if (!domain) return res.status(404).json({ error: 'Domain not found or unauthorized' });
+        res.json(domain);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch domain' });
+    }
+});
+
+router.patch('/domains/:id', (req, res) => {
+    const { domain, site_name, honeypot_question, primary_color, blocked_words } = req.body;
+    if (!domain || !site_name) {
+        return res.status(400).json({ error: 'Domain and site name are required' });
+    }
+
+    const blockedJson = Array.isArray(blocked_words) && blocked_words.length > 0
+        ? JSON.stringify(blocked_words.map(w => w.toLowerCase().trim()).filter(Boolean))
+        : null;
+
+    try {
+        const now = Date.now();
+        const info = db.prepare(`
+            UPDATE domains
+            SET domain = ?, site_name = ?, honeypot_question = ?, primary_color = ?, blocked_words = ?, updated_at = ?
+            WHERE id = ? AND admin_id = ?
+        `).run(domain.trim(), site_name.trim(), honeypot_question || null, primary_color || null, blockedJson, now, req.params.id, req.adminId);
+
+        if (info.changes === 0) {
+            return res.status(404).json({ error: 'Domain not found or unauthorized' });
+        }
+        res.json({ message: 'Domain updated successfully' });
+    } catch (err) {
+        if (err.message.includes('UNIQUE constraint failed')) {
+            return res.status(400).json({ error: 'Domain already exists' });
+        }
+        res.status(500).json({ error: 'Failed to update domain' });
     }
 });
 
@@ -122,28 +200,25 @@ router.get('/domains/:id/posts', (req, res) => {
 
 // --- Comment Moderation ---
 router.get('/comments', (req, res) => {
-    const { domain_id, post_url } = req.query;
+    const { domain_id, post_url, status } = req.query;
     try {
-        // Only fetch comments for domains owned by this admin
         let query = `
-            SELECT c.*, d.domain 
+            SELECT c.*, d.domain
             FROM comments c
             JOIN domains d ON c.domain_id = d.id
             WHERE d.admin_id = ?
         `;
         const params = [req.adminId];
 
-        if (domain_id) {
-            query += ' AND d.id = ?';
-            params.push(domain_id);
-        }
-        
-        if (post_url) {
-            query += ' AND c.post_url = ?';
-            params.push(post_url);
-        }
+        if (domain_id) { query += ' AND d.id = ?'; params.push(domain_id); }
+        if (post_url)   { query += ' AND c.post_url = ?'; params.push(post_url); }
 
-        query += ' ORDER BY c.is_pinned DESC, c.created_at ASC';
+        if (status === 'pending')  query += ' AND c.is_approved = 0 AND c.is_deleted = 0';
+        else if (status === 'approved') query += ' AND c.is_approved = 1 AND c.is_deleted = 0';
+        else if (status === 'deleted')  query += ' AND c.is_deleted = 1';
+        else query += ' AND c.is_deleted = 0'; // default: all non-deleted
+
+        query += ' ORDER BY c.created_at DESC';
 
         const comments = db.prepare(query).all(...params);
         res.json(comments);

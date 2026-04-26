@@ -4,172 +4,562 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discuss Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/admin/admin.css">
     <script src="/client-admin.js"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@1.0.0/dist/umd/lucide.min.js"></script>
+    <style>
+        /* ── Toast ────────────────────────────────── */
+        #toast-container {
+            position: fixed; bottom: 1.5rem; right: 1.5rem;
+            z-index: 9999; display: flex; flex-direction: column-reverse;
+            gap: 0.5rem; pointer-events: none;
+        }
+        .toast {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 1rem; border-radius: 8px;
+            font-size: 0.875rem; font-weight: 500;
+            pointer-events: all; max-width: 340px; min-width: 220px;
+            opacity: 0; transform: translateX(0.75rem);
+            transition: opacity 200ms, transform 200ms;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .toast.toast-in { opacity: 1; transform: translateX(0); }
+        .toast-success { background: #16a34a; color: #fff; }
+        .toast-error   { background: #dc2626; color: #fff; }
+        .toast-info    { background: #2563eb; color: #fff; }
+        .toast-close {
+            background: none; border: none; color: rgba(255,255,255,0.75);
+            cursor: pointer; padding: 0; margin-left: auto;
+            font-size: 1.25rem; line-height: 1; flex-shrink: 0;
+        }
+        .toast-close:hover { color: #fff; }
+
+        /* ── Tag input ────────────────────────────── */
+        #blocked-words-input:focus-within {
+            border-color: var(--focus-ring);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+        }
+        .bw-tag {
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            padding: 0.2rem 0.5rem 0.2rem 0.625rem;
+            background: var(--accent-surface); color: var(--accent-fg);
+            border-radius: 9999px; font-size: 0.8125rem; font-weight: 500;
+            white-space: nowrap; user-select: none;
+        }
+        .bw-tag button {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 1rem; height: 1rem; padding: 0;
+            background: none; border: none; cursor: pointer;
+            color: var(--accent-fg); opacity: 0.6; border-radius: 9999px;
+            font-size: 0.875rem; line-height: 1; transition: opacity 100ms;
+        }
+        .bw-tag button:hover { opacity: 1; }
+
+        /* ── Inbox comment row ────────────────────── */
+        .inbox-item {
+            display: flex; align-items: flex-start; gap: 0.875rem;
+            padding: 1rem 0; border-bottom: 1px solid var(--bds);
+            transition: background-color 100ms;
+        }
+        .inbox-item:last-child { border-bottom: none; }
+        .inbox-item.selected { background-color: var(--accent-surface); padding-left: 0.75rem; padding-right: 0.75rem; margin: 0 -0.75rem; border-radius: 6px; }
+        .inbox-avatar {
+            width: 2rem; height: 2rem; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 0.8125rem; color: #fff;
+        }
+        .inbox-excerpt {
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        /* ── Bulk action bar ──────────────────────── */
+        #bulk-bar {
+            position: sticky; bottom: 0;
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--t1); color: var(--s1);
+            font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.12); z-index: 10;
+        }
+
+        /* ── User avatar initials via data attribute — immune to lucide DOM rewrites ── */
+        #user-avatar::before {
+            content: attr(data-initials);
+        }
+
+        /* ── Section heading (Gestalt common-region via rule, not box) ── */
+        .section-heading {
+            display: flex; align-items: center; gap: 0.625rem;
+            padding-bottom: 0.875rem;
+            border-bottom: 1px solid var(--bds);
+            margin-bottom: 1.5rem;
+        }
+        .section-heading svg, .section-heading i[data-lucide] {
+            width: 1.125rem; height: 1.125rem;
+            color: var(--accent-fg); flex-shrink: 0;
+        }
+        .section-heading h2 {
+            font-size: 0.9375rem; font-weight: 600;
+            color: var(--t1); margin: 0;
+        }
+
+        /* ── Settings form sections ─────────────────── */
+        .settings-section {
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--bds);
+        }
+        .settings-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        /* ── Stat cards: lighter, less prominent ────── */
+        .stat-card {
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--bds);
+            border-radius: 8px;
+            background: var(--s1);
+        }
+
+        /* ── App content: white body ────────────────── */
+        .app-content { background: #fff; }
+        .app-content-inner { max-width: 860px; }
+    </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
-    
+
     <!-- Login Section -->
     <div id="login-section" class="min-h-screen flex items-center justify-center p-4">
-        <div class="card w-full max-w-md">
-            <div class="card-header text-center">
-                <h1 class="text-2xl font-bold text-neutral-900">Discuss Admin</h1>
+        <div style="width:100%;max-width:400px">
+            <div style="text-align:center;margin-bottom:2rem">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" height="36" width="auto" aria-hidden="true" style="display:inline-block">
+                    <path d="M 25 20 V 80 L 10 95 L 35 80 H 50 A 30 30 0 0 0 50 20 Z M 45 40 H 50 A 10 10 0 0 1 50 60 H 45 Z"
+                          fill="#2563eb" fill-rule="evenodd"/>
+                    <text x="88" y="80"
+                          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+                          font-weight="800" font-size="72" letter-spacing="-0.04em" fill="#111827">iscuss</text>
+                </svg>
             </div>
-            <div class="card-body">
-                <form id="login-form" class="space-y-4">
-                    <div class="field-group">
-                        <label class="label">Username</label>
-                        <input type="text" id="login-username" class="input" required>
-                    </div>
-                    <div class="field-group">
-                        <label class="label">Password</label>
-                        <input type="password" id="login-password" class="input" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-full">Login</button>
-                </form>
-            </div>
+            <form id="login-form" style="background:#fff;border:1px solid var(--bds);border-radius:12px;padding:2rem;display:flex;flex-direction:column;gap:1.25rem">
+                <div>
+                    <h1 style="font-size:1.125rem;font-weight:700;color:var(--t1);margin:0 0 0.25rem">Sign in to your dashboard</h1>
+                    <p style="font-size:0.875rem;color:var(--t4);margin:0">Discuss Admin</p>
+                </div>
+                <div class="field-group mb-0">
+                    <label class="label" for="login-username">Username</label>
+                    <input type="text" id="login-username" class="input" required autocomplete="username">
+                </div>
+                <div class="field-group mb-0">
+                    <label class="label" for="login-password">Password</label>
+                    <input type="password" id="login-password" class="input" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Sign in</button>
+            </form>
         </div>
     </div>
 
-    <!-- App Shell (Hidden initially) -->
+    <!-- App Shell -->
     <div id="app-shell" class="app hidden">
         <header class="app-navbar bg-white">
-            <a class="navbar-brand font-bold text-xl flex items-center gap-2" href="#">
-                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                    <rect width="32" height="32" rx="8" fill="var(--b600)"/>
-                    <path d="M11 8v16M11 16l11-8M11 16l11 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <a class="navbar-brand flex items-center" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" height="28" width="auto" aria-hidden="true">
+                    <path d="M 25 20 V 80 L 10 95 L 35 80 H 50 A 30 30 0 0 0 50 20 Z M 45 40 H 50 A 10 10 0 0 1 50 60 H 45 Z"
+                          fill="#2563eb" fill-rule="evenodd"/>
+                    <text x="88" y="80"
+                          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+                          font-weight="800" font-size="72" letter-spacing="-0.04em" fill="#111827">iscuss</text>
                 </svg>
-                Discuss
             </a>
-            <button class="btn btn-icon ml-auto md:hidden" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="sidebarNav">
-                <i data-lucide="menu"></i>
-            </button>
+
+            <div style="margin-left:auto;display:flex;align-items:center;gap:0.5rem">
+                <button class="btn btn-icon md:hidden" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="sidebarNav">
+                    <i data-lucide="menu"></i>
+                </button>
+
+                <!-- User menu dropdown — z-index must exceed navbar (100) -->
+                <div style="position:relative" id="user-menu">
+                    <button id="user-menu-btn"
+                            onclick="app.toggleUserMenu()"
+                            aria-haspopup="true" aria-expanded="false"
+                            style="display:flex;align-items:center;gap:0.375rem;background:none;border:none;cursor:pointer;padding:0.25rem;border-radius:8px;transition:background 100ms">
+                        <span id="user-avatar" data-initials=""
+                              style="width:2rem;height:2rem;border-radius:50%;background:var(--b600);color:#fff;font-size:0.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0.03em;user-select:none;pointer-events:none">
+                        </span>
+                        <!-- inline SVG — keeps Lucide's createIcons() away from this button -->
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t4);flex-shrink:0;pointer-events:none"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div id="user-dropdown"
+                         style="position:absolute;top:calc(100% + 6px);right:0;left:auto;min-width:180px;
+                                background:var(--s1);border-radius:8px;padding:0.25rem;
+                                box-shadow:var(--surface-shadow-md);z-index:300;
+                                opacity:0;visibility:hidden;transform:translateY(-4px);
+                                transition:opacity 150ms ease-in,transform 150ms ease-in,visibility 0ms 150ms">
+                        <div id="user-dropdown-name"
+                             style="padding:0.5rem 0.75rem 0.5rem;font-size:0.8125rem;font-weight:600;color:var(--t1);display:none"></div>
+                        <div id="user-dropdown-divider"
+                             style="height:1px;background:var(--bds);margin:0.25rem 0;display:none"></div>
+                        <a href="#" onclick="app.logout(); return false;"
+                           style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;border-radius:6px;color:var(--danger-fg);text-decoration:none;transition:background 75ms;cursor:pointer"
+                           onmouseenter="this.style.background='#fef2f2'" onmouseleave="this.style.background='transparent'">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Sign out
+                        </a>
+                    </div>
+                </div>
+            </div>
         </header>
-        
+
         <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-        
+
         <div class="app-body">
-        <nav class="app-sidebar" id="sidebarNav">
-            <a class="sidebar-item active" href="#" onclick="app.showSection('domains'); return false;" id="nav-domains">
-                <i data-lucide="globe"></i>
-                Domains
-            </a>
-            <div style="flex:1"></div>
-            <hr style="border:none; border-top:1px solid var(--shell-divider); margin:0.5rem 0">
-            <a class="sidebar-item sidebar-item--danger" href="#" onclick="app.logout(); return false;">
-                <i data-lucide="log-out"></i>
-                Logout
-            </a>
-        </nav>
-            
-            <main class="app-content bg-neutral-50">
-                
+            <nav class="app-sidebar" id="sidebarNav">
+                <a class="sidebar-item" href="#" onclick="app.showSection('overview'); return false;" id="nav-overview">
+                    <i data-lucide="layout-dashboard"></i>
+                    Overview
+                </a>
+                <a class="sidebar-item" href="#" onclick="app.showSection('inbox'); return false;" id="nav-inbox" style="justify-content:space-between">
+                    <span style="display:flex;align-items:center;gap:0.5rem">
+                        <i data-lucide="inbox"></i>
+                        Comments
+                    </span>
+                    <span id="sidebar-pending-badge" class="badge badge-warning hidden"></span>
+                </a>
+                <a class="sidebar-item" href="#" onclick="app.showSection('domains'); return false;" id="nav-domains">
+                    <i data-lucide="globe"></i>
+                    Domains
+                </a>
+                <div style="flex:1"></div>
+            </nav>
+
+            <main class="app-content">
+
+                <!-- Overview Section -->
+                <div id="overview-section" class="app-content-inner hidden">
+                    <div class="page-header mb-6">
+                        <div class="page-title-row">
+                            <h1 class="page-title">Overview</h1>
+                        </div>
+                        <p class="text-neutral-500 text-sm mt-1">A snapshot of your comment activity.</p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Comments</div>
+                            <div class="stat-value" id="stat-total"><div class="skeleton skeleton-lg" style="width:3rem"></div></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Pending Review</div>
+                            <div class="stat-value text-primary-600" id="stat-pending"><div class="skeleton skeleton-lg" style="width:2rem"></div></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Approved</div>
+                            <div class="stat-value" id="stat-approved"><div class="skeleton skeleton-lg" style="width:3rem"></div></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Domains</div>
+                            <div class="stat-value" id="stat-domains"><div class="skeleton skeleton-lg" style="width:2rem"></div></div>
+                        </div>
+                    </div>
+                    <div id="overview-cta" class="hidden">
+                        <div class="alert alert-info">
+                            <i data-lucide="inbox" style="width:1rem;height:1rem;flex-shrink:0;margin-top:0.125rem"></i>
+                            <div>
+                                <div id="overview-cta-text" style="font-weight:600;margin-bottom:0.25rem"></div>
+                                <a href="#" onclick="app.showSection('inbox'); app.switchInboxTab('pending'); return false;" style="color:inherit;text-decoration:underline">Review pending comments →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inbox Section -->
+                <div id="inbox-section" class="app-content-inner hidden">
+                    <div class="page-header mb-6">
+                        <div class="page-title-row">
+                            <h1 class="page-title">Comments</h1>
+                        </div>
+                        <p class="text-neutral-500 text-sm mt-1">Moderate comments across all your sites.</p>
+                    </div>
+
+                    <div class="tabs mb-6" id="inbox-tabs">
+                        <a class="tab active" data-status="all" href="#" onclick="app.switchInboxTab('all'); return false;">All</a>
+                        <a class="tab" data-status="pending" href="#" onclick="app.switchInboxTab('pending'); return false;">
+                            Pending
+                            <span id="inbox-pending-badge" class="badge badge-warning hidden" style="margin-left:0.375rem"></span>
+                        </a>
+                        <a class="tab" data-status="approved" href="#" onclick="app.switchInboxTab('approved'); return false;">Approved</a>
+                    </div>
+
+                    <div style="display:flex;align-items:center;gap:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--bds);margin-bottom:0.25rem">
+                        <input type="checkbox" id="inbox-select-all" onchange="app.toggleSelectAll(this.checked)"
+                               style="width:1rem;height:1rem;cursor:pointer;accent-color:var(--b600)">
+                        <label for="inbox-select-all" class="text-sm text-neutral-500 cursor-pointer select-none">Select all</label>
+                    </div>
+                    <div id="inbox-list">
+                        <div style="padding:3rem;text-align:center;color:var(--t4)">
+                            <span class="spinner spinner-md"></span>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Action Bar -->
+                    <div id="bulk-bar" style="display:none">
+                        <span id="bulk-count">0 selected</span>
+                        <div style="display:flex;gap:0.5rem;margin-left:auto">
+                            <button class="btn btn-sm"
+                                    style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3)"
+                                    onclick="app.handleBulkAction('approve')">Approve</button>
+                            <button class="btn btn-sm"
+                                    style="background:#dc2626;color:#fff;border-color:#dc2626"
+                                    onclick="app.handleBulkAction('delete')">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Domains Section -->
                 <div id="domains-section" class="app-content-inner hidden">
                     <div class="page-header mb-6">
-                        <h1 class="page-title text-2xl font-bold">Domains</h1>
-                        <p class="text-neutral-500 text-sm mt-1">Manage sites that can use this discuss instance.</p>
+                        <div class="page-title-row">
+                            <h1 class="page-title">Domains</h1>
+                        </div>
+                        <p class="text-neutral-500 text-sm mt-1">Manage sites that can use this Discuss instance.</p>
                     </div>
 
-                    <div class="card mb-8">
-                        <div class="card-header font-semibold">Add New Domain</div>
-                        <div class="card-body">
-                            <form id="add-domain-form" class="space-y-4 max-w-2xl">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="field-group mb-0">
-                                        <label class="label">Domain <span class="text-neutral-400 font-normal">(e.g. example.com)</span></label>
-                                        <input type="text" id="domain-name" class="input" required>
-                                    </div>
-                                    <div class="field-group mb-0">
-                                        <label class="label">Site Name</label>
-                                        <input type="text" id="domain-site-name" class="input" required>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="field-group mb-0">
-                                        <label class="label">Honeypot Question <span class="text-neutral-400 font-normal">(Optional)</span></label>
-                                        <input type="text" id="domain-hq" class="input" placeholder="e.g. Leave this blank">
-                                    </div>
-                                    <div class="field-group mb-0">
-                                        <label class="label">Honeypot Answer <span class="text-neutral-400 font-normal">(Optional)</span></label>
-                                        <input type="text" id="domain-ha" class="input" placeholder="e.g. ">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-4">Add Domain</button>
-                            </form>
-                        </div>
+                    <!-- Add domain -->
+                    <div class="section-heading">
+                        <i data-lucide="plus-circle"></i>
+                        <h2>Add New Domain</h2>
                     </div>
-
-                    <div class="card">
-                        <div class="table-wrap">
-                            <table class="table w-full text-left" id="domains-table">
-                                <thead>
-                                    <tr class="border-b border-neutral-200 text-sm text-neutral-500">
-                                        <th class="p-3 font-medium">Domain</th>
-                                        <th class="p-3 font-medium">Site Name</th>
-                                        <th class="p-3 font-medium text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Populated by JS -->
-                                </tbody>
-                            </table>
+                    <form id="add-domain-form" class="space-y-4 max-w-2xl mb-10">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="field-group mb-0">
+                                <label class="label" for="domain-name">Domain</label>
+                                <input type="text" id="domain-name" class="input" placeholder="example.com" required>
+                                <p class="field-help-text">Hostname only — no <code>https://</code> or trailing slash.</p>
+                            </div>
+                            <div class="field-group mb-0">
+                                <label class="label" for="domain-site-name">Site Name</label>
+                                <input type="text" id="domain-site-name" class="input" placeholder="My Blog" required>
+                                <p class="field-help-text">A friendly label shown in your admin dashboard.</p>
+                            </div>
                         </div>
+                        <div class="field-group mb-0 max-w-sm">
+                            <label class="label" for="domain-hq">Spam Trap Label <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                            <input type="text" id="domain-hq" class="input" placeholder="e.g. What's the name of the red planet?">
+                            <p class="field-help-text">A hidden field bots auto-fill — humans never see it.</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Domain</button>
+                    </form>
+
+                    <!-- Domain list -->
+                    <div class="section-heading">
+                        <i data-lucide="globe"></i>
+                        <h2>Your Domains</h2>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="table w-full text-left">
+                            <thead>
+                                <tr>
+                                    <th>Domain</th>
+                                    <th>Site Name</th>
+                                    <th>Comments</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="domains-tbody"></tbody>
+                        </table>
                     </div>
                 </div>
 
                 <!-- Posts Section -->
                 <div id="posts-section" class="app-content-inner hidden">
                     <div class="page-header mb-6">
-                        <div class="text-sm text-neutral-500 mb-2">
-                            <a href="#" onclick="app.showSection('domains'); return false;" class="hover:text-primary-600">Domains</a> / <span id="posts-breadcrumb-domain" class="font-medium text-neutral-900"></span>
+                        <div class="breadcrumb mb-2">
+                            <a href="#" onclick="app.showSection('domains'); return false;">Domains</a>
+                            <span class="breadcrumb-sep"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+                            <span id="posts-breadcrumb-domain"></span>
                         </div>
-                        <h1 class="page-title text-2xl font-bold">Posts</h1>
+                        <div class="page-title-row">
+                            <h1 class="page-title">Posts</h1>
+                        </div>
                         <p class="text-neutral-500 text-sm mt-1">Select a post to moderate its comments.</p>
                     </div>
-
-                    <div class="card">
-                        <div class="table-wrap">
-                            <table class="table w-full text-left" id="posts-table">
-                                <thead>
-                                    <tr class="border-b border-neutral-200 text-sm text-neutral-500">
-                                        <th class="p-3 font-medium">Post URL</th>
-                                        <th class="p-3 font-medium">Comments</th>
-                                        <th class="p-3 font-medium">Last Activity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="section-heading">
+                        <i data-lucide="file-text"></i>
+                        <h2>All Posts</h2>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="table w-full text-left">
+                            <thead>
+                                <tr>
+                                    <th>Post URL</th>
+                                    <th>Comments</th>
+                                    <th>Last Activity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="posts-tbody"></tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Comments Section -->
+                <!-- Comments Section (post-specific moderation) -->
                 <div id="comments-section" class="app-content-inner hidden">
                     <div class="page-header mb-6">
-                        <div class="text-sm text-neutral-500 mb-2">
-                            <a href="#" onclick="app.showSection('domains'); return false;" class="hover:text-primary-600">Domains</a> / 
-                            <a href="#" onclick="app.showSection('posts'); return false;" class="hover:text-primary-600" id="comments-breadcrumb-domain"></a> / 
-                            <span class="font-medium text-neutral-900">Comments</span>
+                        <div class="breadcrumb mb-2">
+                            <a href="#" onclick="app.showSection('domains'); return false;">Domains</a>
+                            <span class="breadcrumb-sep"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+                            <a href="#" onclick="app.showSection('posts'); return false;" id="comments-breadcrumb-domain"></a>
+                            <span class="breadcrumb-sep"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+                            <span>Comments</span>
                         </div>
-                        <h1 class="page-title text-2xl font-bold">Comments Moderation</h1>
-                        <p class="text-neutral-500 text-sm mt-1 truncate" id="comments-subtitle">Review, approve, and manage comments.</p>
+                        <div class="page-title-row">
+                            <h1 class="page-title">Comments</h1>
+                        </div>
+                        <p class="text-neutral-500 text-sm mt-1 truncate" id="comments-subtitle"></p>
+                    </div>
+                    <div class="space-y-4" id="comments-list"></div>
+                </div>
+
+                <!-- Site Settings Section -->
+                <div id="settings-section" class="app-content-inner hidden">
+                    <div class="page-header mb-6">
+                        <div class="breadcrumb mb-2">
+                            <a href="#" onclick="app.showSection('domains'); return false;">Domains</a>
+                            <span class="breadcrumb-sep"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+                            <span id="settings-breadcrumb-domain"></span>
+                        </div>
+                        <div class="page-title-row">
+                            <h1 class="page-title">Site Settings</h1>
+                        </div>
                     </div>
 
-                    <div class="space-y-4" id="comments-list">
-                        <!-- Populated by JS -->
-                    </div>
+                    <form id="settings-form" class="max-w-2xl">
+                        <input type="hidden" id="settings-domain-id">
+
+                        <!-- General -->
+                        <div class="settings-section">
+                            <div class="section-heading">
+                                <i data-lucide="globe"></i>
+                                <h2>General</h2>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="field-group mb-0">
+                                    <label class="label" for="settings-domain">Domain</label>
+                                    <input type="text" id="settings-domain" class="input" placeholder="example.com" required>
+                                    <p class="field-help-text">Hostname only — no <code>https://</code> or trailing slash. Comments posted from any other origin will be blocked.</p>
+                                </div>
+                                <div class="field-group mb-0">
+                                    <label class="label" for="settings-site-name">Site Name</label>
+                                    <input type="text" id="settings-site-name" class="input" placeholder="My Blog" required>
+                                    <p class="field-help-text">A friendly label shown in your admin dashboard.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appearance -->
+                        <div class="settings-section">
+                            <div class="section-heading">
+                                <i data-lucide="palette"></i>
+                                <h2>Appearance</h2>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="field-group mb-0">
+                                    <label class="label">Brand Colour</label>
+                                    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+                                        <input type="color" id="settings-color-picker" value="#2563eb"
+                                               style="width:2.5rem;height:2.5rem;padding:0.125rem;border:1px solid var(--bd-control);border-radius:6px;cursor:pointer;background:var(--s1)"
+                                               oninput="app.onColorPickerInput(this.value)">
+                                        <input type="text" id="settings-color-hex" class="input" placeholder="#2563eb"
+                                               style="width:8rem;font-family:monospace"
+                                               oninput="app.onColorHexInput(this.value)"
+                                               maxlength="7">
+                                        <span id="settings-color-preview"
+                                              style="display:inline-flex;align-items:center;justify-content:center;padding:0.375rem 0.875rem;border-radius:6px;font-size:0.8125rem;font-weight:600;color:#fff;background:#2563eb;transition:background 150ms">
+                                            Preview
+                                        </span>
+                                    </div>
+                                    <p class="field-help-text">Used for buttons and interactive elements in the embedded comment widget.</p>
+                                </div>
+                                <div id="settings-a11y" style="display:none">
+                                    <div id="settings-a11y-inner" style="display:flex;gap:0.5rem;flex-wrap:wrap"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Spam Protection -->
+                        <div class="settings-section">
+                            <div class="section-heading">
+                                <i data-lucide="shield"></i>
+                                <h2>Spam Protection</h2>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="field-group mb-0">
+                                    <label class="label" for="settings-hq">Spam Trap Label <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                                    <input type="text" id="settings-hq" class="input" placeholder="e.g. What's the name of the red planet?">
+                                    <p class="field-help-text">A hidden field is added to the comment form with this label. Bots that auto-fill forms will trigger it — humans never see it. Leave empty to disable.</p>
+                                </div>
+                                <div class="field-group mb-0">
+                                    <label class="label">Blocked Words <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                                    <div id="blocked-words-input"
+                                         style="display:flex;flex-wrap:wrap;align-items:center;gap:0.375rem;min-height:2.75rem;padding:0.375rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;background:var(--s1);cursor:text;transition:border-color 120ms,box-shadow 120ms"
+                                         onclick="document.getElementById('blocked-words-field').focus()">
+                                        <input id="blocked-words-field" type="text"
+                                               placeholder="Type a word and press Enter…"
+                                               autocomplete="off" autocorrect="off" spellcheck="false"
+                                               style="border:none;outline:none;background:transparent;font-size:0.9375rem;color:var(--t1);min-width:14rem;flex:1;padding:0.25rem 0;line-height:1.4">
+                                    </div>
+                                    <p class="field-help-text">Comments containing any of these words are silently held for moderation — the commenter sees no error. Case-insensitive, whole-word match. Press <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">Enter</kbd> or <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">,</kbd> to add a word.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Embed Code -->
+                        <div class="settings-section">
+                            <div class="section-heading">
+                                <i data-lucide="code-2"></i>
+                                <h2>Embed Code</h2>
+                            </div>
+                            <p class="field-help-text" style="margin-bottom:0.875rem">Drop this snippet on any page where you want comments to appear. The <code>primaryColor</code> option pre-applies your brand colour instantly — no flash of unstyled content.</p>
+                            <div style="position:relative">
+                                <pre id="settings-embed-snippet" style="font-size:0.75rem;line-height:1.6;white-space:pre;overflow-x:auto;padding-right:6rem"></pre>
+                                <button type="button" id="settings-copy-btn"
+                                        class="btn btn-sm btn-secondary"
+                                        style="position:absolute;top:0.5rem;right:0.5rem"
+                                        onclick="app.copyEmbedSnippet()">
+                                    <i data-lucide="copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;gap:0.75rem;padding-bottom:2rem">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="button" class="btn btn-ghost" onclick="app.showSection('domains')">Cancel</button>
+                        </div>
+                    </form>
                 </div>
+
             </main>
         </div>
     </div>
 
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+        <div class="modal" style="max-width:420px">
+            <div class="modal-header">
+                <h2 class="modal-title" id="confirm-modal-title">Confirm</h2>
+            </div>
+            <div class="modal-body" id="confirm-modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="confirm-modal-cancel">Cancel</button>
+                <button class="btn btn-danger" id="confirm-modal-ok">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
     <script src="/admin/app.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>

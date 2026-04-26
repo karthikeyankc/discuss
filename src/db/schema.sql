@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS domains (
     site_name TEXT NOT NULL,
     honeypot_question TEXT,
     honeypot_answer TEXT,
+    primary_color TEXT,
+    blocked_words TEXT,
     admin_id INTEGER NOT NULL,
     created_at INTEGER NOT NULL,
     updated_at INTEGER NOT NULL,
