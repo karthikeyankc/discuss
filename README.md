@@ -210,6 +210,10 @@ Two new columns were added to the `domains` table:
 
 Existing domains will have `NULL` for both columns. This is safe — the widget falls back to its default blue palette when `primary_color` is `NULL`, and no word-filtering is applied when `blocked_words` is `NULL`. You can configure both per-domain at any time from **Admin → Domains → Settings**.
 
+#### Comment counters showing 0 after upgrade
+
+Early builds stored comments with `domain_id = 0` before that column was fully wired up. The admin stats query joins on `domain_id`, so those comments were invisible in the dashboard. The server now runs a one-time backfill on startup that reassigns any `domain_id = 0` (or orphaned) comments to your first domain. If your counters were stuck at 0, they will be correct after restarting the server.
+
 ---
 
 ## Contributing

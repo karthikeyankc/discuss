@@ -133,7 +133,11 @@ const app = {
             document.getElementById('login-section').classList.remove('hidden');
         } else {
             document.getElementById('app-shell').classList.remove('hidden');
-            document.getElementById(`${sectionId}-section`)?.classList.remove('hidden');
+            // settings-section is revealed by loadSettings() after the fetch resolves
+            // to prevent stale data flashing while the request is in-flight
+            if (sectionId !== 'settings') {
+                document.getElementById(`${sectionId}-section`)?.classList.remove('hidden');
+            }
 
             if (pushHistory) {
                 let path = `/admin/${sectionId}`;
@@ -668,12 +672,6 @@ const app = {
         const id = this.currentDomainId;
         if (!id) return this.showSection('domains');
 
-        // Try local cache first for breadcrumb; fetch full record for primary_color
-        const cached = this.domains.find(d => d.id == id);
-        if (cached) {
-            document.getElementById('settings-breadcrumb-domain').textContent = cached.domain;
-        }
-
         try {
             const res = await fetch(`/api/admin/domains/${id}`);
             if (!res.ok) return this.showSection('domains');
@@ -698,9 +696,13 @@ const app = {
             } catch { this.blockedWords = [...SPAM_DEFAULTS]; }
             this.initBlockedWordsInput();
             this._renderBlockedTags();
+
+            // Reveal the section only after all fields are populated
+            document.getElementById('settings-section').classList.remove('hidden');
         } catch (err) {
             console.error(err);
             this.showToast('Failed to load settings.', 'error');
+            this.showSection('domains');
         }
     },
 

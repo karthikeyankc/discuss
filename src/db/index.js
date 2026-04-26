@@ -24,4 +24,18 @@ db.exec(schema);
 try { db.exec('ALTER TABLE domains ADD COLUMN primary_color TEXT'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN blocked_words TEXT'); } catch {}
 
+// Backfill comments that were written before domain_id was wired up (domain_id = 0).
+// Assigns them to the first domain in the database so they show up in the admin.
+// Safe to run repeatedly — only touches rows where domain_id is 0 or orphaned.
+try {
+    const firstDomain = db.prepare('SELECT id FROM domains ORDER BY id ASC LIMIT 1').get();
+    if (firstDomain) {
+        db.prepare(`
+            UPDATE comments SET domain_id = ?
+            WHERE domain_id = 0
+               OR domain_id NOT IN (SELECT id FROM domains)
+        `).run(firstDomain.id);
+    }
+} catch {}
+
 export default db;
