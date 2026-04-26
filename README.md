@@ -188,7 +188,17 @@ sudo systemctl start discuss
 ```bash
 git pull origin main
 npm install --production
-npm start   # or: sudo systemctl restart discuss
+```
+
+If running under systemd:
+```bash
+sudo systemctl restart discuss
+sudo systemctl status discuss   # verify it came up cleanly
+```
+
+If running manually:
+```bash
+npm start
 ```
 
 That's it. No manual SQL, no migration scripts.
