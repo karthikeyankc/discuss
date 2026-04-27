@@ -897,14 +897,30 @@ const app = {
         if (!this.currentDomainId || !this.currentPostUrl) return this.showSection('domains');
         document.getElementById('comments-subtitle').textContent = `Post: ${this.currentPostUrl}`;
         const list = document.getElementById('comments-list');
-        list.innerHTML = '<div id="discuss-comments" data-is-admin="true"></div>';
-        new window.DiscussWidget({
-            container: document.getElementById('discuss-comments'),
-            postUrl: this.currentPostUrl,
-            fetchUrl: `/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`,
-            isAdmin: true,
-        });
-        if (window.lucide) lucide.createIcons();
+        list.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--t4)"><span class="spinner spinner-md"></span></div>';
+
+        try {
+            const res = await fetch(`/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`);
+            if (!res.ok) throw new Error('Failed');
+            const comments = await res.json();
+
+            if (comments.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div style="margin-bottom:1rem;color:var(--t4)"><i data-lucide="message-circle" style="width:2.5rem;height:2.5rem"></i></div>
+                        <div class="empty-title">No comments yet</div>
+                        <p class="empty-desc">No comments have been posted on this page.</p>
+                    </div>`;
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
+
+            list.innerHTML = comments.map(c => this.renderInboxItem(c)).join('');
+            if (window.lucide) lucide.createIcons();
+        } catch (err) {
+            console.error(err);
+            list.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger-fg)">Error loading comments.</div>';
+        }
     },
 };
 
