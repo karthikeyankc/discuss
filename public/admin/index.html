@@ -91,17 +91,28 @@
 
         /* ── Section heading (Gestalt common-region via rule, not box) ── */
         .section-heading {
-            display: flex; align-items: center; gap: 0.625rem;
-            padding-bottom: 0.875rem;
+            display: flex; align-items: center; gap: 0.75rem;
+            padding-bottom: 1rem;
             border-bottom: 1px solid var(--bds);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
         }
-        .section-heading svg, .section-heading i[data-lucide] {
-            width: 1.125rem; height: 1.125rem;
+        .section-heading-icon {
+            display: flex; align-items: center; justify-content: center;
+            width: 1.875rem; height: 1.875rem; flex-shrink: 0;
+            background: var(--accent-surface);
+            border-radius: 6px;
+        }
+        .section-heading-icon svg, .section-heading-icon i[data-lucide] {
+            width: 1rem; height: 1rem;
+            color: var(--accent-fg);
+        }
+        /* legacy: direct icon child (existing markup without wrapper) */
+        .section-heading > svg, .section-heading > i[data-lucide] {
+            width: 1rem; height: 1rem;
             color: var(--accent-fg); flex-shrink: 0;
         }
         .section-heading h2 {
-            font-size: 0.9375rem; font-weight: 600;
+            font-size: 1rem; font-weight: 600;
             color: var(--t1); margin: 0;
         }
 
@@ -135,10 +146,10 @@
     <div id="login-section" class="hidden min-h-screen flex items-center justify-center p-4">
         <div style="width:100%;max-width:400px">
             <div style="text-align:center;margin-bottom:2rem">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" height="36" width="auto" aria-hidden="true" style="display:inline-block">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" height="48" width="auto" aria-hidden="true" style="display:inline-block">
                     <path d="M 25 20 V 80 L 10 95 L 35 80 H 50 A 30 30 0 0 0 50 20 Z M 45 40 H 50 A 10 10 0 0 1 50 60 H 45 Z"
                           fill="#2563eb" fill-rule="evenodd"/>
-                    <text x="88" y="80"
+                    <text x="82" y="80"
                           font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
                           font-weight="800" font-size="72" letter-spacing="-0.04em" fill="#111827">iscuss</text>
                 </svg>
@@ -165,10 +176,10 @@
     <div id="app-shell" class="app hidden">
         <header class="app-navbar bg-white">
             <a class="navbar-brand flex items-center" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" height="28" width="auto" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" height="32" width="auto" aria-hidden="true">
                     <path d="M 25 20 V 80 L 10 95 L 35 80 H 50 A 30 30 0 0 0 50 20 Z M 45 40 H 50 A 10 10 0 0 1 50 60 H 45 Z"
                           fill="#2563eb" fill-rule="evenodd"/>
-                    <text x="88" y="80"
+                    <text x="82" y="80"
                           font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
                           font-weight="800" font-size="72" letter-spacing="-0.04em" fill="#111827">iscuss</text>
                 </svg>
@@ -282,13 +293,15 @@
                         <p class="text-neutral-500 text-sm mt-1">Moderate comments across all your sites.</p>
                     </div>
 
-                    <div class="tabs mb-6" id="inbox-tabs">
-                        <a class="tab active" data-status="all" href="#" onclick="app.switchInboxTab('all'); return false;">All</a>
-                        <a class="tab" data-status="pending" href="#" onclick="app.switchInboxTab('pending'); return false;">
+                    <div class="tabs mb-6" id="inbox-tabs" role="tablist">
+                        <button class="tab active" role="tab" data-status="all" onclick="app.switchInboxTab('all')">All</button>
+                        <button class="tab" role="tab" data-status="pending" onclick="app.switchInboxTab('pending')"
+                                style="display:inline-flex;align-items:center;gap:0.375rem">
                             Pending
-                            <span id="inbox-pending-badge" class="badge badge-warning hidden" style="margin-left:0.375rem"></span>
-                        </a>
-                        <a class="tab" data-status="approved" href="#" onclick="app.switchInboxTab('approved'); return false;">Approved</a>
+                            <span id="inbox-pending-badge" class="badge badge-warning hidden"></span>
+                        </button>
+                        <button class="tab" role="tab" data-status="approved" onclick="app.switchInboxTab('approved')">Approved</button>
+                        <span class="tab-indicator" id="inbox-tab-indicator"></span>
                     </div>
 
                     <div style="display:flex;align-items:center;gap:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--bds);margin-bottom:0.25rem">
@@ -327,7 +340,7 @@
 
                     <!-- Add domain -->
                     <div class="section-heading">
-                        <i data-lucide="plus-circle"></i>
+                        <div class="section-heading-icon"><i data-lucide="plus-circle"></i></div>
                         <h2>Add New Domain</h2>
                     </div>
                     <form id="add-domain-form" class="space-y-4 max-w-2xl mb-10">
@@ -344,16 +357,25 @@
                             </div>
                         </div>
                         <div class="field-group mb-0 max-w-sm">
-                            <label class="label" for="domain-hq">Spam Trap Label <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                            <label class="label" for="domain-hq">
+                                Spam Trap Label
+                                <span class="text-neutral-400 font-normal">(Optional)</span>
+                                <span class="help-icon-wrap" tabindex="0" aria-describedby="domain-hq-tip">
+                                    <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
+                                    <span class="help-tooltip" id="domain-hq-tip" role="tooltip">
+                                        A <strong>honeypot field</strong> — a hidden form field that real visitors never see or fill in. Spam bots, which blindly complete every input, will fill it in and get silently rejected. No captchas, no friction for your readers.
+                                    </span>
+                                </span>
+                            </label>
                             <input type="text" id="domain-hq" class="input" placeholder="e.g. What's the name of the red planet?">
-                            <p class="field-help-text">A hidden field bots auto-fill — humans never see it.</p>
+                            <p class="field-help-text">A hidden field that spam bots fill in automatically — real visitors never see it. Leave empty to disable.</p>
                         </div>
                         <button type="submit" class="btn btn-primary">Add Domain</button>
                     </form>
 
                     <!-- Domain list -->
                     <div class="section-heading">
-                        <i data-lucide="globe"></i>
+                        <div class="section-heading-icon"><i data-lucide="globe"></i></div>
                         <h2>Your Domains</h2>
                     </div>
                     <div class="table-wrap">
@@ -385,7 +407,7 @@
                         <p class="text-neutral-500 text-sm mt-1">Select a post to moderate its comments.</p>
                     </div>
                     <div class="section-heading">
-                        <i data-lucide="file-text"></i>
+                        <div class="section-heading-icon"><i data-lucide="file-text"></i></div>
                         <h2>All Posts</h2>
                     </div>
                     <div class="table-wrap">
@@ -439,7 +461,7 @@
                         <!-- General -->
                         <div class="settings-section">
                             <div class="section-heading">
-                                <i data-lucide="globe"></i>
+                                <div class="section-heading-icon"><i data-lucide="globe"></i></div>
                                 <h2>General</h2>
                             </div>
                             <div class="space-y-4">
@@ -459,7 +481,7 @@
                         <!-- Appearance -->
                         <div class="settings-section">
                             <div class="section-heading">
-                                <i data-lucide="palette"></i>
+                                <div class="section-heading-icon"><i data-lucide="palette"></i></div>
                                 <h2>Appearance</h2>
                             </div>
                             <div class="space-y-4">
@@ -489,14 +511,23 @@
                         <!-- Spam Protection -->
                         <div class="settings-section">
                             <div class="section-heading">
-                                <i data-lucide="shield"></i>
+                                <div class="section-heading-icon"><i data-lucide="shield"></i></div>
                                 <h2>Spam Protection</h2>
                             </div>
                             <div class="space-y-4">
                                 <div class="field-group mb-0">
-                                    <label class="label" for="settings-hq">Spam Trap Label <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                                    <label class="label" for="settings-hq">
+                                        Spam Trap Label
+                                        <span class="text-neutral-400 font-normal">(Optional)</span>
+                                        <span class="help-icon-wrap" tabindex="0" aria-describedby="settings-hq-tip">
+                                            <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
+                                            <span class="help-tooltip" id="settings-hq-tip" role="tooltip">
+                                                A <strong>honeypot field</strong> — a hidden form field that real visitors never see or fill in. Spam bots, which blindly complete every input, will fill it in and get silently rejected. No captchas, no friction for your readers.
+                                            </span>
+                                        </span>
+                                    </label>
                                     <input type="text" id="settings-hq" class="input" placeholder="e.g. What's the name of the red planet?">
-                                    <p class="field-help-text">A hidden field is added to the comment form with this label. Bots that auto-fill forms will trigger it — humans never see it. Leave empty to disable.</p>
+                                    <p class="field-help-text">A hidden field that spam bots fill in automatically — real visitors never see it. Leave empty to disable.</p>
                                 </div>
                                 <div class="field-group mb-0">
                                     <label class="label">Blocked Words <span class="text-neutral-400 font-normal">(Optional)</span></label>
@@ -516,7 +547,7 @@
                         <!-- Embed Code -->
                         <div class="settings-section">
                             <div class="section-heading">
-                                <i data-lucide="code-2"></i>
+                                <div class="section-heading-icon"><i data-lucide="code-2"></i></div>
                                 <h2>Embed Code</h2>
                             </div>
                             <p class="field-help-text" style="margin-bottom:0.875rem">Drop this snippet on any page where you want comments to appear. The <code>primaryColor</code> option pre-applies your brand colour instantly — no flash of unstyled content.</p>

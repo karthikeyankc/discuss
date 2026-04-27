@@ -100,6 +100,78 @@ const cssContent = injectedCss + `
         color: var(--t4);
         font-style: italic;
     }
+    #discuss-comments .discuss-comment-body kbd {
+        display: inline-block;
+        padding: 0.15em 0.5em 0.2em;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.8125em;
+        line-height: 1.4;
+        color: var(--t2);
+        background: var(--s2);
+        border: 1px solid var(--bd);
+        border-bottom: 2px solid var(--bd-strong);
+        border-radius: 4px;
+        box-shadow: inset 0 -1px 0 var(--bd-strong), inset 0 1px 0 #fff;
+        white-space: nowrap;
+        vertical-align: baseline;
+    }
+    #discuss-comments .discuss-comment-body mark {
+        background: #fef9c3;
+        color: #713f12;
+        padding: 0.1em 0.2em;
+        border-radius: 3px;
+    }
+    #discuss-comments .discuss-comment-body abbr[title] {
+        text-decoration: underline dotted;
+        cursor: help;
+    }
+    #discuss-comments .discuss-comment-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15em 0.4em;
+        background: var(--s3);
+        color: var(--t2);
+        border-radius: 4px;
+    }
+    #discuss-comments .discuss-comment-body pre {
+        margin: 0.875em 0;
+        padding: 1rem 1.25rem;
+        background: var(--t1);
+        color: var(--s2);
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+    #discuss-comments .discuss-comment-body pre code {
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        font-size: inherit;
+        border-radius: 0;
+    }
+    #discuss-comments .discuss-comment-body ul,
+    #discuss-comments .discuss-comment-body ol {
+        margin: 0.625em 0 0.75em;
+        padding-left: 1.5rem;
+    }
+    #discuss-comments .discuss-comment-body ul { list-style-type: disc; }
+    #discuss-comments .discuss-comment-body ol { list-style-type: decimal; }
+    #discuss-comments .discuss-comment-body li { margin: 0.3em 0; }
+    #discuss-comments .discuss-comment-body del { color: var(--t4); text-decoration: line-through; }
+    #discuss-comments .discuss-comment-body ins {
+        text-decoration: none;
+        background: #dcfce7;
+        color: #15803d;
+        padding: 0.1em 0.2em;
+        border-radius: 3px;
+    }
+    #discuss-comments .discuss-comment-body cite { font-style: italic; color: var(--t3); }
+    #discuss-comments .discuss-comment-body sup,
+    #discuss-comments .discuss-comment-body sub { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
+    #discuss-comments .discuss-comment-body sup { top: -0.5em; }
+    #discuss-comments .discuss-comment-body sub { bottom: -0.25em; }
 
     /* ── Badge (also purged by scanner) ── */
     /* ── Badge — exact DS spec: inline-flex gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full ── */

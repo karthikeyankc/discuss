@@ -1,4 +1,4 @@
-(()=>{var m={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var w=document.getElementsByTagName("script"),x=w[w.length-1],$=x?new URL(x.src).origin:window.location.origin,T=`#discuss-comments *, #discuss-comments ::before, #discuss-comments ::after {
+(()=>{var m={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var x=document.getElementsByTagName("script"),w=x[x.length-1],$=w?new URL(w.src).origin:window.location.origin,T=`#discuss-comments *, #discuss-comments ::before, #discuss-comments ::after {
     --tw-border-spacing-x: 0;
     --tw-border-spacing-y: 0;
     --tw-translate-x: 0;
@@ -509,6 +509,7 @@
 #discuss-comments .discuss-checkbox-input:checked + .checkbox-box .checkbox-icon path { stroke-dashoffset: 0; transition: stroke-dashoffset 150ms ease-out 80ms; }
 /* Animated radio \u2014 inner dot scales in with spring */
 /* Same position:relative requirement as .checkbox-label \u2014 see note above. */
+/* \u2500\u2500 Help icon tooltip \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
 /* \u2500\u2500 Card \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
 /* shadow-sm = three-layer resting shadow. No border. See CLAUDE.md. */
 /* \u2500\u2500 Badge \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
@@ -940,6 +941,78 @@
         color: var(--t4);
         font-style: italic;
     }
+    #discuss-comments .discuss-comment-body kbd {
+        display: inline-block;
+        padding: 0.15em 0.5em 0.2em;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.8125em;
+        line-height: 1.4;
+        color: var(--t2);
+        background: var(--s2);
+        border: 1px solid var(--bd);
+        border-bottom: 2px solid var(--bd-strong);
+        border-radius: 4px;
+        box-shadow: inset 0 -1px 0 var(--bd-strong), inset 0 1px 0 #fff;
+        white-space: nowrap;
+        vertical-align: baseline;
+    }
+    #discuss-comments .discuss-comment-body mark {
+        background: #fef9c3;
+        color: #713f12;
+        padding: 0.1em 0.2em;
+        border-radius: 3px;
+    }
+    #discuss-comments .discuss-comment-body abbr[title] {
+        text-decoration: underline dotted;
+        cursor: help;
+    }
+    #discuss-comments .discuss-comment-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15em 0.4em;
+        background: var(--s3);
+        color: var(--t2);
+        border-radius: 4px;
+    }
+    #discuss-comments .discuss-comment-body pre {
+        margin: 0.875em 0;
+        padding: 1rem 1.25rem;
+        background: var(--t1);
+        color: var(--s2);
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+    #discuss-comments .discuss-comment-body pre code {
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        font-size: inherit;
+        border-radius: 0;
+    }
+    #discuss-comments .discuss-comment-body ul,
+    #discuss-comments .discuss-comment-body ol {
+        margin: 0.625em 0 0.75em;
+        padding-left: 1.5rem;
+    }
+    #discuss-comments .discuss-comment-body ul { list-style-type: disc; }
+    #discuss-comments .discuss-comment-body ol { list-style-type: decimal; }
+    #discuss-comments .discuss-comment-body li { margin: 0.3em 0; }
+    #discuss-comments .discuss-comment-body del { color: var(--t4); text-decoration: line-through; }
+    #discuss-comments .discuss-comment-body ins {
+        text-decoration: none;
+        background: #dcfce7;
+        color: #15803d;
+        padding: 0.1em 0.2em;
+        border-radius: 3px;
+    }
+    #discuss-comments .discuss-comment-body cite { font-style: italic; color: var(--t3); }
+    #discuss-comments .discuss-comment-body sup,
+    #discuss-comments .discuss-comment-body sub { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
+    #discuss-comments .discuss-comment-body sup { top: -0.5em; }
+    #discuss-comments .discuss-comment-body sub { bottom: -0.25em; }
 
     /* \u2500\u2500 Badge (also purged by scanner) \u2500\u2500 */
     /* \u2500\u2500 Badge \u2014 exact DS spec: inline-flex gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full \u2500\u2500 */
@@ -1152,7 +1225,7 @@
         border-radius: 0.5rem;
         transition: box-shadow 300ms ease;
     }
-`;function E(){if(document.getElementById("discuss-styles"))return;let c=document.createElement("style");c.id="discuss-styles",c.textContent=S,document.head.appendChild(c)}function _(c){let s=parseInt(c.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function z(c,s,e){return"#"+[c,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function B(c,s,e){c/=255,s/=255,e/=255;let t=Math.max(c,s,e),i=Math.min(c,s,e),a,r,n=(t+i)/2;if(t===i)a=r=0;else{let o=t-i;switch(r=n>.5?o/(2-t-i):o/(t+i),t){case c:a=((s-e)/o+(s<e?6:0))/6;break;case s:a=((e-c)/o+2)/6;break;default:a=((c-s)/o+4)/6}}return[a*360,r,n]}function I(c,s,e){c/=360;let t=(r,n,o)=>(o<0&&(o+=1),o>1&&(o-=1),o<1/6?r+(n-r)*6*o:o<1/2?n:o<2/3?r+(n-r)*(2/3-o)*6:r);if(s===0){let r=Math.round(e*255);return[r,r,r]}let i=e<.5?e*(1+s):e+s-e*s,a=2*e-i;return[t(a,i,c+1/3),t(a,i,c),t(a,i,c-1/3)].map(r=>Math.round(r*255))}function j(c){let[s,e,t]=_(c),[i,a]=B(s,e,t),r={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},n={};for(let[o,d]of Object.entries(r)){let[l,p,f]=I(i,Math.min(a,.85),d);n[o]=z(l,p,f)}return n}var g=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||window.location.pathname,this.serverUrl=s.serverUrl||$,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=j(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){E(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
+`;function E(){if(document.getElementById("discuss-styles"))return;let c=document.createElement("style");c.id="discuss-styles",c.textContent=S,document.head.appendChild(c)}function z(c){let s=parseInt(c.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function M(c,s,e){return"#"+[c,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function _(c,s,e){c/=255,s/=255,e/=255;let t=Math.max(c,s,e),i=Math.min(c,s,e),a,o,r=(t+i)/2;if(t===i)a=o=0;else{let n=t-i;switch(o=r>.5?n/(2-t-i):n/(t+i),t){case c:a=((s-e)/n+(s<e?6:0))/6;break;case s:a=((e-c)/n+2)/6;break;default:a=((c-s)/n+4)/6}}return[a*360,o,r]}function B(c,s,e){c/=360;let t=(o,r,n)=>(n<0&&(n+=1),n>1&&(n-=1),n<1/6?o+(r-o)*6*n:n<1/2?r:n<2/3?o+(r-o)*(2/3-n)*6:o);if(s===0){let o=Math.round(e*255);return[o,o,o]}let i=e<.5?e*(1+s):e+s-e*s,a=2*e-i;return[t(a,i,c+1/3),t(a,i,c),t(a,i,c-1/3)].map(o=>Math.round(o*255))}function I(c){let[s,e,t]=z(c),[i,a]=_(s,e,t),o={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},r={};for(let[n,d]of Object.entries(o)){let[l,p,b]=B(i,Math.min(a,.85),d);r[n]=M(l,p,b)}return r}var g=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||window.location.pathname,this.serverUrl=s.serverUrl||$,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=I(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){E(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
                     <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
@@ -1166,7 +1239,7 @@
                     </div>
                 </div>`:""}
             </div>
-        `,this.container.querySelectorAll("form[data-parent]").forEach(i=>{i.addEventListener("submit",this.handleSubmit)}),this.container.querySelectorAll(".discuss-reply-tag").forEach(i=>{i.addEventListener("click",a=>{a.preventDefault();let r=a.currentTarget.getAttribute("href"),n=r.startsWith("#")?r.substring(1):r,o=document.getElementById(n);if(o){o.scrollIntoView({behavior:"smooth",block:"center"});let d=o.style.backgroundColor,l=document.documentElement.classList.contains("dark")||document.body.classList.contains("dark");o.style.backgroundColor=l?"#1e293b":"var(--b50)",o.style.borderRadius="8px",setTimeout(()=>{o.style.transition="background-color 500ms ease",o.style.backgroundColor=d,setTimeout(()=>{o.style.transition="",o.style.borderRadius=""},500)},1500)}})}),this.container.querySelectorAll(".discuss-reply-btn").forEach(i=>{i.addEventListener("click",a=>{let r=a.currentTarget.dataset.id,n=document.getElementById(`discuss-reply-form-${r}`);n&&n.classList.toggle("discuss-hidden")})});let t=i=>{let a=i.currentTarget.dataset.id,r=!1,n=document.getElementById(`discuss-collapse-target-${a}`);n&&(r=n.classList.toggle("discuss-hidden"));let o=document.getElementById(`discuss-children-${a}`);o&&(n?o.classList.toggle("discuss-hidden",r):r=o.classList.toggle("discuss-hidden"));let d=document.querySelector(`.discuss-collapse-btn[data-id="${a}"]`);if(d){let l=d.querySelector("svg");l&&(l.style.transform=r?"rotate(-90deg)":"rotate(0deg)")}};this.container.querySelectorAll(".discuss-collapse-btn, .discuss-collapse-line").forEach(i=>{i.addEventListener("click",t)}),this.container.querySelectorAll(".discuss-share-btn").forEach(i=>{i.addEventListener("click",async a=>{let r=a.currentTarget,n=r.dataset.id,o=`${window.location.origin}${window.location.pathname}#comment-${n}`;if(navigator.share){try{await navigator.share({title:document.title,url:o})}catch(d){if(d.name==="AbortError")return;await this.copyToClipboard(r,o)}return}await this.copyToClipboard(r,o)})})}async copyToClipboard(s,e){try{if(navigator.clipboard)await navigator.clipboard.writeText(e);else{window.prompt("Copy link:",e);return}s.innerHTML=`${m.share} <span>Copied!</span>`,setTimeout(()=>{s.innerHTML=`${m.share} <span>Share</span>`},2e3)}catch{window.prompt("Copy link:",e)}}getInitialsColor(s){let e=["#0d4891","#16a34a","#b45309","#1e40af","#dc2626","#6b21a8","#be185d","#0369a1"],t=0;for(let i=0;i<s.length;i++)t=s.charCodeAt(i)+((t<<5)-t);return e[Math.abs(t)%e.length]}getAvatarHtml(s){let e=s.name?s.name.charAt(0).toUpperCase():"U";return`
+        `,this.container.querySelectorAll("form[data-parent]").forEach(i=>{i.addEventListener("submit",this.handleSubmit)}),this.container.querySelectorAll(".discuss-reply-tag").forEach(i=>{i.addEventListener("click",a=>{a.preventDefault();let o=a.currentTarget.getAttribute("href"),r=o.startsWith("#")?o.substring(1):o,n=document.getElementById(r);if(n){n.scrollIntoView({behavior:"smooth",block:"center"});let d=n.style.backgroundColor,l=document.documentElement.classList.contains("dark")||document.body.classList.contains("dark");n.style.backgroundColor=l?"#1e293b":"var(--b50)",n.style.borderRadius="8px",setTimeout(()=>{n.style.transition="background-color 500ms ease",n.style.backgroundColor=d,setTimeout(()=>{n.style.transition="",n.style.borderRadius=""},500)},1500)}})}),this.container.querySelectorAll(".discuss-reply-btn").forEach(i=>{i.addEventListener("click",a=>{let o=a.currentTarget.dataset.id,r=document.getElementById(`discuss-reply-form-${o}`);r&&r.classList.toggle("discuss-hidden")})});let t=i=>{let a=i.currentTarget.dataset.id,o=!1,r=document.getElementById(`discuss-collapse-target-${a}`);r&&(o=r.classList.toggle("discuss-hidden"));let n=document.getElementById(`discuss-children-${a}`);n&&(r?n.classList.toggle("discuss-hidden",o):o=n.classList.toggle("discuss-hidden"));let d=document.querySelector(`.discuss-collapse-btn[data-id="${a}"]`);if(d){let l=d.querySelector("svg");l&&(l.style.transform=o?"rotate(-90deg)":"rotate(0deg)")}};this.container.querySelectorAll(".discuss-collapse-btn, .discuss-collapse-line").forEach(i=>{i.addEventListener("click",t)}),this.container.querySelectorAll(".discuss-share-btn").forEach(i=>{i.addEventListener("click",async a=>{let o=a.currentTarget,r=o.dataset.id,n=`${window.location.origin}${window.location.pathname}#comment-${r}`;if(navigator.share){try{await navigator.share({title:document.title,url:n})}catch(d){if(d.name==="AbortError")return;await this.copyToClipboard(o,n)}return}await this.copyToClipboard(o,n)})})}async copyToClipboard(s,e){try{if(navigator.clipboard)await navigator.clipboard.writeText(e);else{window.prompt("Copy link:",e);return}s.innerHTML=`${m.share} <span>Copied!</span>`,setTimeout(()=>{s.innerHTML=`${m.share} <span>Share</span>`},2e3)}catch{window.prompt("Copy link:",e)}}getInitialsColor(s){let e=["#0d4891","#16a34a","#b45309","#1e40af","#dc2626","#6b21a8","#be185d","#0369a1"],t=0;for(let i=0;i<s.length;i++)t=s.charCodeAt(i)+((t<<5)-t);return e[Math.abs(t)%e.length]}getAvatarHtml(s){let e=s.name?s.name.charAt(0).toUpperCase():"U";return`
             <div style="width:100%;height:100%;background-color:${this.getInitialsColor(s.name||"")};display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.875rem;position:relative;overflow:hidden;border-radius:inherit;">
                 ${e}
                 <img src="${s.avatar}" alt="${s.name}" 
@@ -1174,23 +1247,23 @@
                      onload="this.style.opacity='1';this.style.visibility='visible'" 
                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;visibility:hidden;transition:opacity 0.2s;" />
             </div>
-        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,t,i){e=e||0;let a=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",r=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",n=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),o=this.getAdminBadges(s),d=this.getAdminTooltip(s),l=this.getAdminControls(s),p=t?`<a href="#comment-${i}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${t}</a>`:"",f=`
+        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,t,i){e=e||0;let a=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",o=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",r=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),n=this.getAdminBadges(s),d=this.getAdminTooltip(s),l=this.getAdminControls(s),p=t?`<a href="#comment-${i}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${t}</a>`:"",b=`
             <button class="discuss-collapse-btn" data-id="${s.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--t4);display:inline-flex;align-items:center;margin-left:0.25rem;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;"><path d="m6 9 6 6 6-6"/></svg>
             </button>
-        `,h="";if(s.children.length>0)if(e>=3){let b=s.children.map(C=>this.renderComment(C,3,s.name,s.id)).join("");h=`
+        `,h="";if(s.children.length>0)if(e>=3){let f=s.children.map(C=>this.renderComment(C,3,s.name,s.id)).join("");h=`
                     <div id="discuss-children-${s.id}" style="display:contents">
-                        ${b}
+                        ${f}
                     </div>
                 `}else h=`
                     <div class="discuss-nested discuss-flex discuss-flex-col discuss-gap-4" id="discuss-children-${s.id}">
-                        ${s.children.map(b=>this.renderComment(b,e+1)).join("")}
+                        ${s.children.map(f=>this.renderComment(f,e+1)).join("")}
                     </div>
                 `;let u=s.content;p&&(u.startsWith("<p>")?u=u.replace("<p>",`<p>${p}`):u=p+u);let k=s.children.length>0&&e<3?`
             <div class="discuss-collapse-line" data-id="${s.id}" aria-label="Collapse thread">
                 <div class="discuss-thread-line"></div>
             </div>
-        `:"",y=`
+        `:"",v=`
             <div class="discuss-flex discuss-comment-row" id="comment-${s.id}">
                 ${k}
                 <span class="discuss-avatar discuss-avatar-md discuss-flex-shrink-0" style="position:relative;z-index:20;overflow:hidden">
@@ -1199,10 +1272,10 @@
                 <div class="discuss-comment-content" style="min-width:0">
                     <div style="display:flex;align-items:center;gap:0.375rem;flex-wrap:wrap;margin-bottom:0.375rem">
                         <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${s.name}</span>
-                        ${r}${a}${o}${d}
+                        ${o}${a}${n}${d}
                         <span style="color:var(--t5);font-size:0.75rem">\xB7</span>
-                        <span style="font-size:0.8125rem;color:var(--t4)">${n}</span>
-                        ${f}
+                        <span style="font-size:0.8125rem;color:var(--t4)">${r}</span>
+                        ${b}
                     </div>
                     
                     <div id="discuss-collapse-target-${s.id}">
@@ -1225,7 +1298,7 @@
                     </div>
                 </div>
             </div>
-        `;return e<3?y:y+h}renderForm(s){let e=this.config.honeypot_question?`<input type="text" name="honeypot_answer_given" placeholder="${this.config.honeypot_question}" style="display:none" tabindex="-1" autocomplete="off">`:"";return`
+        `;return e<3?v:v+h}renderForm(s){let e=this.config.honeypot_question?`<input type="text" name="honeypot_answer_given" placeholder="${this.config.honeypot_question}" style="display:none" tabindex="-1" autocomplete="off">`:"";return`
             <form data-parent="${s}" style="width:100%">
                 <div class="discuss-form-container">
                     <textarea name="content" class="discuss-form-textarea" placeholder="Share your thoughts... (*markdown* supported)" required></textarea>
@@ -1253,4 +1326,4 @@
                     </div>
                 </div>
             </form>
-        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let a={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0};try{let r=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(a)});if(r.ok){if(e.reset(),parseInt(t,10)!==0){let n=document.getElementById(`discuss-reply-form-${t}`);n&&n.classList.add("discuss-hidden")}this.init()}else{let n=await r.json();alert(n.error||"Failed to post comment.")}}catch(r){console.error("[Discuss]",r),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=g;var v=document.getElementById("discuss-comments");v&&v.dataset.isAdmin!=="true"&&new g({container:v});})();
+        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let a={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0};try{let o=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(a)});if(o.ok){if(e.reset(),parseInt(t,10)!==0){let r=document.getElementById(`discuss-reply-form-${t}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await o.json();alert(r.error||"Failed to post comment.")}}catch(o){console.error("[Discuss]",o),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=g;var y=document.getElementById("discuss-comments");y&&y.dataset.isAdmin!=="true"&&new g({container:y});})();

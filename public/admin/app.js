@@ -162,7 +162,7 @@ const app = {
             }
 
             if (sectionId === 'overview')  this.loadStats();
-            if (sectionId === 'inbox')     this.loadInbox();
+            if (sectionId === 'inbox')     { this.loadInbox(); this._updateInboxTabIndicator(this.currentInboxStatus); }
             if (sectionId === 'domains')   this.loadDomains();
             if (sectionId === 'posts')     this.loadPosts();
             if (sectionId === 'comments')  this.loadComments();
@@ -311,7 +311,18 @@ const app = {
         document.querySelectorAll('#inbox-tabs .tab').forEach(tab => {
             tab.classList.toggle('active', tab.dataset.status === status);
         });
+        this._updateInboxTabIndicator(status);
         this.loadInbox(status);
+    },
+
+    _updateInboxTabIndicator(status) {
+        requestAnimationFrame(() => {
+            const indicator = document.getElementById('inbox-tab-indicator');
+            const activeTab = document.querySelector(`#inbox-tabs .tab[data-status="${status}"]`);
+            if (!indicator || !activeTab) return;
+            indicator.style.left  = activeTab.offsetLeft + 'px';
+            indicator.style.width = activeTab.offsetWidth + 'px';
+        });
     },
 
     renderInboxItem(c) {
@@ -891,36 +902,19 @@ const app = {
         this.showSection('comments');
     },
 
-    // ── Comments (post-specific moderation) ───────────────────────────────
+    // ── Comments (post-specific moderation — threaded) ────────────────────
 
     async loadComments() {
         if (!this.currentDomainId || !this.currentPostUrl) return this.showSection('domains');
         document.getElementById('comments-subtitle').textContent = `Post: ${this.currentPostUrl}`;
         const list = document.getElementById('comments-list');
-        list.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--t4)"><span class="spinner spinner-md"></span></div>';
-
-        try {
-            const res = await fetch(`/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`);
-            if (!res.ok) throw new Error('Failed');
-            const comments = await res.json();
-
-            if (comments.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <div style="margin-bottom:1rem;color:var(--t4)"><i data-lucide="message-circle" style="width:2.5rem;height:2.5rem"></i></div>
-                        <div class="empty-title">No comments yet</div>
-                        <p class="empty-desc">No comments have been posted on this page.</p>
-                    </div>`;
-                if (window.lucide) lucide.createIcons();
-                return;
-            }
-
-            list.innerHTML = comments.map(c => this.renderInboxItem(c)).join('');
-            if (window.lucide) lucide.createIcons();
-        } catch (err) {
-            console.error(err);
-            list.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger-fg)">Error loading comments.</div>';
-        }
+        list.innerHTML = '<div id="discuss-comments"></div>';
+        new window.DiscussWidget({
+            container: document.getElementById('discuss-comments'),
+            fetchUrl: `/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`,
+            serverUrl: window.location.origin,
+            postUrl: this.currentPostUrl,
+        });
     },
 };
 

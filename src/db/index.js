@@ -23,6 +23,10 @@ db.exec(schema);
 // Migrations
 try { db.exec('ALTER TABLE domains ADD COLUMN primary_color TEXT'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN blocked_words TEXT'); } catch {}
+try { db.exec('ALTER TABLE comments ADD COLUMN content_raw TEXT'); } catch {}
+// Backfill: existing rows get content (rendered HTML) as their raw value — not ideal
+// but recoverable; any admin edit will replace it with true markdown going forward.
+try { db.exec("UPDATE comments SET content_raw = content WHERE content_raw IS NULL"); } catch {}
 
 // Backfill comments that were written before domain_id was wired up (domain_id = 0).
 // Assigns them to the first domain in the database so they show up in the admin.

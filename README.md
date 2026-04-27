@@ -123,13 +123,20 @@ Ensure you have the `proxy` and `proxy_http` modules enabled (`sudo a2enmod prox
     # SSLCertificateFile /path/to/cert.pem
     # SSLCertificateKeyFile /path/to/privkey.pem
 
+    # Required: pass percent-encoded slashes (%2F) through to the proxy unchanged.
+    # Without this, Apache decodes %2F to / before proxying, breaking admin URLs
+    # like /admin/domains/1/posts/%2Fmy-post/comments (returns 404 on hard refresh).
+    AllowEncodedSlashes NoDecode
+
     ProxyPreserveHost On
-    ProxyPass / http://127.0.0.1:3000/
+    ProxyPass / http://127.0.0.1:3000/ nocanon
     ProxyPassReverse / http://127.0.0.1:3000/
 
     RequestHeader set X-Forwarded-Proto "https"
 </VirtualHost>
 ```
+
+> **Note:** `AllowEncodedSlashes NoDecode` must be set at the `VirtualHost` (or server) level — it cannot be set in `.htaccess`. The `nocanon` flag on `ProxyPass` tells Apache not to canonicalise (re-encode/decode) the URL path before forwarding it to Express.
 
 ---
 

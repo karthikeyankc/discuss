@@ -365,6 +365,46 @@
   .field-help-text  { @apply text-xs; color: var(--t4); }
   .field-error-text { @apply text-xs; color: var(--danger-fg); }
 
+  /* ── Help icon tooltip ───────────── */
+  .help-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+  .help-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 17rem;
+    padding: 0.625rem 0.75rem;
+    background: var(--t1);
+    color: var(--s1);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.55;
+    border-radius: 7px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    white-space: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    pointer-events: none;
+    z-index: 50;
+  }
+  .help-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--t1);
+  }
+  .help-icon-wrap:hover .help-tooltip,
+  .help-icon-wrap:focus .help-tooltip { display: block; }
+
 
   /* ── Card ───────────────────────── */
   /* shadow-sm = three-layer resting shadow. No border. See CLAUDE.md. */
@@ -411,16 +451,18 @@
   .table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--bds);
+    border-radius: 8px;
   }
   .table { @apply w-full text-sm text-left border-collapse; }
 
   .table thead {
     @apply border-b;
-    background-color: var(--s3);
+    background-color: var(--s2);
     border-color: var(--bds);
   }
   .table th {
-    @apply px-4 py-3 text-xs font-semibold uppercase tracking-wide;
+    @apply px-4 py-2.5 text-xs font-semibold uppercase tracking-wide;
     color: var(--t4);
   }
   .table tbody tr {
@@ -518,6 +560,10 @@
   .tab  {
     @apply px-4 py-2.5 text-sm cursor-pointer no-underline whitespace-nowrap transition-colors duration-100;
     color: var(--t4);
+    background: none;
+    border: none;
+    border-radius: 0;
+    font-family: inherit;
   }
   .tab:hover  { color: var(--t1); }
   .tab:focus-visible {

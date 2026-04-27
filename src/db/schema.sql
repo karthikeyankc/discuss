@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS comments (
     permalink TEXT,
     fav_count INTEGER DEFAULT 0,
     reply_count INTEGER DEFAULT 0,
+    content_raw TEXT,
     post_url TEXT NOT NULL,
     is_spam INTEGER DEFAULT 0,
     is_deleted INTEGER DEFAULT 0,

@@ -1,5 +1,6 @@
 import express from 'express';
 import argon2 from 'argon2';
+import { renderMarkdown } from '../../lib/render.js';
 import db from '../../db/index.js';
 import { authenticateAdmin, generateToken } from '../../middleware/auth.js';
 
@@ -224,6 +225,42 @@ router.get('/comments', (req, res) => {
         res.json(comments);
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+});
+
+router.patch('/comments/:id', (req, res) => {
+    const { name, email, content, created_at } = req.body;
+    if (!name || !content) {
+        return res.status(400).json({ error: 'Name and content are required' });
+    }
+
+    try {
+        const cleanHtml = renderMarkdown(content);
+        const now = Date.now();
+        const ts = created_at ? parseInt(created_at) : null;
+        const nameVal  = name.trim();
+        const emailVal = email ? email.trim() : '';
+
+        let info;
+        if (ts) {
+            info = db.prepare(`
+                UPDATE comments
+                SET name = ?, email = ?, content = ?, content_raw = ?, created_at = ?, updated_at = ?
+                WHERE id = ? AND domain_id IN (SELECT id FROM domains WHERE admin_id = ?)
+            `).run(nameVal, emailVal, cleanHtml, content, ts, now, req.params.id, req.adminId);
+        } else {
+            info = db.prepare(`
+                UPDATE comments
+                SET name = ?, email = ?, content = ?, content_raw = ?, updated_at = ?
+                WHERE id = ? AND domain_id IN (SELECT id FROM domains WHERE admin_id = ?)
+            `).run(nameVal, emailVal, cleanHtml, content, now, req.params.id, req.adminId);
+        }
+
+        if (info.changes === 0) return res.status(404).json({ error: 'Comment not found or unauthorized' });
+        res.json({ message: 'Comment updated', content: cleanHtml });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update comment' });
     }
 });
 

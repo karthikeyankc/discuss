@@ -1,18 +1,12 @@
 import express from 'express';
 import db from '../../db/index.js';
-import MarkdownIt from 'markdown-it';
-import sanitizeHtml from 'sanitize-html';
+import { renderMarkdown } from '../../lib/render.js';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key';
 
 const router = express.Router();
-const md = new MarkdownIt({
-    html: false,
-    linkify: true,
-    typographer: true
-});
 
 // Helper to get domain by origin or return error
 function getDomainOrError(req, res) {
@@ -93,14 +87,7 @@ router.post('/', (req, res) => {
     }
 
     try {
-        // Render markdown and sanitize
-        const rawHtml = md.render(content);
-        const cleanHtml = sanitizeHtml(rawHtml, {
-            allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'code', 'pre', 'blockquote' ],
-            allowedAttributes: {
-                'a': [ 'href' ]
-            }
-        });
+        const cleanHtml = renderMarkdown(content);
 
         let isAuthor = 0;
         let finalAvatar = getGravatarUrl(email);
@@ -139,9 +126,9 @@ router.post('/', (req, res) => {
         }
 
         const info = db.prepare(`
-            INSERT INTO comments (name, email, avatar, content, created_at, updated_at, parent_id, post_url, domain_id, is_author, is_approved)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(name, email, finalAvatar, cleanHtml, now, now, pId, post_url, domain.id, isAuthor, isApproved);
+            INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, parent_id, post_url, domain_id, is_author, is_approved)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(name, email, finalAvatar, cleanHtml, content, now, now, pId, post_url, domain.id, isAuthor, isApproved);
 
         // If parent_id, update reply count
         if (pId > 0) {
