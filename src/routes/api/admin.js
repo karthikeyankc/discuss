@@ -1,13 +1,23 @@
 import express from 'express';
 import argon2 from 'argon2';
+import { rateLimit } from 'express-rate-limit';
 import { renderMarkdown } from '../../lib/render.js';
-import db from '../../db/index.js';
+import defaultDb from '../../db/index.js';
 import { authenticateAdmin, generateToken } from '../../middleware/auth.js';
 
+const loginRateLimit = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    message: { error: 'Too many login attempts. Please try again later.' },
+});
+
+export function buildAdminRouter(db) {
 const router = express.Router();
 
 // --- Auth Routes ---
-router.post('/login', async (req, res) => {
+router.post('/login', loginRateLimit, async (req, res) => {
     const { username, password } = req.body;
     try {
         const admin = db.prepare('SELECT * FROM admins WHERE username = ?').get(username);
@@ -319,4 +329,7 @@ router.delete('/comments/:id', (req, res) => {
     }
 });
 
-export default router;
+return router;
+}
+
+export default buildAdminRouter(defaultDb);

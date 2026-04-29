@@ -1,11 +1,11 @@
 import express from 'express';
-import db from '../../db/index.js';
+import defaultDb from '../../db/index.js';
 import { renderMarkdown } from '../../lib/render.js';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../../config.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key';
-
+export function buildCommentsRouter(db) {
 const router = express.Router();
 
 // Helper to get domain by origin or return error
@@ -14,7 +14,7 @@ function getDomainOrError(req, res) {
     if (!origin) {
         return null; // Local testing might not have origin, but in production we want it.
     }
-    
+
     let domainToMatch;
     try {
         const url = new URL(origin);
@@ -22,7 +22,7 @@ function getDomainOrError(req, res) {
     } catch(e) {
         domainToMatch = origin;
     }
-    
+
     const domain = db.prepare('SELECT * FROM domains WHERE domain = ?').get(domainToMatch);
     return domain || null;
 }
@@ -155,4 +155,7 @@ router.get('/config', (req, res) => {
     });
 });
 
-export default router;
+return router;
+}
+
+export default buildCommentsRouter(defaultDb);

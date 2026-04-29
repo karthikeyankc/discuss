@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dynamicCors } from './middleware/cors.js';
+import { PORT } from './config.js';
 
 // Route imports
 import commentsRoutes from './routes/api/comments.js';
@@ -12,13 +13,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Security headers middleware (replacing helmet)
+// Security headers middleware
 app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Referrer-Policy', 'no-referrer');
+    res.setHeader('Content-Security-Policy',
+        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.gravatar.com data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    );
     res.removeHeader('X-Powered-By');
     next();
 });

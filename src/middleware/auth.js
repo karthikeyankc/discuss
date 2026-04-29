@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key';
+import { JWT_SECRET } from '../config.js';
 
 export function authenticateAdmin(req, res, next) {
     const token = req.cookies.admin_token;

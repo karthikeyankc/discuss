@@ -1,6 +1,6 @@
 {
   "name": "discuss",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A self-hosted, lightweight SQLite comment system for static sites.",
   "main": "src/server.js",
   "type": "module",
@@ -16,7 +16,7 @@
     "build:client:inject": "node scripts/build-client.js",
     "build:client": "npm run build:client:css && npm run build:client:inject",
     "build": "npm run build:css && npm run build:client",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules --test test/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "better-sqlite3": "^12.9.0",
     "cookie-parser": "^1.4.7",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.4.1",
     "jsonwebtoken": "^9.0.3",
     "markdown-it": "^14.1.1",
     "sanitize-html": "^2.17.3"

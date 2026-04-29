@@ -154,3 +154,6 @@ public/client.css
 # OS noise
 .DS_Store
 Thumbs.db
+
+# Internal planning docs
+project-context.md
