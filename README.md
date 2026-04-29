@@ -63,19 +63,45 @@ cp .env.example .env
 
 Edit `.env` and set `JWT_SECRET` to a long random string. See [Environment Variables](#environment-variables).
 
-### 5. Start the server
+### 5. Create the systemd service
+
+Create `/etc/systemd/system/discuss.service`:
+
+```ini
+[Unit]
+Description=Discuss Comment Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/discuss
+ExecStart=/usr/bin/node src/server.js
+Restart=on-failure
+EnvironmentFile=/var/www/discuss/.env
+Environment=NODE_ENV=production PORT=3000
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Update `WorkingDirectory` and `EnvironmentFile` to match your actual install path.
+
+### 6. Start the server
 
 ```bash
-npm start
+sudo systemctl daemon-reload
+sudo systemctl enable discuss
+sudo systemctl start discuss
 ```
 
 The server runs on port 3000 by default. Enable your reverse proxy (see [Nginx Reverse Proxy](#nginx-reverse-proxy) or [Apache Reverse Proxy](#apache-reverse-proxy)) to access the admin dashboard from your domain.
 
-### 6. Add your domain
+### 7. Add your domain
 
 Visit `/admin`, log in, and add your site's domain where you want to use the comment system. Allowed domains are stored in SQLite and checked on every request.
 
-### 7. Embed the widget
+### 8. Embed the widget
 
 Go to **Admin > Domains > Settings** for your domain and copy the embed snippet. Paste it into any page where you want comments to appear.
 
@@ -146,35 +172,6 @@ Copy `.env.example` to `.env` and set the values before starting the server.
 | `NODE_ENV` | `development` | No | Set to `production` for production |
 
 The server will refuse to start in production if `JWT_SECRET` is not set.
-
----
-
-## Keeping it Running (systemd)
-
-Create `/etc/systemd/system/discuss.service`:
-
-```ini
-[Unit]
-Description=Discuss Comment Server
-After=network.target
-
-[Service]
-Type=simple
-User=www-data
-WorkingDirectory=/var/www/discuss
-ExecStart=/usr/bin/node src/server.js
-Restart=on-failure
-EnvironmentFile=/var/www/discuss/.env
-Environment=NODE_ENV=production PORT=3000
-
-[Install]
-WantedBy=multi-user.target
-```
-
-```bash
-sudo systemctl enable discuss
-sudo systemctl start discuss
-```
 
 ---
 

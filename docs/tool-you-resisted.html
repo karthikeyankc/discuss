@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What tool did you resist the longest? — Discuss Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .logo {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: #0f172a;
+      text-decoration: none;
+      letter-spacing: -0.03em;
+    }
+
+    .logo span { color: #2563eb; }
+
+    .back {
+      font-size: 0.875rem;
+      color: #475569;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .back:hover { color: #0f172a; }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .thread-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin: 0 0 1.25rem;
+    }
+
+    .body {
+      font-size: 1rem;
+      color: #334155;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .body p { margin: 0 0 1rem; }
+    .body p:last-child { margin: 0; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 4rem;
+    }
+
+    footer a { color: #64748b; text-decoration: none; }
+    footer a:hover { color: #2563eb; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="/discuss/"><span>D</span>iscuss</a>
+    <a class="back" href="/discuss/">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      All threads
+    </a>
+  </header>
+
+  <div class="container">
+    <div class="thread-label">Thread 02</div>
+    <h1>What tool did you resist the longest — and then love?</h1>
+    <div class="body">
+      <p>We all have one. The tool you dismissed, avoided, maybe even argued against — until one day you actually used it properly and couldn't imagine going back.</p>
+      <p>For a lot of people it's TypeScript. You thought it was just JavaScript with extra steps. Then a refactor caught a bug at compile time that would have taken hours to trace in production, and something clicked. For others it's Vim, or Docker, or Git itself back in the day.</p>
+      <p>What was yours? How long did you resist, and what finally made you give it a real shot?</p>
+    </div>
+
+    <!-- Discuss comment widget -->
+    <div id="discuss-comments"></div>
+    <script src="https://discuss.arclind.com/client.js"></script>
+    <script>
+      new DiscussWidget({
+        container: document.getElementById('discuss-comments'),
+        serverUrl: 'https://discuss.arclind.com',
+        primaryColor: '#2563eb',
+      });
+    </script>
+  </div>
+
+  <footer>
+    Powered by <a href="https://github.com/karthikeyankc/discuss" target="_blank" rel="noopener">Discuss</a> — self-hosted comments for static sites.
+  </footer>
+
+</body>
+</html>
