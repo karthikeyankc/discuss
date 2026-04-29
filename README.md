@@ -1,6 +1,6 @@
 <div align="center">
   <img src="public/logo.png" alt="Discuss" width="480" />
-  <p>A self-hosted comment system for static sites and blogs. Drop in a single <code>&lt;script&gt;</code> tag and your site has comments. No third-party services, no tracking, no subscriptions.</p>
+  <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
 </div>
 
 ---
