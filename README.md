@@ -1,11 +1,5 @@
 <div align="center">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" height="64" width="auto" aria-label="Discuss">
-    <path d="M 25 20 V 80 L 10 95 L 35 80 H 50 A 30 30 0 0 0 50 20 Z M 45 40 H 50 A 10 10 0 0 1 50 60 H 45 Z"
-          fill="#2563eb" fill-rule="evenodd"/>
-    <text x="82" y="80"
-          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-          font-weight="800" font-size="72" letter-spacing="-0.04em" fill="#111827">iscuss</text>
-  </svg>
+  <img src="public/logo.png" alt="Discuss" width="480" />
   <p>A self-hosted comment system for static sites and blogs. Drop in a single <code>&lt;script&gt;</code> tag and your site has comments. No third-party services, no tracking, no subscriptions.</p>
 </div>
 
