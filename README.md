@@ -6,6 +6,7 @@
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
     <img src="https://img.shields.io/github/v/tag/karthikeyankc/discuss?label=version" alt="Version">
   </p>
+  <p><a href="https://karthikeyankc.github.io/discuss/">Live Demo</a></p>
 </div>
 
 ---
