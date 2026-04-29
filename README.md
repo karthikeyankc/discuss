@@ -1,6 +1,11 @@
 <div align="center">
   <img src="public/logo.png" alt="Discuss" width="480" />
   <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
+  <p>
+    <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
+    <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
+    <img src="https://img.shields.io/github/v/tag/karthikeyankc/discuss?label=version" alt="Version">
+  </p>
 </div>
 
 ---
@@ -96,6 +101,7 @@ server {
 }
 ```
 
+> [!TIP]
 > **Setting up a new subdomain with Certbot?** Configure the port 80 block only, then run `certbot --nginx -d discuss.example.com`. Certbot will obtain the certificate and rewrite your config to add the SSL listener automatically. If you already have a certificate for the subdomain, configure the 443 block directly as shown above.
 
 ---
@@ -158,6 +164,7 @@ User=www-data
 WorkingDirectory=/var/www/discuss
 ExecStart=/usr/bin/node src/server.js
 Restart=on-failure
+EnvironmentFile=/var/www/discuss/.env
 Environment=NODE_ENV=production PORT=3000
 
 [Install]
