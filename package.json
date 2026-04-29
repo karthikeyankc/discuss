@@ -16,7 +16,7 @@
     "build:client:inject": "node scripts/build-client.js",
     "build:client": "npm run build:client:css && npm run build:client:inject",
     "build": "npm run build:css && npm run build:client",
-    "test": "node --experimental-vm-modules --test test/**/*.test.js"
+    "test": "node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js"
   },
   "repository": {
     "type": "git",
