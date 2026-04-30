@@ -7,6 +7,13 @@ const defaultServerUrl = currentScript ? new URL(currentScript.src).origin : win
 const injectedCss = typeof INJECTED_CSS_CONTENT !== 'undefined' ? INJECTED_CSS_CONTENT : "";
 
 const cssContent = injectedCss + `
+    .dark #discuss-comments {
+        --t1:#f8fafc; --t2:#e2e8f0; --t3:#cbd5e1; --t4:#94a3b8; --t5:#64748b;
+        --s1:#111827; --s2:#0a1120; --s3:#1e293b;
+        --bd:#475569; --bds:#334155; --bd-control:#475569; --bd-button:#334155; --bd-strong:#94a3b8;
+        --accent-fg:#93c5fd; --accent-surface:color-mix(in srgb,#1e40af 32%,#111827); --focus-ring:#93c5fd;
+    }
+
     #discuss-comments { text-align: left; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: transparent; }
     #discuss-comments * { box-sizing: inherit; }
     

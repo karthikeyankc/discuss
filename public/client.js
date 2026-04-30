@@ -616,6 +616,47 @@
 }
 /* \u2500\u2500 Divider \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
 /* \u2500\u2500 Tooltip (CSS-only) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
+#discuss-comments .discuss-tooltip {
+    position: relative;
+    display: inline-block;
+}
+#discuss-comments .discuss-tooltip-content {
+    visibility: hidden;
+    position: absolute;
+    bottom: 100%;
+    z-index: 10;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    border-radius: 6px;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    opacity: 0;
+    left: 50%;
+    /* start slightly toward trigger, rise away on enter */
+    color: var(--tooltip-fg);
+    background-color: var(--tooltip-bg);
+    transform: translateX(-50%) translateY(4px);
+    transition: opacity 150ms ease-in, transform 150ms ease-in, visibility 0ms 150ms;
+}
+#discuss-comments .discuss-tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--tooltip-bg);
+  }
+#discuss-comments .discuss-tooltip:hover .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1), visibility 0ms;
+  }
 /* \u2500\u2500 Tabs with sliding indicator \u2500\u2500\u2500 */
 #discuss-comments .discuss-tabs {
     position: relative;
@@ -848,6 +889,13 @@
   }
 }
 `,S=T+`
+    .dark #discuss-comments {
+        --t1:#f8fafc; --t2:#e2e8f0; --t3:#cbd5e1; --t4:#94a3b8; --t5:#64748b;
+        --s1:#111827; --s2:#0a1120; --s3:#1e293b;
+        --bd:#475569; --bds:#334155; --bd-control:#475569; --bd-button:#334155; --bd-strong:#94a3b8;
+        --accent-fg:#93c5fd; --accent-surface:color-mix(in srgb,#1e40af 32%,#111827); --focus-ring:#93c5fd;
+    }
+
     #discuss-comments { text-align: left; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: transparent; }
     #discuss-comments * { box-sizing: inherit; }
     
