@@ -2553,7 +2553,36 @@
     #discuss-comments .discuss-tracking-wide { letter-spacing: 0.025em; }
     #discuss-comments .discuss-mb-10 { margin-bottom: 2.5rem; }
 
-    /* \u2500\u2500 Button variants (Tailwind only generates .btn, not .discuss-btn-primary) \u2500\u2500 */
+    /* \u2500\u2500 Button base + variants (KDS .btn equivalent, scoped to widget) \u2500\u2500 */
+    #discuss-comments .discuss-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 40px;
+        padding: 0 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1;
+        border-radius: 0.375rem;
+        border: 1px solid transparent;
+        box-sizing: border-box;
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+    }
+    #discuss-comments .discuss-btn:active:not(:disabled) {
+        transform: scale(0.96);
+        transition-duration: 60ms;
+    }
+    #discuss-comments .discuss-btn:focus-visible {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+        outline: none;
+    }
+    #discuss-comments .discuss-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #discuss-comments .discuss-btn svg { width: 1em; height: 1em; flex-shrink: 0; }
     #discuss-comments .discuss-btn-primary {
         background-color: var(--b600);
         color: var(--on-primary);
@@ -2904,7 +2933,7 @@
         border-radius: 0.5rem;
         transition: box-shadow 300ms ease;
     }
-`;function M(){if(document.getElementById("discuss-styles"))return;let d=document.createElement("style");d.id="discuss-styles",d.textContent=S,document.head.appendChild(d)}function E(d){let e=parseInt(d.replace("#",""),16);return[e>>16&255,e>>8&255,e&255]}function A(d,e,s){return"#"+[d,e,s].map(o=>Math.round(Math.max(0,Math.min(255,o))).toString(16).padStart(2,"0")).join("")}function z(d,e,s){d/=255,e/=255,s/=255;let o=Math.max(d,e,s),t=Math.min(d,e,s),i,n,a=(o+t)/2;if(o===t)i=n=0;else{let r=o-t;switch(n=a>.5?r/(2-o-t):r/(o+t),o){case d:i=((e-s)/r+(e<s?6:0))/6;break;case e:i=((s-d)/r+2)/6;break;default:i=((d-e)/r+4)/6}}return[i*360,n,a]}function B(d,e,s){d/=360;let o=(n,a,r)=>(r<0&&(r+=1),r>1&&(r-=1),r<1/6?n+(a-n)*6*r:r<1/2?a:r<2/3?n+(a-n)*(2/3-r)*6:n);if(e===0){let n=Math.round(s*255);return[n,n,n]}let t=s<.5?s*(1+e):s+e-s*e,i=2*s-t;return[o(i,t,d+1/3),o(i,t,d),o(i,t,d-1/3)].map(n=>Math.round(n*255))}function I(d){let[e,s,o]=E(d),[t,i]=z(e,s,o),n={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},a={};for(let[r,c]of Object.entries(n)){let[l,m,b]=B(t,Math.min(i,.85),c);a[r]=A(l,m,b)}return a}var h=class{constructor(e){if(window.DiscussWidgetInstance=this,this.container=e.container,!this.container)return;let s=document.querySelector('link[rel="canonical"]')?.getAttribute("href");this.postUrl=e.postUrl||this.container.dataset.url||s||window.location.pathname,this.serverUrl=e.serverUrl||C,this.fetchUrl=e.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=e.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init()}applyTheme(e){if(!e||!/^#[0-9a-fA-F]{6}$/.test(e))return;let s=I(e),o=this.container;o.style.setProperty("--b50",s[50]),o.style.setProperty("--b100",s[100]),o.style.setProperty("--b200",s[200]),o.style.setProperty("--b300",s[300]),o.style.setProperty("--b400",s[400]),o.style.setProperty("--b500",s[500]),o.style.setProperty("--b600",s[600]),o.style.setProperty("--b700",s[700]),o.style.setProperty("--b800",s[800]),o.style.setProperty("--b900",s[900]),o.style.setProperty("--accent-fg",s[700]),o.style.setProperty("--accent-surface",s[50]),o.style.setProperty("--focus-ring",s[700])}async init(){M(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let e=await fetch(`${this.serverUrl}/api/comments/config`);e.ok&&(this.config=await e.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let s=await fetch(this.fetchUrl);if(!s.ok)throw new Error("Failed to load comments");let o=await s.json();this.render(o)}catch(e){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",e)}}buildTree(e){let s={},o=[];return e.forEach(t=>{t.children=[],s[t.id]=t}),e.forEach(t=>{t.parent_id===0||!s[t.parent_id]?o.push(t):s[t.parent_id].children.push(t)}),o}render(e){let s=this.buildTree(e);this.container.innerHTML=`
+`;function M(){if(document.getElementById("discuss-styles"))return;let d=document.createElement("style");d.id="discuss-styles",d.textContent=S,document.head.appendChild(d)}function E(d){let e=parseInt(d.replace("#",""),16);return[e>>16&255,e>>8&255,e&255]}function A(d,e,s){return"#"+[d,e,s].map(o=>Math.round(Math.max(0,Math.min(255,o))).toString(16).padStart(2,"0")).join("")}function z(d,e,s){d/=255,e/=255,s/=255;let o=Math.max(d,e,s),t=Math.min(d,e,s),i,n,a=(o+t)/2;if(o===t)i=n=0;else{let r=o-t;switch(n=a>.5?r/(2-o-t):r/(o+t),o){case d:i=((e-s)/r+(e<s?6:0))/6;break;case e:i=((s-d)/r+2)/6;break;default:i=((d-e)/r+4)/6}}return[i*360,n,a]}function B(d,e,s){d/=360;let o=(n,a,r)=>(r<0&&(r+=1),r>1&&(r-=1),r<1/6?n+(a-n)*6*r:r<1/2?a:r<2/3?n+(a-n)*(2/3-r)*6:n);if(e===0){let n=Math.round(s*255);return[n,n,n]}let t=s<.5?s*(1+e):s+e-s*e,i=2*s-t;return[o(i,t,d+1/3),o(i,t,d),o(i,t,d-1/3)].map(n=>Math.round(n*255))}function j(d){let[e,s,o]=E(d),[t,i]=z(e,s,o),n={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},a={};for(let[r,c]of Object.entries(n)){let[l,m,b]=B(t,Math.min(i,.85),c);a[r]=A(l,m,b)}return a}var h=class{constructor(e){if(window.DiscussWidgetInstance=this,this.container=e.container,!this.container)return;let s=document.querySelector('link[rel="canonical"]')?.getAttribute("href");this.postUrl=e.postUrl||this.container.dataset.url||s||window.location.pathname,this.serverUrl=e.serverUrl||C,this.fetchUrl=e.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=e.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init()}applyTheme(e){if(!e||!/^#[0-9a-fA-F]{6}$/.test(e))return;let s=j(e),o=this.container;o.style.setProperty("--b50",s[50]),o.style.setProperty("--b100",s[100]),o.style.setProperty("--b200",s[200]),o.style.setProperty("--b300",s[300]),o.style.setProperty("--b400",s[400]),o.style.setProperty("--b500",s[500]),o.style.setProperty("--b600",s[600]),o.style.setProperty("--b700",s[700]),o.style.setProperty("--b800",s[800]),o.style.setProperty("--b900",s[900]),o.style.setProperty("--accent-fg",s[700]),o.style.setProperty("--accent-surface",s[50]),o.style.setProperty("--focus-ring",s[700])}async init(){M(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let e=await fetch(`${this.serverUrl}/api/comments/config`);e.ok&&(this.config=await e.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let s=await fetch(this.fetchUrl);if(!s.ok)throw new Error("Failed to load comments");let o=await s.json();this.render(o)}catch(e){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",e)}}buildTree(e){let s={},o=[];return e.forEach(t=>{t.children=[],s[t.id]=t}),e.forEach(t=>{t.parent_id===0||!s[t.parent_id]?o.push(t):s[t.parent_id].children.push(t)}),o}render(e){let s=this.buildTree(e);this.container.innerHTML=`
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
                     <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>

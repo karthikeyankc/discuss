@@ -39,7 +39,36 @@ const cssContent = injectedCss + `
     #discuss-comments .discuss-tracking-wide { letter-spacing: 0.025em; }
     #discuss-comments .discuss-mb-10 { margin-bottom: 2.5rem; }
 
-    /* ── Button variants (Tailwind only generates .btn, not .discuss-btn-primary) ── */
+    /* ── Button base + variants (KDS .btn equivalent, scoped to widget) ── */
+    #discuss-comments .discuss-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 40px;
+        padding: 0 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1;
+        border-radius: 0.375rem;
+        border: 1px solid transparent;
+        box-sizing: border-box;
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+    }
+    #discuss-comments .discuss-btn:active:not(:disabled) {
+        transform: scale(0.96);
+        transition-duration: 60ms;
+    }
+    #discuss-comments .discuss-btn:focus-visible {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+        outline: none;
+    }
+    #discuss-comments .discuss-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #discuss-comments .discuss-btn svg { width: 1em; height: 1em; flex-shrink: 0; }
     #discuss-comments .discuss-btn-primary {
         background-color: var(--b600);
         color: var(--on-primary);

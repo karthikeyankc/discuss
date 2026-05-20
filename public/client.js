@@ -2553,7 +2553,36 @@
     #discuss-comments .discuss-tracking-wide { letter-spacing: 0.025em; }
     #discuss-comments .discuss-mb-10 { margin-bottom: 2.5rem; }
 
-    /* \u2500\u2500 Button variants (Tailwind only generates .btn, not .discuss-btn-primary) \u2500\u2500 */
+    /* \u2500\u2500 Button base + variants (KDS .btn equivalent, scoped to widget) \u2500\u2500 */
+    #discuss-comments .discuss-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 40px;
+        padding: 0 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1;
+        border-radius: 0.375rem;
+        border: 1px solid transparent;
+        box-sizing: border-box;
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+    }
+    #discuss-comments .discuss-btn:active:not(:disabled) {
+        transform: scale(0.96);
+        transition-duration: 60ms;
+    }
+    #discuss-comments .discuss-btn:focus-visible {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+        outline: none;
+    }
+    #discuss-comments .discuss-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #discuss-comments .discuss-btn svg { width: 1em; height: 1em; flex-shrink: 0; }
     #discuss-comments .discuss-btn-primary {
         background-color: var(--b600);
         color: var(--on-primary);
@@ -2904,7 +2933,7 @@
         border-radius: 0.5rem;
         transition: box-shadow 300ms ease;
     }
-`;function T(){if(document.getElementById("discuss-styles"))return;let c=document.createElement("style");c.id="discuss-styles",c.textContent=S,document.head.appendChild(c)}function z(c){let s=parseInt(c.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function E(c,s,e){return"#"+[c,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function M(c,s,e){c/=255,s/=255,e/=255;let t=Math.max(c,s,e),i=Math.min(c,s,e),a,o,r=(t+i)/2;if(t===i)a=o=0;else{let n=t-i;switch(o=r>.5?n/(2-t-i):n/(t+i),t){case c:a=((s-e)/n+(s<e?6:0))/6;break;case s:a=((e-c)/n+2)/6;break;default:a=((c-s)/n+4)/6}}return[a*360,o,r]}function _(c,s,e){c/=360;let t=(o,r,n)=>(n<0&&(n+=1),n>1&&(n-=1),n<1/6?o+(r-o)*6*n:n<1/2?r:n<2/3?o+(r-o)*(2/3-n)*6:o);if(s===0){let o=Math.round(e*255);return[o,o,o]}let i=e<.5?e*(1+s):e+s-e*s,a=2*e-i;return[t(a,i,c+1/3),t(a,i,c),t(a,i,c-1/3)].map(o=>Math.round(o*255))}function A(c){let[s,e,t]=z(c),[i,a]=M(s,e,t),o={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},r={};for(let[n,d]of Object.entries(o)){let[l,p,b]=_(i,Math.min(a,.85),d);r[n]=E(l,p,b)}return r}var g=class{constructor(s){if(window.DiscussWidgetInstance=this,this.container=s.container,!this.container)return;let e=document.querySelector('link[rel="canonical"]')?.getAttribute("href");this.postUrl=s.postUrl||this.container.dataset.url||e||window.location.pathname,this.serverUrl=s.serverUrl||C,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init()}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=A(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){T(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
+`;function T(){if(document.getElementById("discuss-styles"))return;let c=document.createElement("style");c.id="discuss-styles",c.textContent=S,document.head.appendChild(c)}function z(c){let s=parseInt(c.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function E(c,s,e){return"#"+[c,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function M(c,s,e){c/=255,s/=255,e/=255;let t=Math.max(c,s,e),i=Math.min(c,s,e),a,o,r=(t+i)/2;if(t===i)a=o=0;else{let n=t-i;switch(o=r>.5?n/(2-t-i):n/(t+i),t){case c:a=((s-e)/n+(s<e?6:0))/6;break;case s:a=((e-c)/n+2)/6;break;default:a=((c-s)/n+4)/6}}return[a*360,o,r]}function _(c,s,e){c/=360;let t=(o,r,n)=>(n<0&&(n+=1),n>1&&(n-=1),n<1/6?o+(r-o)*6*n:n<1/2?r:n<2/3?o+(r-o)*(2/3-n)*6:o);if(s===0){let o=Math.round(e*255);return[o,o,o]}let i=e<.5?e*(1+s):e+s-e*s,a=2*e-i;return[t(a,i,c+1/3),t(a,i,c),t(a,i,c-1/3)].map(o=>Math.round(o*255))}function j(c){let[s,e,t]=z(c),[i,a]=M(s,e,t),o={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},r={};for(let[n,d]of Object.entries(o)){let[l,p,g]=_(i,Math.min(a,.85),d);r[n]=E(l,p,g)}return r}var b=class{constructor(s){if(window.DiscussWidgetInstance=this,this.container=s.container,!this.container)return;let e=document.querySelector('link[rel="canonical"]')?.getAttribute("href");this.postUrl=s.postUrl||this.container.dataset.url||e||window.location.pathname,this.serverUrl=s.serverUrl||C,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init()}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=j(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){T(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
                     <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
@@ -2926,7 +2955,7 @@
                      onload="this.style.opacity='1';this.style.visibility='visible'" 
                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;visibility:hidden;transition:opacity 0.2s;" />
             </div>
-        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,t,i){e=e||0;let a=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",o=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",r=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),n=this.getAdminBadges(s),d=this.getAdminTooltip(s),l=this.getAdminControls(s),p=t?`<a href="#comment-${i}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${t}</a>`:"",b=`
+        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,t,i){e=e||0;let a=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",o=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",r=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),n=this.getAdminBadges(s),d=this.getAdminTooltip(s),l=this.getAdminControls(s),p=t?`<a href="#comment-${i}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${t}</a>`:"",g=`
             <button class="discuss-collapse-btn" data-id="${s.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--t4);display:inline-flex;align-items:center;margin-left:0.25rem;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;"><path d="m6 9 6 6 6-6"/></svg>
             </button>
@@ -2954,7 +2983,7 @@
                         ${o}${a}${n}${d}
                         <span style="color:var(--t5);font-size:0.75rem">\xB7</span>
                         <span style="font-size:0.8125rem;color:var(--t4)">${r}</span>
-                        ${b}
+                        ${g}
                     </div>
                     
                     <div id="discuss-collapse-target-${s.id}">
@@ -3005,4 +3034,4 @@
                     </div>
                 </div>
             </form>
-        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let a={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0};try{let o=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(a)});if(o.ok){if(e.reset(),parseInt(t,10)!==0){let r=document.getElementById(`discuss-reply-form-${t}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await o.json();alert(r.error||"Failed to post comment.")}}catch(o){console.error("[Discuss]",o),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=g;var y=document.getElementById("discuss-comments");y&&y.dataset.isAdmin!=="true"&&new g({container:y});})();
+        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let a={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0};try{let o=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(a)});if(o.ok){if(e.reset(),parseInt(t,10)!==0){let r=document.getElementById(`discuss-reply-form-${t}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await o.json();alert(r.error||"Failed to post comment.")}}catch(o){console.error("[Discuss]",o),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=b;var y=document.getElementById("discuss-comments");y&&y.dataset.isAdmin!=="true"&&new b({container:y});})();
