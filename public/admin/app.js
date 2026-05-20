@@ -353,17 +353,53 @@ const app = {
                         <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${c.name}</span>
                         ${statusBadge}
                         <span class="badge badge-neutral">${c.domain}</span>
-                        <span style="font-size:0.75rem;color:var(--t4);margin-left:auto;white-space:nowrap">${date}</span>
+                        <span style="font-size:0.8125rem;color:var(--t4);margin-left:auto;white-space:nowrap">${date}</span>
                     </div>
-                    <p class="inbox-excerpt" style="font-size:0.875rem;color:var(--t3);margin:0 0 0.25rem">${excerpt}</p>
-                    <div style="font-size:0.75rem;color:var(--t5);margin-bottom:0.625rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.post_url}</div>
-                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                    <p class="inbox-excerpt" style="font-size:0.9375rem;color:var(--t2);margin:0 0 0.25rem">${excerpt}</p>
+                    <div style="font-size:0.75rem;color:var(--t5);margin-bottom:0.625rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                        <a href="${c.post_url}" target="_blank" rel="noopener noreferrer" style="color:var(--t5);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${c.post_url}</a>
+                        <a href="#" style="color:var(--accent-fg);font-weight:500;white-space:nowrap;text-decoration:none;flex-shrink:0" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.preventDefault();app.inboxViewThread(${c.domain_id},'${c.post_url.replace(/'/g, "\\'")}')">View thread →</a>
+                    </div>
+                    <div style="display:flex;gap:0.25rem;flex-wrap:wrap;align-items:center">
                         ${c.is_approved
-                            ? `<button class="btn btn-ghost btn-sm" onclick="app.inboxSetApproval(${c.id}, 0)">Unapprove</button>`
-                            : `<button class="btn btn-primary btn-sm" onclick="app.inboxSetApproval(${c.id}, 1)">Approve</button>`
+                            ? `<button class="discuss-action-btn" onclick="app.inboxSetApproval(${c.id}, 0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Unapprove</span></button>`
+                            : `<button class="discuss-action-btn" style="color:#16a34a" onclick="app.inboxSetApproval(${c.id}, 1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Approve</span></button>`
                         }
-                        <button class="btn btn-ghost btn-sm" style="color:var(--danger-fg)"
-                                onclick="app.inboxDeleteOne(${c.id})">Delete</button>
+                        <div style="width:1px;height:12px;background:var(--bds);margin:0 0.25rem"></div>
+                        <button class="discuss-action-btn" id="inbox-pin-btn-${c.id}" onclick="app.inboxTogglePin(${c.id}, ${c.is_pinned})">
+                            ${c.is_pinned
+                                ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/><line x1="2" x2="22" y1="2" y2="22"/></svg><span>Unpin</span>`
+                                : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg><span>Pin</span>`
+                            }
+                        </button>
+                        <button class="discuss-action-btn" onclick="app.inboxToggleEdit(${c.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+                            <span>Edit</span>
+                        </button>
+                        <button class="discuss-action-btn" style="color:#ef4444" onclick="app.inboxDeleteOne(${c.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                    <div id="inbox-edit-form-${c.id}" style="display:none;margin-top:0.75rem;padding:1rem;border:1px solid var(--bds);border-radius:8px;background:var(--s2)">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+                            <div>
+                                <label class="label">Name</label>
+                                <input type="text" id="inbox-edit-name-${c.id}" class="input" value="${(c.name || '').replace(/"/g, '&quot;')}">
+                            </div>
+                            <div>
+                                <label class="label">Email</label>
+                                <input type="email" id="inbox-edit-email-${c.id}" class="input" value="${(c.email || '').replace(/"/g, '&quot;')}">
+                            </div>
+                        </div>
+                        <div style="margin-bottom:0.75rem">
+                            <label class="label">Content (Markdown)</label>
+                            <textarea id="inbox-edit-content-${c.id}" rows="4" class="input textarea">${(c.content_raw || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
+                        </div>
+                        <div style="display:flex;gap:0.5rem">
+                            <button class="btn btn-primary btn-sm" onclick="app.inboxSaveEdit(${c.id})">Save</button>
+                            <button class="btn btn-ghost btn-sm" onclick="app.inboxToggleEdit(${c.id})">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>`;
@@ -472,6 +508,54 @@ const app = {
         } catch { this.showToast('Network error.', 'error'); }
     },
 
+    inboxViewThread(domainId, postUrl) {
+        this.currentDomainId = domainId;
+        this.currentPostUrl  = postUrl;
+        this.showSection('comments');
+    },
+
+    async inboxTogglePin(id, isPinned) {
+        try {
+            const res = await fetch(`/api/admin/comments/${id}/pin`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_pinned: isPinned ? 0 : 1 }),
+            });
+            if (res.ok) {
+                this.showToast(isPinned ? 'Comment unpinned.' : 'Comment pinned.');
+                this.loadInbox();
+            } else {
+                this.showToast('Failed to update pin.', 'error');
+            }
+        } catch { this.showToast('Network error.', 'error'); }
+    },
+
+    inboxToggleEdit(id) {
+        const form = document.getElementById(`inbox-edit-form-${id}`);
+        if (!form) return;
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    },
+
+    async inboxSaveEdit(id) {
+        const name    = document.getElementById(`inbox-edit-name-${id}`)?.value.trim();
+        const email   = document.getElementById(`inbox-edit-email-${id}`)?.value.trim();
+        const content = document.getElementById(`inbox-edit-content-${id}`)?.value.trim();
+        if (!name || !content) return this.showToast('Name and content are required.', 'error');
+        try {
+            const res = await fetch(`/api/admin/comments/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, content }),
+            });
+            if (res.ok) {
+                this.showToast('Comment updated.');
+                this.loadInbox();
+            } else {
+                this.showToast('Failed to save edit.', 'error');
+            }
+        } catch { this.showToast('Network error.', 'error'); }
+    },
+
     // ── Auth ───────────────────────────────────────────────────────────────
 
     async handleLogin(e) {
@@ -541,8 +625,8 @@ const app = {
                     ? `<span class="badge badge-warning" style="margin-left:0.5rem">${d.pending_count} pending</span>` : '';
                 tr.innerHTML = `
                     <td class="font-medium">${d.domain}${pending}</td>
-                    <td class="text-neutral-600">${d.site_name}</td>
-                    <td class="text-neutral-500">${d.total_count || 0}</td>
+                    <td style="color:var(--t2)">${d.site_name}</td>
+                    <td style="color:var(--t3)">${d.total_count || 0}</td>
                     <td class="text-right" style="white-space:nowrap">
                         <button onclick="app.openSettings(${d.id})" class="btn btn-ghost btn-sm">
                             <i data-lucide="settings"></i> Settings
@@ -889,9 +973,11 @@ const app = {
                 tr.style.cursor = 'pointer';
                 tr.onclick = () => this.selectPost(p.post_url);
                 tr.innerHTML = `
-                    <td class="font-medium truncate max-w-xs" title="${p.post_url}">${p.post_url}</td>
-                    <td class="text-neutral-600">${p.comment_count}</td>
-                    <td class="text-neutral-500 text-sm">${new Date(p.last_comment_at).toLocaleString()}</td>`;
+                    <td class="font-medium truncate max-w-xs" title="${p.post_url}">
+                        <a href="${p.post_url}" target="_blank" rel="noopener noreferrer" style="color:var(--accent-fg);text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.stopPropagation()">${p.post_url}</a>
+                    </td>
+                    <td style="color:var(--t2)">${p.comment_count}</td>
+                    <td class="text-sm" style="color:var(--t3)">${new Date(p.last_comment_at).toLocaleString()}</td>`;
                 tbody.appendChild(tr);
             });
         } catch (err) { console.error(err); }

@@ -1,6 +1,6 @@
 {
   "name": "discuss",
-  "version": "0.1.5",
+  "version": "0.1.8",
   "description": "A self-hosted, lightweight SQLite comment system for static sites.",
   "main": "src/server.js",
   "type": "module",
@@ -11,7 +11,7 @@
     "start": "NODE_ENV=production node src/server.js",
     "dev": "NODE_ENV=development node --watch src/server.js",
     "setup": "node src/setup.js",
-    "build:css": "tailwindcss -c tailwind.admin.config.js -i ./src/design-system/globals.css -o ./public/admin/admin.css --minify",
+    "build:css": "tailwindcss -i ./src/design-system/admin.css -o ./public/admin/admin.css --minify",
     "build:client:css": "node scripts/build-client-css.cjs",
     "build:client:inject": "node scripts/build-client.js",
     "build:client": "npm run build:client:css && npm run build:client:inject",
@@ -46,10 +46,13 @@
     "sanitize-html": "^2.17.3"
   },
   "devDependencies": {
+    "@karthikeyankc/ken-design-system": "file:../../ken-design-system",
+    "@tailwindcss/cli": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.0",
     "autoprefixer": "^10.5.0",
     "esbuild": "^0.28.0",
     "postcss": "^8.5.10",
     "postcss-prefix-selector": "^2.1.1",
-    "tailwindcss": "^3.4.19"
+    "tailwindcss": "^4.3.0"
   }
 }

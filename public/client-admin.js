@@ -1,891 +1,2522 @@
-(()=>{var u={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var x=document.getElementsByTagName("script"),k=x[x.length-1],T=k?new URL(k.src).origin:window.location.origin,S=`#discuss-comments *, #discuss-comments ::before, #discuss-comments ::after {
-    --tw-border-spacing-x: 0;
-    --tw-border-spacing-y: 0;
-    --tw-translate-x: 0;
-    --tw-translate-y: 0;
-    --tw-rotate: 0;
-    --tw-skew-x: 0;
-    --tw-skew-y: 0;
-    --tw-scale-x: 1;
-    --tw-scale-y: 1;
-    --tw-pan-x:  ;
-    --tw-pan-y:  ;
-    --tw-pinch-zoom:  ;
-    --tw-scroll-snap-strictness: proximity;
-    --tw-gradient-from-position:  ;
-    --tw-gradient-via-position:  ;
-    --tw-gradient-to-position:  ;
-    --tw-ordinal:  ;
-    --tw-slashed-zero:  ;
-    --tw-numeric-figure:  ;
-    --tw-numeric-spacing:  ;
-    --tw-numeric-fraction:  ;
-    --tw-ring-inset:  ;
-    --tw-ring-offset-width: 0px;
-    --tw-ring-offset-color: #fff;
-    --tw-ring-color: rgb(59 130 246 / 0.5);
-    --tw-ring-offset-shadow: 0 0 #0000;
-    --tw-ring-shadow: 0 0 #0000;
-    --tw-shadow: 0 0 #0000;
-    --tw-shadow-colored: 0 0 #0000;
-    --tw-blur:  ;
-    --tw-brightness:  ;
-    --tw-contrast:  ;
-    --tw-grayscale:  ;
-    --tw-hue-rotate:  ;
-    --tw-invert:  ;
-    --tw-saturate:  ;
-    --tw-sepia:  ;
-    --tw-drop-shadow:  ;
-    --tw-backdrop-blur:  ;
-    --tw-backdrop-brightness:  ;
-    --tw-backdrop-contrast:  ;
-    --tw-backdrop-grayscale:  ;
-    --tw-backdrop-hue-rotate:  ;
-    --tw-backdrop-invert:  ;
-    --tw-backdrop-opacity:  ;
-    --tw-backdrop-saturate:  ;
-    --tw-backdrop-sepia:  ;
-    --tw-contain-size:  ;
-    --tw-contain-layout:  ;
-    --tw-contain-paint:  ;
-    --tw-contain-style:  ;
-}
-#discuss-comments ::backdrop {
-    --tw-border-spacing-x: 0;
-    --tw-border-spacing-y: 0;
-    --tw-translate-x: 0;
-    --tw-translate-y: 0;
-    --tw-rotate: 0;
-    --tw-skew-x: 0;
-    --tw-skew-y: 0;
-    --tw-scale-x: 1;
-    --tw-scale-y: 1;
-    --tw-pan-x:  ;
-    --tw-pan-y:  ;
-    --tw-pinch-zoom:  ;
-    --tw-scroll-snap-strictness: proximity;
-    --tw-gradient-from-position:  ;
-    --tw-gradient-via-position:  ;
-    --tw-gradient-to-position:  ;
-    --tw-ordinal:  ;
-    --tw-slashed-zero:  ;
-    --tw-numeric-figure:  ;
-    --tw-numeric-spacing:  ;
-    --tw-numeric-fraction:  ;
-    --tw-ring-inset:  ;
-    --tw-ring-offset-width: 0px;
-    --tw-ring-offset-color: #fff;
-    --tw-ring-color: rgb(59 130 246 / 0.5);
-    --tw-ring-offset-shadow: 0 0 #0000;
-    --tw-ring-shadow: 0 0 #0000;
-    --tw-shadow: 0 0 #0000;
-    --tw-shadow-colored: 0 0 #0000;
-    --tw-blur:  ;
-    --tw-brightness:  ;
-    --tw-contrast:  ;
-    --tw-grayscale:  ;
-    --tw-hue-rotate:  ;
-    --tw-invert:  ;
-    --tw-saturate:  ;
-    --tw-sepia:  ;
-    --tw-drop-shadow:  ;
-    --tw-backdrop-blur:  ;
-    --tw-backdrop-brightness:  ;
-    --tw-backdrop-contrast:  ;
-    --tw-backdrop-grayscale:  ;
-    --tw-backdrop-hue-rotate:  ;
-    --tw-backdrop-invert:  ;
-    --tw-backdrop-opacity:  ;
-    --tw-backdrop-saturate:  ;
-    --tw-backdrop-sepia:  ;
-    --tw-contain-size:  ;
-    --tw-contain-layout:  ;
-    --tw-contain-paint:  ;
-    --tw-contain-style:  ;
-}
-  #discuss-comments {
-    /* Brand scale mirrors tailwind.config.js so CSS variable consumers stay in sync
-       when the primary palette is replaced at build time. */
-    --b50: #eff6ff;
-    --b100: #dbeafe;
-    --b200: #bfdbfe;
-    --b300: #93c5fd;
-    --b400: #60a5fa;
-    --b500: #3b82f6;
-    --b600: #2563eb;
-    --b700: #1d4ed8;
-    --b800: #1e40af;
-    --b900: #1e3a8a;
-
-    /* Semantic light-theme defaults. Apps can override these directly or swap them
-       at runtime when they implement deriveThemeTokens()-style dark mode logic. */
-    --t1: #111827;
-    --t2: #334155;
-    --t3: #475569;
-    --t4: #64748b;
-    --t5: #94a3b8;
-
-    --s1: #ffffff;
-    --s2: #f8fafc;
-    --s3: #f1f5f9;
-
-    --bd: #cbd5e1;
-    --bds: #e2e8f0;
-    --bd-control: #cbd5e1;
-    --bd-button: #e2e8f0;
-    --bd-strong: #94a3b8;
-    --shell-divider: #e2e8f0;
-
-    --accent-fg: #1d4ed8;
-    --accent-surface: #eff6ff;
-    --focus-ring: #1d4ed8;
-
-    --success-fill: #16a34a;
-    --success-fill-hover: #15803d;
-    --danger-fg: #dc2626;
-    --danger-border: #dc2626;
-
-    --on-primary: #ffffff;
-    --on-success: #ffffff;
-    --on-danger: #ffffff;
-
-    --surface-shadow: 0 0 0 1px rgba(15,23,42,0.04),0 1px 2px -0.5px rgba(15,23,42,0.06),0 2px 4px rgba(15,23,42,0.035);
-    --surface-shadow-md: 0 0 0 1px rgba(15,23,42,0.05),0 4px 8px -2px rgba(15,23,42,0.08),0 8px 16px rgba(15,23,42,0.055);
-    --surface-shadow-lg: 0 0 0 1px rgba(15,23,42,0.05),0 8px 16px -4px rgba(15,23,42,0.10),0 16px 32px rgba(15,23,42,0.07);
-
-    --tooltip-bg: #111827;
-    --tooltip-fg: #ffffff;
-    --toast-bg: #111827;
-    --toast-fg: #ffffff;
-    --modal-backdrop: rgba(0, 0, 0, 0.45);
+(()=>{var u={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var x=document.getElementsByTagName("script"),k=x[x.length-1],T=k?new URL(k.src).origin:window.location.origin,S=`/*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer ken {
+  @layer theme, base, components, utilities;
+  @layer theme {
+    #discuss-comments, #discuss-comments :host {
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --color-neutral-50: oklch(98.2% 0.004 250);
+      --color-neutral-100: oklch(95.8% 0.008 250);
+      --color-neutral-200: oklch(91.2% 0.012 250);
+      --color-neutral-300: oklch(84.5% 0.016 250);
+      --color-neutral-400: oklch(71.0% 0.020 250);
+      --color-neutral-500: oklch(58.5% 0.022 250);
+      --color-neutral-600: oklch(48.0% 0.020 250);
+      --color-neutral-700: oklch(37.5% 0.016 250);
+      --color-neutral-800: oklch(27.0% 0.012 250);
+      --color-neutral-900: oklch(18.5% 0.008 250);
+      --color-white: #fff;
+      --spacing: 0.25rem;
+      --container-xs: 20rem;
+      --container-sm: 24rem;
+      --container-2xl: 42rem;
+      --container-7xl: 80rem;
+      --text-xs: 0.75rem;
+      --text-xs--line-height: 1.125rem;
+      --text-sm: 0.875rem;
+      --text-sm--line-height: 1.375rem;
+      --text-base: 1rem;
+      --text-base--line-height: 1.625rem;
+      --text-lg: 1.125rem;
+      --text-lg--line-height: 1.625rem;
+      --text-xl: 1.25rem;
+      --text-xl--line-height: 1.75rem;
+      --text-2xl: 1.5rem;
+      --text-2xl--line-height: 2rem;
+      --text-3xl: 2rem;
+      --text-3xl--line-height: 2.5rem;
+      --text-4xl: 2.5rem;
+      --text-4xl--line-height: 2.75rem;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --tracking-wide: 0.025em;
+      --tracking-widest: 0.1em;
+      --leading-relaxed: 1.625;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 0 0 1px rgba(15,23,42,0.06), 0 1px 2px -0.5px rgba(15,23,42,0.07), 0 2px 4px rgba(15,23,42,0.04);
+      --shadow-md: 0 0 0 1px rgba(15,23,42,0.07), 0 4px 8px -2px rgba(15,23,42,0.10), 0 8px 16px rgba(15,23,42,0.07);
+      --shadow-lg: 0 0 0 1px rgba(15,23,42,0.06), 0 8px 16px -4px rgba(15,23,42,0.12), 0 16px 32px rgba(15,23,42,0.08);
+      --ease-out: cubic-bezier(0, 0, 0.2, 1);
+      --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+      --animate-spin: spin 1s linear infinite;
+      --default-transition-duration: 150ms;
+      --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      --default-font-family: var(--font-sans);
+      --default-mono-font-family: var(--font-mono);
+      --color-primary-50: oklch(97.1% 0.013 250);
+      --color-primary-100: oklch(93.7% 0.032 250);
+      --color-primary-200: oklch(88.2% 0.060 250);
+      --color-primary-300: oklch(80.5% 0.098 250);
+      --color-primary-400: oklch(70.2% 0.140 250);
+      --color-primary-500: oklch(59.8% 0.175 250);
+      --color-primary-600: oklch(50.2% 0.195 250);
+      --color-primary-700: oklch(42.5% 0.180 250);
+      --color-primary-800: oklch(34.8% 0.148 250);
+      --color-primary-900: oklch(28.0% 0.112 250);
+      --color-success-50: oklch(97.2% 0.018 145);
+      --color-success-100: oklch(93.0% 0.048 145);
+      --color-success-200: oklch(87.5% 0.088 145);
+      --color-success-600: oklch(53.5% 0.168 145);
+      --color-success-700: oklch(44.8% 0.145 145);
+      --color-warning-50: oklch(98.0% 0.020 85);
+      --color-warning-100: oklch(95.2% 0.058 85);
+      --color-warning-200: oklch(91.0% 0.108 85);
+      --color-warning-700: oklch(52.8% 0.155 85);
+      --color-danger-50: oklch(97.5% 0.012 20);
+      --color-danger-100: oklch(93.5% 0.038 20);
+      --color-danger-200: oklch(88.0% 0.072 20);
+      --color-danger-500: oklch(63.5% 0.222 20);
+      --color-danger-600: oklch(53.5% 0.210 20);
+      --color-danger-700: oklch(44.5% 0.188 20);
+      --color-danger-800: oklch(36.0% 0.158 20);
+      --radius-none: 0;
+      --duration-fast: 120ms;
+      --ease-DEFAULT: cubic-bezier(0.16, 1, 0.3, 1);
+    }
   }
-
-  /* Fallback dark token set for the default blue theme. Apps with runtime token
-     derivation can still override these variables after toggling .dark. */
-  #discuss-comments .discuss-dark {
-    --t1: #f8fafc;
-    --t2: #e2e8f0;
-    --t3: #cbd5e1;
-    --t4: #94a3b8;
-    --t5: #64748b;
-
-    --s1: #111827;
-    --s2: #0a1120;
-    --s3: #1e293b;
-
-    --bd: #475569;
-    --bds: #334155;
-    --bd-control: #475569;
-    --bd-button: #334155;
-    --bd-strong: #94a3b8;
-    --shell-divider: #334155;
-
-    --accent-fg: #93c5fd;
-    --accent-surface: color-mix(in srgb, #1e40af 32%, #111827);
-    --focus-ring: #93c5fd;
-
-    --success-fill: #16a34a;
-    --success-fill-hover: #15803d;
-    --danger-fg: #ef4444;
-    --danger-border: #ef4444;
-
-    --surface-shadow: 0 0 0 1px var(--bds), 0 1px 3px rgba(0, 0, 0, 0.45);
-    --surface-shadow-md: 0 0 0 1px var(--bds), 0 4px 8px rgba(0, 0, 0, 0.42);
-    --surface-shadow-lg: 0 0 0 1px var(--bds), 0 12px 24px rgba(0, 0, 0, 0.55);
-
-    --tooltip-bg: var(--t1);
-    --tooltip-fg: var(--s2);
-    --toast-bg: var(--t1);
-    --toast-fg: var(--s2);
-    --modal-backdrop: rgba(0, 0, 0, 0.72);
+  @layer base {
+    #discuss-comments *, #discuss-comments ::after, #discuss-comments ::before, #discuss-comments ::backdrop, #discuss-comments ::file-selector-button {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border: 0 solid;
+    }
+    #discuss-comments, #discuss-comments :host {
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+      -moz-tab-size: 4;
+        -o-tab-size: 4;
+           tab-size: 4;
+      font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+      font-feature-settings: var(--default-font-feature-settings, normal);
+      font-variation-settings: var(--default-font-variation-settings, normal);
+      -webkit-tap-highlight-color: transparent;
+    }
+    #discuss-comments hr {
+      height: 0;
+      color: inherit;
+      border-top-width: 1px;
+    }
+    #discuss-comments abbr:where([title]) {
+      -webkit-text-decoration: underline dotted;
+      text-decoration: underline dotted;
+    }
+    #discuss-comments h1, #discuss-comments h2, #discuss-comments h3, #discuss-comments h4, #discuss-comments h5, #discuss-comments h6 {
+      font-size: inherit;
+      font-weight: inherit;
+    }
+    #discuss-comments a {
+      color: inherit;
+      -webkit-text-decoration: inherit;
+      text-decoration: inherit;
+    }
+    #discuss-comments b, #discuss-comments strong {
+      font-weight: bolder;
+    }
+    #discuss-comments code, #discuss-comments kbd, #discuss-comments samp, #discuss-comments pre {
+      font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+      font-feature-settings: var(--default-mono-font-feature-settings, normal);
+      font-variation-settings: var(--default-mono-font-variation-settings, normal);
+      font-size: 1em;
+    }
+    #discuss-comments small {
+      font-size: 80%;
+    }
+    #discuss-comments sub, #discuss-comments sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline;
+    }
+    #discuss-comments sub {
+      bottom: -0.25em;
+    }
+    #discuss-comments sup {
+      top: -0.5em;
+    }
+    #discuss-comments table {
+      text-indent: 0;
+      border-color: inherit;
+      border-collapse: collapse;
+    }
+    #discuss-comments :-moz-focusring {
+      outline: auto;
+    }
+    #discuss-comments progress {
+      vertical-align: baseline;
+    }
+    #discuss-comments summary {
+      display: list-item;
+    }
+    #discuss-comments ol, #discuss-comments ul, #discuss-comments menu {
+      list-style: none;
+    }
+    #discuss-comments img, #discuss-comments svg, #discuss-comments video, #discuss-comments canvas, #discuss-comments audio, #discuss-comments iframe, #discuss-comments embed, #discuss-comments object {
+      display: block;
+      vertical-align: middle;
+    }
+    #discuss-comments img, #discuss-comments video {
+      max-width: 100%;
+      height: auto;
+    }
+    #discuss-comments button, #discuss-comments input, #discuss-comments select, #discuss-comments optgroup, #discuss-comments textarea, #discuss-comments ::file-selector-button {
+      font: inherit;
+      font-feature-settings: inherit;
+      font-variation-settings: inherit;
+      letter-spacing: inherit;
+      color: inherit;
+      border-radius: 0;
+      background-color: transparent;
+      opacity: 1;
+    }
+    #discuss-comments :where(select:is([multiple], [size])) optgroup {
+      font-weight: bolder;
+    }
+    #discuss-comments :where(select:is([multiple], [size])) optgroup option {
+      padding-inline-start: 20px;
+    }
+    #discuss-comments ::file-selector-button {
+      margin-inline-end: 4px;
+    }
+    #discuss-comments ::-moz-placeholder {
+      opacity: 1;
+    }
+    #discuss-comments ::placeholder {
+      opacity: 1;
+    }
+    @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+      #discuss-comments ::-moz-placeholder {
+        color: currentcolor;
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix(in oklab, currentcolor 50%, transparent);
+        }
+      }
+      #discuss-comments ::placeholder {
+        color: currentcolor;
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix(in oklab, currentcolor 50%, transparent);
+        }
+      }
+    }
+    #discuss-comments textarea {
+      resize: vertical;
+    }
+    #discuss-comments ::-webkit-search-decoration {
+      -webkit-appearance: none;
+    }
+    #discuss-comments ::-webkit-date-and-time-value {
+      min-height: 1lh;
+      text-align: inherit;
+    }
+    #discuss-comments ::-webkit-datetime-edit {
+      display: inline-flex;
+    }
+    #discuss-comments ::-webkit-datetime-edit-fields-wrapper {
+      padding: 0;
+    }
+    #discuss-comments ::-webkit-datetime-edit, #discuss-comments ::-webkit-datetime-edit-year-field, #discuss-comments ::-webkit-datetime-edit-month-field, #discuss-comments ::-webkit-datetime-edit-day-field, #discuss-comments ::-webkit-datetime-edit-hour-field, #discuss-comments ::-webkit-datetime-edit-minute-field, #discuss-comments ::-webkit-datetime-edit-second-field, #discuss-comments ::-webkit-datetime-edit-millisecond-field, #discuss-comments ::-webkit-datetime-edit-meridiem-field {
+      padding-block: 0;
+    }
+    #discuss-comments ::-webkit-calendar-picker-indicator {
+      line-height: 1;
+    }
+    #discuss-comments :-moz-ui-invalid {
+      box-shadow: none;
+    }
+    #discuss-comments button, #discuss-comments input:where([type="button"], [type="reset"], [type="submit"]), #discuss-comments ::file-selector-button {
+      -webkit-appearance: button;
+         -moz-appearance: button;
+              appearance: button;
+    }
+    #discuss-comments ::-webkit-inner-spin-button, #discuss-comments ::-webkit-outer-spin-button {
+      height: auto;
+    }
+    #discuss-comments [hidden]:where(:not([hidden="until-found"])) {
+      display: none !important;
+    }
   }
-
-  #discuss-comments *, #discuss-comments *::before, #discuss-comments *::after { box-sizing: border-box; }
-
-  #discuss-comments {
-    /* #f8fafc \u2014 neutral-50 cool-tinted canvas. Coheres with the cool blue-gray
-       neutral palette used for text, borders, and surfaces. */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: var(--t1);
-    background-color: var(--s2);
-  }
-
-  /* Headings: font sizes now on the 8px grid (32/40/48px for 3xl/4xl/5xl).
-     Line-heights come from tailwind.config fontSize \u2014 no leading-* override needed. */
-  #discuss-comments h1 {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-    font-weight: 600; color: var(--t1);
-}  /* 40px / lh 44px */
-  #discuss-comments h2 {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-    font-weight: 600; color: var(--t1);
-}  /* 32px / lh 40px */
-  #discuss-comments h3 {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 600; color: var(--t1);
-}  /* 24px / lh 32px */
-  #discuss-comments h4 {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-    font-weight: 600; color: var(--t1);
-}  /* 20px / lh 28px */
-  #discuss-comments h5 {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    font-weight: 500; color: var(--t1);
-}    /* 18px / lh 26px */
-  #discuss-comments h6 {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    font-weight: 500; color: var(--t1);
-}   /* 16px / lh 26px */
-
-  /* WCAG 1.4.8 (AAA): max line length \u2264 80ch. Best practice: 45\u201375ch.
-     Use max-w-prose (65ch) on containers holding long-form text. */
-  #discuss-comments p {
-    line-height: 1.625;
-}
-
-  #discuss-comments a {
-    color: var(--accent-fg);
-    text-decoration: none;
-  }
-  #discuss-comments a:hover { text-decoration: underline; }
-
-  #discuss-comments strong {
-    font-weight: 600;
-}
-
-  #discuss-comments code {
-    border-radius: 6px;
-    padding-left: 0.375rem;
-    padding-right: 0.375rem;
-    padding-top: 0.125rem;
-    padding-bottom: 0.125rem;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    background-color: var(--s3);
-    color: var(--t2);
-}
-
-  #discuss-comments pre {
-    overflow-x: auto;
-    border-radius: 8px;
-    padding: 1rem;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    background-color: var(--t1);
-    color: var(--s2);
-}
-  #discuss-comments pre code {
-    border-radius: 0;
-    background-color: transparent;
-    padding: 0px;
-    color: inherit;
-}
-
-  #discuss-comments hr {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    border-width: 0px;
-    border-top-width: 1px;
-    border-color: var(--bds);
-}
-#discuss-comments .discuss-\\!container {
-    width: 100% !important;
-}
-#discuss-comments .discuss-container {
-    width: 100%;
-}
-@media (min-width: 640px) {
-    #discuss-comments .discuss-\\!container {
-        max-width: 640px !important;
+  @layer utilities {
+    #discuss-comments .discuss-visible {
+      visibility: visible;
+    }
+    #discuss-comments .discuss-fixed {
+      position: fixed;
+    }
+    #discuss-comments .discuss-relative {
+      position: relative;
+    }
+    #discuss-comments .discuss-static {
+      position: static;
+    }
+    #discuss-comments .discuss-top-full {
+      top: 100%;
+    }
+    #discuss-comments .discuss-bottom-full {
+      bottom: 100%;
     }
     #discuss-comments .discuss-container {
-        max-width: 640px;
+      width: 100%;
+      @media (width >= 40rem) {
+        max-width: 40rem;
+      }
+      @media (width >= 48rem) {
+        max-width: 48rem;
+      }
+      @media (width >= 64rem) {
+        max-width: 64rem;
+      }
+      @media (width >= 80rem) {
+        max-width: 80rem;
+      }
+      @media (width >= 96rem) {
+        max-width: 96rem;
+      }
     }
-}
-@media (min-width: 768px) {
-    #discuss-comments .discuss-\\!container {
-        max-width: 768px !important;
+    #discuss-comments .discuss-mt-1 {
+      margin-top: calc(var(--spacing) * 1);
     }
-    #discuss-comments .discuss-container {
-        max-width: 768px;
+    #discuss-comments .discuss-mt-2 {
+      margin-top: calc(var(--spacing) * 2);
     }
-}
-@media (min-width: 1024px) {
-    #discuss-comments .discuss-\\!container {
-        max-width: 1024px !important;
+    #discuss-comments .discuss-mb-2 {
+      margin-bottom: calc(var(--spacing) * 2);
     }
-    #discuss-comments .discuss-container {
-        max-width: 1024px;
+    #discuss-comments .discuss-mb-6 {
+      margin-bottom: calc(var(--spacing) * 6);
     }
-}
-@media (min-width: 1280px) {
-    #discuss-comments .discuss-\\!container {
-        max-width: 1280px !important;
+    #discuss-comments .discuss-mb-8 {
+      margin-bottom: calc(var(--spacing) * 8);
     }
-    #discuss-comments .discuss-container {
-        max-width: 1280px;
+    #discuss-comments .discuss-mb-10 {
+      margin-bottom: calc(var(--spacing) * 10);
     }
-}
-@media (min-width: 1536px) {
-    #discuss-comments .discuss-\\!container {
-        max-width: 1536px !important;
+    #discuss-comments .discuss-block {
+      display: block;
     }
-    #discuss-comments .discuss-container {
-        max-width: 1536px;
+    #discuss-comments .discuss-flex {
+      display: flex;
     }
-}
-/* \u2500\u2500 Button \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/*
-   * Scale from web standards (8px grid, iOS-safe 16px floor):
-   *   sm  \u2192 14px font, 32px height  (py-2    + leading-4)
-   *   md  \u2192 16px font, 40px height  (py-3    + leading-4)  \u2190 default
-   *   lg  \u2192 18px font, 48px height  (py-4    + leading-4)
-   * Inputs share the same md scale so they sit flush side-by-side.
-   */
-#discuss-comments .discuss-btn {
-    display: inline-flex;
-    cursor: pointer;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-            user-select: none;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    white-space: nowrap;
-    border-radius: 6px;
-    border-width: 1px;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1rem;
-    transition-property: background-color,border-color,box-shadow,transform;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 120ms;
-    transition-timing-function: cubic-bezier(0.4,0,0.2,1);
-}
-#discuss-comments .discuss-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-#discuss-comments .discuss-btn:active:not(:disabled) { transform: scale(0.97); transition-duration: 75ms; }
-#discuss-comments .discuss-btn:focus-visible {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
-    outline: none;
+    #discuss-comments .discuss-grid {
+      display: grid;
+    }
+    #discuss-comments .discuss-hidden {
+      display: none;
+    }
+    #discuss-comments .discuss-inline {
+      display: inline;
+    }
+    #discuss-comments .discuss-inline-flex {
+      display: inline-flex;
+    }
+    #discuss-comments .discuss-table {
+      display: table;
+    }
+    #discuss-comments .discuss-min-h-screen {
+      min-height: 100vh;
+    }
+    #discuss-comments .discuss-w-full {
+      width: 100%;
+    }
+    #discuss-comments .discuss-max-w-2xl {
+      max-width: var(--container-2xl);
+    }
+    #discuss-comments .discuss-max-w-prose {
+      max-width: 65ch;
+    }
+    #discuss-comments .discuss-max-w-sm {
+      max-width: var(--container-sm);
+    }
+    #discuss-comments .discuss-max-w-xs {
+      max-width: var(--container-xs);
+    }
+    #discuss-comments .discuss-flex-shrink {
+      flex-shrink: 1;
+    }
+    #discuss-comments .discuss-flex-grow {
+      flex-grow: 1;
+    }
+    #discuss-comments .discuss-grow {
+      flex-grow: 1;
+    }
+    #discuss-comments .discuss-border-collapse {
+      border-collapse: collapse;
+    }
+    #discuss-comments .discuss-transform {
+      transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+    }
+    #discuss-comments .discuss-cursor-pointer {
+      cursor: pointer;
+    }
+    #discuss-comments .discuss-resize {
+      resize: both;
+    }
+    #discuss-comments .discuss-grid-cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    #discuss-comments .discuss-grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    #discuss-comments .discuss-flex-wrap {
+      flex-wrap: wrap;
+    }
+    #discuss-comments .discuss-items-center {
+      align-items: center;
+    }
+    #discuss-comments .discuss-justify-center {
+      justify-content: center;
+    }
+    #discuss-comments .discuss-gap-1 {
+      gap: calc(var(--spacing) * 1);
+    }
+    #discuss-comments .discuss-gap-3 {
+      gap: calc(var(--spacing) * 3);
+    }
+    #discuss-comments .discuss-gap-4 {
+      gap: calc(var(--spacing) * 4);
+    }
+    #discuss-comments .discuss-space-y-6 {
+      #discuss-comments :where(& > :not(:last-child)) {
+        --tw-space-y-reverse: 0;
+        margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
+        margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
+      }
+    }
+    #discuss-comments .discuss-truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #discuss-comments .discuss-rounded {
+      border-radius: 0.25rem;
+    }
+    #discuss-comments .discuss-rounded-full {
+      border-radius: calc(infinity * 1px);
+    }
+    #discuss-comments .discuss-border {
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+    }
+    #discuss-comments .discuss-bg-neutral-50 {
+      background-color: var(--color-neutral-50);
+    }
+    #discuss-comments .discuss-bg-primary-600 {
+      background-color: var(--color-primary-600);
+    }
+    #discuss-comments .discuss-bg-success-100 {
+      background-color: var(--color-success-100);
+    }
+    #discuss-comments .discuss-bg-white {
+      background-color: var(--color-white);
+    }
+    #discuss-comments .discuss-p-4 {
+      padding: calc(var(--spacing) * 4);
+    }
+    #discuss-comments .discuss-px-2\\.5 {
+      padding-inline: calc(var(--spacing) * 2.5);
+    }
+    #discuss-comments .discuss-py-0\\.5 {
+      padding-block: calc(var(--spacing) * 0.5);
+    }
+    #discuss-comments .discuss-py-3 {
+      padding-block: calc(var(--spacing) * 3);
+    }
+    #discuss-comments .discuss-text-left {
+      text-align: left;
+    }
+    #discuss-comments .discuss-text-right {
+      text-align: right;
+    }
+    #discuss-comments .discuss-text-sm {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+    #discuss-comments .discuss-text-xs {
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+    }
+    #discuss-comments .discuss-font-medium {
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+    }
+    #discuss-comments .discuss-text-danger-600 {
+      color: var(--color-danger-600);
+    }
+    #discuss-comments .discuss-text-neutral-900 {
+      color: var(--color-neutral-900);
+    }
+    #discuss-comments .discuss-text-primary-600 {
+      color: var(--color-primary-600);
+    }
+    #discuss-comments .discuss-text-success-700 {
+      color: var(--color-success-700);
+    }
+    #discuss-comments .discuss-uppercase {
+      text-transform: uppercase;
+    }
+    #discuss-comments .discuss-italic {
+      font-style: italic;
+    }
+    #discuss-comments .discuss-overline {
+      text-decoration-line: overline;
+    }
+    #discuss-comments .discuss-underline {
+      text-decoration-line: underline;
+    }
+    #discuss-comments .discuss-shadow {
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+    #discuss-comments .discuss-ring {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+    #discuss-comments .discuss-outline {
+      outline-style: var(--tw-outline-style);
+      outline-width: 1px;
+    }
+    #discuss-comments .discuss-blur {
+      --tw-blur: blur(8px);
+      filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+    }
+    #discuss-comments .discuss-filter {
+      filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+    }
+    #discuss-comments .discuss-transition {
+      transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+    }
+    #discuss-comments .discuss-ease-DEFAULT {
+      --tw-ease: var(--ease-DEFAULT);
+      transition-timing-function: var(--ease-DEFAULT);
+    }
+    #discuss-comments .discuss-ease-in-out {
+      --tw-ease: var(--ease-in-out);
+      transition-timing-function: var(--ease-in-out);
+    }
+    #discuss-comments .discuss-ease-out {
+      --tw-ease: var(--ease-out);
+      transition-timing-function: var(--ease-out);
+    }
+    #discuss-comments .discuss-select-none {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+           user-select: none;
+    }
+    #discuss-comments .discuss-hover\\:bg-danger-50 {
+      #discuss-comments &:hover {
+        @media (hover: hover) {
+          background-color: var(--color-danger-50);
+        }
+      }
+    }
+    #discuss-comments .discuss-hover\\:text-danger-700 {
+      #discuss-comments &:hover {
+        @media (hover: hover) {
+          color: var(--color-danger-700);
+        }
+      }
+    }
+    #discuss-comments .discuss-md\\:hidden {
+      @media (width >= 48rem) {
+        display: none;
+      }
+    }
+    #discuss-comments .discuss-md\\:grid-cols-2 {
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    #discuss-comments .discuss-md\\:grid-cols-4 {
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
   }
-#discuss-comments .discuss-btn svg,
-  #discuss-comments .discuss-btn i[data-lucide] {
-    width: 1em;
-    height: 1em;
-    flex-shrink: 0;
+  @layer base {
+    #discuss-comments {
+      --b50: var(--color-primary-50);
+      --b100: var(--color-primary-100);
+      --b200: var(--color-primary-200);
+      --b300: var(--color-primary-300);
+      --b400: var(--color-primary-400);
+      --b500: var(--color-primary-500);
+      --b600: var(--color-primary-600);
+      --b700: var(--color-primary-700);
+      --b800: var(--color-primary-800);
+      --b900: var(--color-primary-900);
+      --t1: var(--color-neutral-900);
+      --t2: var(--color-neutral-700);
+      --t3: var(--color-neutral-600);
+      --t4: var(--color-neutral-500);
+      --t5: var(--color-neutral-400);
+      --s1: #ffffff;
+      --s2: var(--color-neutral-50);
+      --s3: var(--color-neutral-100);
+      --bd: var(--color-neutral-300);
+      --bds: var(--color-neutral-200);
+      --bd-control: var(--color-neutral-300);
+      --bd-button: var(--color-neutral-200);
+      --bd-strong: var(--color-neutral-400);
+      --shell-divider: var(--color-neutral-200);
+      --accent-fg: var(--color-primary-800);
+      --accent-surface: var(--color-primary-50);
+      --focus-ring: var(--color-primary-700);
+      --success-fill: var(--color-success-600);
+      --success-fill-hover: var(--color-success-700);
+      --danger-fg: var(--color-danger-600);
+      --danger-border: var(--color-danger-600);
+      --on-primary: #ffffff;
+      --on-success: #ffffff;
+      --on-danger: #ffffff;
+      --surface-shadow: var(--shadow-sm);
+      --surface-shadow-md: var(--shadow-md);
+      --surface-shadow-lg: var(--shadow-lg);
+      --tooltip-bg: var(--color-neutral-900);
+      --tooltip-fg: #ffffff;
+      --toast-bg: var(--color-neutral-900);
+      --toast-fg: #ffffff;
+      --modal-backdrop: rgba(0, 0, 0, 0.45);
+    }
+    #discuss-comments .discuss-dark {
+      --t1: var(--color-neutral-50);
+      --t2: var(--color-neutral-200);
+      --t3: var(--color-neutral-300);
+      --t4: var(--color-neutral-400);
+      --t5: var(--color-neutral-500);
+      --s1: oklch(3% 0 0);
+      --s2: oklch(0% 0 0);
+      --s3: oklch(8% 0.004 250);
+      --bd: var(--color-neutral-600);
+      --bds: var(--color-neutral-700);
+      --bd-control: var(--color-neutral-600);
+      --bd-button: var(--color-neutral-700);
+      --bd-strong: var(--color-neutral-400);
+      --shell-divider: var(--color-neutral-700);
+      --accent-fg: var(--color-primary-300);
+      --accent-surface: color-mix(in srgb, oklch(34.8% 0.148 250) 32%, oklch(18.5% 0.008 250));
+      @supports (color: color-mix(in lab, red, red)) {
+        --accent-surface: color-mix(in srgb, var(--color-primary-800) 32%, var(--color-neutral-900));
+      }
+      --focus-ring: var(--color-primary-300);
+      --success-fill: var(--color-success-600);
+      --success-fill-hover: var(--color-success-700);
+      --danger-fg: var(--color-danger-500);
+      --danger-border: var(--color-danger-500);
+      --surface-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 0 0 1px rgba(255,255,255,0.10);
+      --surface-shadow-md: inset 0 1px 0 rgba(255,255,255,0.11), 0 0 0 1px rgba(255,255,255,0.12);
+      --surface-shadow-lg: inset 0 1px 0 rgba(255,255,255,0.13), 0 0 0 1px rgba(255,255,255,0.14);
+      --tooltip-bg: var(--t1);
+      --tooltip-fg: var(--s2);
+      --toast-bg: var(--t1);
+      --toast-fg: var(--s2);
+      --modal-backdrop: rgba(0, 0, 0, 0.72);
+    }
+    #discuss-comments .discuss-theme-light {
+      color-scheme: light;
+      --t1: var(--color-neutral-900);
+      --t2: var(--color-neutral-700);
+      --t3: var(--color-neutral-600);
+      --t4: var(--color-neutral-500);
+      --t5: var(--color-neutral-400);
+      --s1: #ffffff;
+      --s2: var(--color-neutral-50);
+      --s3: var(--color-neutral-100);
+      --bd: var(--color-neutral-300);
+      --bds: var(--color-neutral-200);
+      --bd-control: var(--color-neutral-300);
+      --bd-button: var(--color-neutral-200);
+      --bd-strong: var(--color-neutral-400);
+      --shell-divider: var(--color-neutral-200);
+      --accent-fg: var(--color-primary-800);
+      --accent-surface: var(--color-primary-50);
+      --focus-ring: var(--color-primary-700);
+      --success-fill: var(--color-success-600);
+      --success-fill-hover: var(--color-success-700);
+      --danger-fg: var(--color-danger-600);
+      --danger-border: var(--color-danger-600);
+      --surface-shadow: var(--shadow-sm);
+      --surface-shadow-md: var(--shadow-md);
+      --surface-shadow-lg: var(--shadow-lg);
+      --modal-backdrop: rgba(0, 0, 0, 0.45);
+    }
+    #discuss-comments .discuss-theme-dark {
+      color-scheme: dark;
+      --t1: var(--color-neutral-50);
+      --t2: var(--color-neutral-200);
+      --t3: var(--color-neutral-300);
+      --t4: var(--color-neutral-400);
+      --t5: var(--color-neutral-500);
+      --s1: oklch(3% 0 0);
+      --s2: oklch(0% 0 0);
+      --s3: oklch(8% 0.004 250);
+      --bd: var(--color-neutral-600);
+      --bds: var(--color-neutral-700);
+      --bd-control: var(--color-neutral-600);
+      --bd-button: var(--color-neutral-700);
+      --bd-strong: var(--color-neutral-400);
+      --shell-divider: var(--color-neutral-700);
+      --accent-fg: var(--color-primary-300);
+      --accent-surface: color-mix(in srgb, oklch(34.8% 0.148 250) 32%, oklch(18.5% 0.008 250));
+      @supports (color: color-mix(in lab, red, red)) {
+        --accent-surface: color-mix(in srgb, var(--color-primary-800) 32%, var(--color-neutral-900));
+      }
+      --focus-ring: var(--color-primary-300);
+      --success-fill: var(--color-success-600);
+      --success-fill-hover: var(--color-success-700);
+      --danger-fg: var(--color-danger-500);
+      --danger-border: var(--color-danger-500);
+      --surface-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 0 0 1px rgba(255,255,255,0.10);
+      --surface-shadow-md: inset 0 1px 0 rgba(255,255,255,0.11), 0 0 0 1px rgba(255,255,255,0.12);
+      --surface-shadow-lg: inset 0 1px 0 rgba(255,255,255,0.13), 0 0 0 1px rgba(255,255,255,0.14);
+      --modal-backdrop: rgba(0, 0, 0, 0.72);
+    }
+    #discuss-comments *, #discuss-comments *::before, #discuss-comments *::after {
+      box-sizing: border-box;
+    }
+    #discuss-comments {
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: var(--t1);
+      background-color: var(--s2);
+      letter-spacing: 0em;
+    }
+    #discuss-comments h1 {
+      font-size: var(--text-4xl);
+      line-height: var(--tw-leading, var(--text-4xl--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      color: var(--t1);
+      letter-spacing: -0.018em;
+    }
+    #discuss-comments h2 {
+      font-size: var(--text-3xl);
+      line-height: var(--tw-leading, var(--text-3xl--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      color: var(--t1);
+      letter-spacing: -0.014em;
+    }
+    #discuss-comments h3 {
+      font-size: var(--text-2xl);
+      line-height: var(--tw-leading, var(--text-2xl--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      color: var(--t1);
+      letter-spacing: -0.010em;
+    }
+    #discuss-comments h4 {
+      font-size: var(--text-xl);
+      line-height: var(--tw-leading, var(--text-xl--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      color: var(--t1);
+      letter-spacing: -0.006em;
+    }
+    #discuss-comments h5 {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      color: var(--t1);
+      letter-spacing: -0.003em;
+    }
+    #discuss-comments h6 {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      color: var(--t1);
+      letter-spacing: 0em;
+    }
+    #discuss-comments p {
+      --tw-leading: var(--leading-relaxed);
+      line-height: var(--leading-relaxed);
+    }
+    #discuss-comments a {
+      color: var(--accent-fg);
+      text-decoration: none;
+    }
+    #discuss-comments a:hover {
+      text-decoration: underline;
+    }
+    #discuss-comments strong {
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+    }
+    #discuss-comments code {
+      border-radius: 0.25rem;
+      padding-inline: calc(var(--spacing) * 1.5);
+      padding-block: calc(var(--spacing) * 0.5);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      background-color: var(--s3);
+      color: var(--t2);
+    }
+    #discuss-comments pre {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      padding: calc(var(--spacing) * 4);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      background-color: var(--color-neutral-900);
+      color: var(--color-neutral-100);
+    }
+    #discuss-comments pre code {
+      border-radius: var(--radius-none);
+      background-color: transparent;
+      padding: calc(var(--spacing) * 0);
+      color: inherit;
+    }
+    #discuss-comments hr {
+      margin-block: calc(var(--spacing) * 6);
+      border-style: var(--tw-border-style);
+      border-width: 0px;
+      border-top-style: var(--tw-border-style);
+      border-top-width: 1px;
+      border-color: var(--bds);
+    }
   }
-#discuss-comments i[data-lucide] { display: inline-flex; }
-/* \u2500\u2500 Form \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-label {
-    margin-bottom: 0.25rem;
-    display: block;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 600;
-    color: var(--t2);
-}
-/* Overline / section group label.
-     0.75rem + neutral-600 = ~5.5:1 vs white, ~5:1 vs #f5f5f5 \u2014 passes WCAG AA.
-     0.7rem (11.2px) would fail the WCAG 12px floor \u2014 never go below xs (0.75rem). */
-/* \u2500\u2500 Label mono \u2014 monospace class/token reference label \u2500\u2500 */
-/* \u2500\u2500 Section title / description \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/* 16px font = iOS auto-zoom safe. py-3 + leading-4 = 40px, flush with .btn default. */
-#discuss-comments .discuss-input {
-    display: block;
-    width: 100%;
-    border-radius: 6px;
-    border-width: 1px;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    font-size: 1rem;
-    line-height: 1rem;
-    transition-property: border-color,box-shadow;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 120ms;
-    transition-timing-function: cubic-bezier(0.4,0,0.2,1);
-}
-#discuss-comments .discuss-input:disabled {
-    cursor: not-allowed;
-}
-#discuss-comments .discuss-input {
-    color: var(--t1);
-    background-color: var(--s1);
-    border-color: var(--bd-control);
+  @layer components {
+    #discuss-comments .discuss-btn {
+      display: inline-flex;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: calc(var(--spacing) * 2);
+      border-radius: var(--radius-md);
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+      padding-inline: calc(var(--spacing) * 5);
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      white-space: nowrap;
+      transition-property: background-color,border-color,box-shadow,transform;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      -webkit-user-select: none;
+      -moz-user-select: none;
+           user-select: none;
+      #discuss-comments &:disabled {
+        cursor: not-allowed;
+      }
+      #discuss-comments &:disabled {
+        opacity: 50%;
+      }
+      height: 40px;
+      line-height: 1;
+      padding-top: 0;
+      padding-bottom: 0;
+      box-sizing: border-box;
+      text-decoration: none;
+      transition-duration: var(--duration-fast);
+      transition-timing-function: var(--ease-DEFAULT);
+    }
+    #discuss-comments .discuss-btn:hover {
+      text-decoration: none;
+    }
+    #discuss-comments .discuss-btn:active:not(:disabled) {
+      transform: scale(0.96);
+      transition: transform 60ms linear, background-color 60ms linear, border-color 60ms linear, box-shadow 60ms linear;
+    }
+    #discuss-comments .discuss-btn:focus-visible {
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      @supports (color: color-mix(in lab, red, red)) {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+      }
+      outline: none;
+    }
+    #discuss-comments .discuss-btn svg, #discuss-comments .discuss-btn i[data-lucide] {
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+    }
+    #discuss-comments i[data-lucide] {
+      display: inline-flex;
+    }
+    #discuss-comments .discuss-btn-primary {
+      background-color: var(--b600);
+      color: var(--on-primary);
+      border-color: var(--b600);
+    }
+    #discuss-comments .discuss-btn-primary:hover {
+      background-color: var(--b700);
+      border-color: var(--b700);
+    }
+    #discuss-comments .discuss-btn-primary:active:not(:disabled) {
+      background-color: var(--b800);
+      border-color: var(--b800);
+    }
+    #discuss-comments .discuss-btn-secondary {
+      background-color: var(--s1);
+      color: var(--t2);
+      border-color: var(--bd-button);
+    }
+    #discuss-comments .discuss-btn-secondary:hover {
+      background-color: var(--s3);
+      border-color: var(--bd-control);
+    }
+    #discuss-comments .discuss-btn-secondary:active:not(:disabled) {
+      background-color: var(--s2);
+      border-color: var(--bd-control);
+    }
+    #discuss-comments .discuss-btn-ghost {
+      background-color: transparent;
+      color: var(--t3);
+      border-color: var(--bd-button);
+    }
+    #discuss-comments .discuss-btn-ghost:hover {
+      background-color: var(--s3);
+      color: var(--t1);
+      border-color: var(--bd-control);
+    }
+    #discuss-comments .discuss-btn-ghost:active:not(:disabled) {
+      background-color: var(--s2);
+      border-color: var(--bd-control);
+    }
+    #discuss-comments .discuss-btn-danger {
+      background-color: var(--danger-border);
+      color: var(--on-danger);
+      border-color: var(--danger-border);
+    }
+    #discuss-comments .discuss-btn-danger:hover {
+      background-color: var(--color-danger-700);
+      border-color: var(--color-danger-700);
+    }
+    #discuss-comments .discuss-btn-danger:active:not(:disabled) {
+      background-color: var(--color-danger-800);
+      border-color: var(--color-danger-800);
+    }
+    #discuss-comments .discuss-btn-success {
+      background-color: var(--success-fill);
+      color: var(--on-success);
+      border-color: var(--success-fill);
+    }
+    #discuss-comments .discuss-btn-success:hover {
+      background-color: var(--success-fill-hover);
+      border-color: var(--success-fill-hover);
+    }
+    #discuss-comments .discuss-btn-sm {
+      padding-inline: calc(var(--spacing) * 3.5);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      height: 32px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    #discuss-comments .discuss-btn-lg {
+      padding-inline: calc(var(--spacing) * 8);
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+      height: 48px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    #discuss-comments .discuss-btn-icon {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-color: transparent;
+      background-color: transparent;
+      color: var(--t3);
+    }
+    #discuss-comments .discuss-btn-sm.btn-icon {
+      width: 32px;
+      height: 32px;
+    }
+    #discuss-comments .discuss-btn-lg.btn-icon {
+      width: 48px;
+      height: 48px;
+    }
+    #discuss-comments .discuss-btn-icon:hover {
+      background-color: var(--s3);
+      color: var(--t2);
+    }
+    #discuss-comments .discuss-label {
+      margin-bottom: calc(var(--spacing) * 1);
+      display: block;
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      color: var(--t2);
+      letter-spacing: 0.006em;
+    }
+    #discuss-comments .discuss-label-required::after {
+      content: ' *';
+      color: var(--color-danger-500);
+    }
+    #discuss-comments .discuss-label-overline {
+      margin-bottom: calc(var(--spacing) * 2);
+      display: block;
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      --tw-tracking: var(--tracking-widest);
+      letter-spacing: var(--tracking-widest);
+      text-transform: uppercase;
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-label-mono {
+      margin-top: calc(var(--spacing) * 1);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-section-title {
+      margin-bottom: calc(var(--spacing) * 1);
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      color: var(--t1);
+    }
+    #discuss-comments .discuss-section-desc {
+      margin-bottom: calc(var(--spacing) * 6);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      color: var(--t3);
+    }
+    #discuss-comments .discuss-input {
+      display: block;
+      width: 100%;
+      border-radius: var(--radius-md);
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+      padding-inline: calc(var(--spacing) * 3);
+      padding-block: calc(var(--spacing) * 3);
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+      --tw-leading: calc(var(--spacing) * 4);
+      line-height: calc(var(--spacing) * 4);
+      transition-property: border-color,box-shadow;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      #discuss-comments &:disabled {
+        cursor: not-allowed;
+      }
+      color: var(--t1);
+      background-color: var(--s1);
+      border-color: var(--bd-control);
+      transition-duration: var(--duration-fast);
+      transition-timing-function: var(--ease-DEFAULT);
+    }
+    #discuss-comments .discuss-input::-moz-placeholder {
+      color: var(--t5);
+    }
+    #discuss-comments .discuss-input::placeholder {
+      color: var(--t5);
+    }
+    #discuss-comments .discuss-input:focus, #discuss-comments .discuss-input:focus-visible {
+      border-color: var(--focus-ring);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      @supports (color: color-mix(in lab, red, red)) {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+      }
+      outline: none;
+    }
+    #discuss-comments .discuss-input:disabled {
+      background-color: var(--s2);
+      color: var(--t5);
+    }
+    #discuss-comments .discuss-input-error {
+      border-color: var(--danger-border);
+    }
+    #discuss-comments .discuss-input-error:focus, #discuss-comments .discuss-input-error:focus-visible {
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25);
+    }
+    #discuss-comments .discuss-input-error.shake {
+      animation: field-shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    #discuss-comments .discuss-input-success {
+      border-color: var(--color-success-600);
+    }
+    #discuss-comments .discuss-input-success:focus, #discuss-comments .discuss-input-success:focus-visible {
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25);
+    }
+    #discuss-comments .discuss-textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    #discuss-comments .discuss-select {
+      cursor: pointer;
+      -webkit-appearance: none;
+         -moz-appearance: none;
+              appearance: none;
+      padding-right: calc(var(--spacing) * 8);
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.25rem;
+    }
+    #discuss-comments .discuss-checkbox-label {
+      position: relative;
+      display: inline-flex;
+      cursor: pointer;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+      -webkit-user-select: none;
+      -moz-user-select: none;
+           user-select: none;
+    }
+    #discuss-comments .discuss-checkbox-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    #discuss-comments .discuss-checkbox-box {
+      display: flex;
+      height: calc(var(--spacing) * 4);
+      width: calc(var(--spacing) * 4);
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.25rem;
+      transition-property: background-color,border-color;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      border: 2px solid var(--bd-control);
+      background-color: var(--s1);
+      color: var(--on-primary);
+      transition-duration: var(--duration-fast);
+      transition-timing-function: var(--ease-DEFAULT);
+    }
+    #discuss-comments .discuss-checkbox-input:checked + .checkbox-box {
+      background-color: var(--b600);
+      border-color: var(--b600);
+      animation: checkbox-pop 250ms cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    #discuss-comments .discuss-checkbox-input:focus-visible + .checkbox-box {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+    #discuss-comments .discuss-checkbox-input:disabled + .checkbox-box {
+      cursor: not-allowed;
+      opacity: 50%;
+    }
+    #discuss-comments .discuss-checkbox-icon {
+      width: 0.625rem;
+      height: 0.625rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #discuss-comments .discuss-checkbox-icon path {
+      stroke-dasharray: 14;
+      stroke-dashoffset: 14;
+      transition: stroke-dashoffset 150ms ease-out;
+    }
+    #discuss-comments .discuss-checkbox-input:checked + .checkbox-box .checkbox-icon path {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 150ms ease-out 80ms;
+    }
+    #discuss-comments .discuss-radio-label {
+      position: relative;
+      display: inline-flex;
+      cursor: pointer;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+      -webkit-user-select: none;
+      -moz-user-select: none;
+           user-select: none;
+    }
+    #discuss-comments .discuss-radio-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    #discuss-comments .discuss-radio-box {
+      display: flex;
+      height: calc(var(--spacing) * 4);
+      width: calc(var(--spacing) * 4);
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      border-radius: calc(infinity * 1px);
+      transition-property: border-color;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      border: 2px solid var(--bd-control);
+      background-color: var(--s1);
+      transition-duration: var(--duration-fast);
+      transition-timing-function: var(--ease-DEFAULT);
+    }
+    #discuss-comments .discuss-radio-input:checked + .radio-box {
+      border-color: var(--b600);
+    }
+    #discuss-comments .discuss-radio-input:focus-visible + .radio-box {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+    #discuss-comments .discuss-radio-input:disabled + .radio-box {
+      cursor: not-allowed;
+      opacity: 50%;
+    }
+    #discuss-comments .discuss-radio-dot {
+      height: calc(var(--spacing) * 1.5);
+      width: calc(var(--spacing) * 1.5);
+      border-radius: calc(infinity * 1px);
+      background-color: var(--b600);
+      transform: scale(0);
+      transition: transform 100ms ease-in;
+    }
+    #discuss-comments .discuss-radio-input:checked + .radio-box .radio-dot {
+      transform: scale(1);
+      transition: transform 200ms cubic-bezier(0.16,1,0.3,1);
+    }
+    #discuss-comments .discuss-field-group {
+      margin-bottom: calc(var(--spacing) * 4);
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1);
+    }
+    #discuss-comments .discuss-field-help-text {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      color: var(--t4);
+      letter-spacing: 0.010em;
+    }
+    #discuss-comments .discuss-field-error-text {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      color: var(--danger-fg);
+      letter-spacing: 0.010em;
+    }
+    #discuss-comments .discuss-field-help-text svg, #discuss-comments .discuss-field-help-text i[data-lucide], #discuss-comments .discuss-field-error-text svg, #discuss-comments .discuss-field-error-text i[data-lucide] {
+      width: .875rem;
+      height: .875rem;
+      flex-shrink: 0;
+    }
+    #discuss-comments .discuss-card {
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background-color: var(--s1);
+      box-shadow: var(--surface-shadow);
+    }
+    #discuss-comments .discuss-card-header {
+      border-bottom-style: var(--tw-border-style);
+      border-bottom-width: 1px;
+      padding-inline: calc(var(--spacing) * 5);
+      padding-block: calc(var(--spacing) * 4);
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      border-color: var(--bds);
+      color: var(--t1);
+    }
+    #discuss-comments .discuss-card-body {
+      padding-inline: calc(var(--spacing) * 5);
+      padding-block: calc(var(--spacing) * 4);
+    }
+    #discuss-comments .discuss-card-footer {
+      border-top-style: var(--tw-border-style);
+      border-top-width: 1px;
+      padding-inline: calc(var(--spacing) * 5);
+      padding-block: calc(var(--spacing) * 3);
+      border-color: var(--bds);
+      background-color: var(--s3);
+    }
+    #discuss-comments .discuss-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1);
+      border-radius: calc(infinity * 1px);
+      padding-inline: calc(var(--spacing) * 2.5);
+      padding-block: calc(var(--spacing) * 0.5);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.010em;
+    }
+    #discuss-comments .discuss-badge-info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    #discuss-comments .discuss-badge-neutral {
+      background: var(--s3);
+      color: var(--t2);
+    }
+    #discuss-comments .discuss-badge-brand {
+      background: var(--accent-surface);
+      color: var(--accent-fg);
+    }
+    #discuss-comments .discuss-badge-success {
+      background-color: var(--color-success-100);
+      color: var(--color-success-700);
+    }
+    #discuss-comments .discuss-badge-warning {
+      background-color: var(--color-warning-100);
+      color: var(--color-warning-700);
+    }
+    #discuss-comments .discuss-badge-danger {
+      background-color: var(--color-danger-100);
+      color: var(--color-danger-700);
+    }
+    #discuss-comments .discuss-alert {
+      display: flex;
+      gap: calc(var(--spacing) * 3);
+      border-radius: var(--radius-lg);
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+      padding-inline: calc(var(--spacing) * 4);
+      padding-block: calc(var(--spacing) * 3);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+    #discuss-comments .discuss-alert-info {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1e3a8a;
+    }
+    #discuss-comments .discuss-alert-success {
+      border-color: var(--color-success-200);
+      background-color: var(--color-success-50);
+      color: var(--color-success-700);
+    }
+    #discuss-comments .discuss-alert-warning {
+      border-color: var(--color-warning-200);
+      background-color: var(--color-warning-50);
+      color: var(--color-warning-700);
+    }
+    #discuss-comments .discuss-alert-danger {
+      border-color: var(--color-danger-200);
+      background-color: var(--color-danger-50);
+      color: var(--color-danger-700);
+    }
+    #discuss-comments .discuss-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+    }
+    #discuss-comments .discuss-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+    #discuss-comments .discuss-table thead {
+      border-bottom-style: var(--tw-border-style);
+      border-bottom-width: 1px;
+      background-color: var(--s3);
+      border-color: var(--bd);
+    }
+    #discuss-comments .discuss-table th {
+      padding-inline: calc(var(--spacing) * 4);
+      padding-block: calc(var(--spacing) * 3);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      --tw-tracking: var(--tracking-wide);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-table tbody tr {
+      border-bottom-style: var(--tw-border-style);
+      border-bottom-width: 1px;
+      transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      --tw-duration: 100ms;
+      transition-duration: 100ms;
+      border-color: var(--bds);
+    }
+    #discuss-comments .discuss-table tbody tr:hover {
+      background-color: var(--s2);
+    }
+    #discuss-comments .discuss-table tbody tr:last-child {
+      border-bottom-style: var(--tw-border-style);
+      border-bottom-width: 0px;
+    }
+    #discuss-comments .discuss-table td {
+      padding-inline: calc(var(--spacing) * 4);
+      padding-block: calc(var(--spacing) * 3);
+      color: var(--t2);
+    }
+    #discuss-comments .discuss-avatar {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: calc(infinity * 1px);
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      background-color: var(--s3);
+      color: var(--t3);
+    }
+    #discuss-comments .discuss-avatar-xs {
+      height: calc(var(--spacing) * 6);
+      width: calc(var(--spacing) * 6);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+    }
+    #discuss-comments .discuss-avatar-sm {
+      height: calc(var(--spacing) * 8);
+      width: calc(var(--spacing) * 8);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+    }
+    #discuss-comments .discuss-avatar-md {
+      height: calc(var(--spacing) * 10);
+      width: calc(var(--spacing) * 10);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+    #discuss-comments .discuss-avatar-lg {
+      height: calc(var(--spacing) * 12);
+      width: calc(var(--spacing) * 12);
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+    }
+    #discuss-comments .discuss-avatar-xl {
+      height: calc(var(--spacing) * 16);
+      width: calc(var(--spacing) * 16);
+      font-size: var(--text-xl);
+      line-height: var(--tw-leading, var(--text-xl--line-height));
+    }
+    #discuss-comments .discuss-spinner {
+      display: inline-block;
+      animation: var(--animate-spin);
+      border-radius: calc(infinity * 1px);
+      border-style: var(--tw-border-style);
+      border-width: 2px;
+      border-color: currentcolor;
+      border-top-color: transparent;
+      opacity: 75%;
+    }
+    #discuss-comments .discuss-spinner-sm {
+      height: calc(var(--spacing) * 3);
+      width: calc(var(--spacing) * 3);
+    }
+    #discuss-comments .discuss-spinner-md {
+      height: calc(var(--spacing) * 4);
+      width: calc(var(--spacing) * 4);
+    }
+    #discuss-comments .discuss-spinner-lg {
+      height: calc(var(--spacing) * 6);
+      width: calc(var(--spacing) * 6);
+      border-style: var(--tw-border-style);
+      border-width: 3px;
+    }
+    #discuss-comments .discuss-skeleton {
+      border-radius: 0.25rem;
+      background-color: var(--s3);
+      background-image: linear-gradient( 90deg, transparent 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0.55) 55%, transparent 100% );
+      background-size: 200% 100%;
+      background-position: 200% 0;
+      animation: skeleton-shimmer 1400ms cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    #discuss-comments .discuss-skeleton-sm {
+      height: calc(var(--spacing) * 3);
+    }
+    #discuss-comments .discuss-skeleton-md {
+      height: calc(var(--spacing) * 4);
+    }
+    #discuss-comments .discuss-skeleton-lg {
+      height: calc(var(--spacing) * 6);
+    }
+    #discuss-comments .discuss-divider {
+      margin-block: calc(var(--spacing) * 4);
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 3);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-divider::before, #discuss-comments .discuss-divider::after {
+      content: '';
+      height: 1px;
+      flex: 1;
+      background-color: var(--bds);
+    }
+    #discuss-comments .discuss-tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    #discuss-comments .discuss-tooltip-content {
+      visibility: hidden;
+      position: absolute;
+      bottom: 100%;
+      z-index: 10;
+      margin-bottom: calc(var(--spacing) * 2);
+      border-radius: var(--radius-md);
+      padding-inline: calc(var(--spacing) * 2.5);
+      padding-block: calc(var(--spacing) * 1.5);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      white-space: nowrap;
+      opacity: 0%;
+      left: 50%;
+      color: var(--tooltip-fg);
+      background-color: var(--tooltip-bg);
+      transform: translateX(-50%) translateY(4px);
+      transition: opacity 150ms ease-in, transform 150ms ease-in, visibility 0ms 150ms;
+    }
+    #discuss-comments .discuss-tooltip-content::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: var(--tooltip-bg);
+    }
+    #discuss-comments .discuss-tooltip:hover .tooltip-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1), visibility 0ms;
+    }
+    #discuss-comments .discuss-tabs {
+      position: relative;
+      display: flex;
+      border-bottom-style: var(--tw-border-style);
+      border-bottom-width: 1px;
+      border-color: var(--bds);
+      gap: 0;
+    }
+    #discuss-comments .discuss-tab {
+      cursor: pointer;
+      padding-inline: calc(var(--spacing) * 4);
+      padding-block: calc(var(--spacing) * 2.5);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      white-space: nowrap;
+      text-decoration-line: none;
+      transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      --tw-duration: 100ms;
+      transition-duration: 100ms;
+      color: var(--t4);
+      background: none;
+      border: none;
+      font-family: inherit;
+      letter-spacing: 0.006em;
+    }
+    #discuss-comments .discuss-tab:hover {
+      color: var(--t1);
+    }
+    #discuss-comments .discuss-tab:focus-visible {
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      @supports (color: color-mix(in lab, red, red)) {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+      }
+      border-radius: 4px;
+      outline: none;
+    }
+    #discuss-comments .discuss-tab.active {
+      color: var(--accent-fg);
+      font-weight: 500;
+    }
+    #discuss-comments .discuss-tab-indicator {
+      position: absolute;
+      background-color: var(--accent-fg);
+      bottom: -1px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      pointer-events: none;
+      transition: left 200ms cubic-bezier(0.4,0,0.2,1), width 200ms cubic-bezier(0.4,0,0.2,1);
+    }
+    #discuss-comments .discuss-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    #discuss-comments .discuss-dropdown-menu {
+      position: absolute;
+      z-index: 50;
+      min-width: 180px;
+      border-radius: var(--radius-lg);
+      padding: calc(var(--spacing) * 1);
+      top: calc(100% + 6px);
+      left: 0;
+      background-color: var(--s1);
+      border: 1px solid var(--bd);
+      box-shadow: 0 4px 16px rgba(15,23,42,.10), 0 1px 4px rgba(15,23,42,.06);
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.95) translateY(-6px);
+      transform-origin: top center;
+      transition: opacity 150ms ease-in, transform 150ms ease-in, visibility 0ms 150ms;
+    }
+    #discuss-comments .discuss-dropdown-menu.open {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      transition: opacity 200ms cubic-bezier(0.16,1,0.3,1), transform 200ms cubic-bezier(0.16,1,0.3,1), visibility 0ms;
+    }
+    #discuss-comments .discuss-dropdown-item {
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+      border-radius: var(--radius-md);
+      padding-inline: calc(var(--spacing) * 3);
+      padding-block: calc(var(--spacing) * 2);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      text-decoration-line: none;
+      transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      --tw-duration: 75ms;
+      transition-duration: 75ms;
+      color: var(--t2);
+      outline: none;
+      letter-spacing: 0.006em;
+    }
+    #discuss-comments .discuss-dropdown-item svg, #discuss-comments .discuss-dropdown-item i[data-lucide] {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+    #discuss-comments .discuss-dropdown-item:hover {
+      background-color: var(--s3);
+    }
+    #discuss-comments .discuss-dropdown-item:focus-visible {
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      @supports (color: color-mix(in lab, red, red)) {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+      }
+      outline: none;
+    }
+    #discuss-comments .discuss-dropdown-item.danger {
+      color: var(--danger-fg);
+    }
+    #discuss-comments .discuss-dropdown-item.danger:hover {
+      background-color: var(--color-danger-50);
+    }
+    #discuss-comments .discuss-dropdown-divider {
+      margin-block: calc(var(--spacing) * 1);
+      height: 1px;
+      background-color: var(--bds);
+    }
+    #discuss-comments .discuss-dropdown-header {
+      padding-inline: calc(var(--spacing) * 3);
+      padding-block: calc(var(--spacing) * 1);
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+      --tw-font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-semibold);
+      --tw-tracking: var(--tracking-wide);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-page-container {
+      margin-inline: auto;
+      max-width: var(--container-7xl);
+      padding-inline: calc(var(--spacing) * 4);
+      @media (width >= 40rem) {
+        padding-inline: calc(var(--spacing) * 6);
+      }
+      @media (width >= 64rem) {
+        padding-inline: calc(var(--spacing) * 8);
+      }
+    }
+    #discuss-comments .discuss-section {
+      padding-block: calc(var(--spacing) * 8);
+      @media (width >= 40rem) {
+        padding-block: calc(var(--spacing) * 12);
+      }
+    }
+    #discuss-comments .discuss-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    #discuss-comments .discuss-navbar {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+      border-radius: var(--radius-lg);
+      padding: 0.625rem 1.25rem;
+      background-color: var(--s1);
+      box-shadow: var(--surface-shadow);
+    }
+    #discuss-comments .discuss-navbar-brand {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--t1);
+      margin-right: 0.75rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    #discuss-comments .discuss-navbar-menu {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      gap: 0.125rem;
+    }
+    #discuss-comments .discuss-navbar-item {
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1rem;
+      letter-spacing: 0em;
+      color: var(--t2);
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      background: none;
+      border: none;
+      font-family: inherit;
+      transition: color 120ms, background-color 100ms, box-shadow 120ms, transform 60ms linear;
+    }
+    #discuss-comments .discuss-navbar-item:hover {
+      background-color: var(--accent-surface);
+      color: var(--t1);
+    }
+    #discuss-comments .discuss-navbar-item:active {
+      transform: scale(0.96);
+      transition: transform 60ms linear, background-color 60ms linear, color 60ms linear;
+    }
+    #discuss-comments .discuss-navbar-item:focus-visible {
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      @supports (color: color-mix(in lab, red, red)) {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+      }
+      outline: none;
+    }
+    #discuss-comments .discuss-navbar-item.active {
+      background-color: var(--accent-surface);
+      color: var(--accent-fg);
+      font-weight: 600;
+    }
+    #discuss-comments .discuss-navbar-end {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-left: auto;
+    }
+    #discuss-comments .discuss-stat-card {
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      background-color: var(--s1);
+      box-shadow: var(--surface-shadow);
+    }
+    #discuss-comments .discuss-stat-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--t4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.375rem;
+    }
+    #discuss-comments .discuss-stat-value {
+      font-size: 1.875rem;
+      line-height: 1;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 0.375rem;
+    }
+    #discuss-comments .discuss-stat-delta {
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    #discuss-comments .discuss-stat-delta.up {
+      color: var(--color-success-600);
+    }
+    #discuss-comments .discuss-stat-delta.down {
+      color: var(--color-danger-600);
+    }
+    #discuss-comments .discuss-stat-delta.flat {
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-page-header {
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--bds);
+    }
+    #discuss-comments .discuss-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      color: var(--t4);
+      margin-bottom: 0.5rem;
+    }
+    #discuss-comments .discuss-breadcrumb a {
+      color: var(--t4);
+      text-decoration: none;
+    }
+    #discuss-comments .discuss-breadcrumb a:hover {
+      color: var(--accent-fg);
+    }
+    #discuss-comments .discuss-breadcrumb-sep {
+      display: inline-flex;
+      align-items: center;
+      color: var(--t4);
+      width: 14px;
+      height: 14px;
+    }
+    #discuss-comments .discuss-breadcrumb-sep svg {
+      display: block;
+      width: 14px;
+      height: 14px;
+    }
+    #discuss-comments .discuss-page-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    #discuss-comments .discuss-page-title {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--t1);
+    }
+    #discuss-comments .discuss-page-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    #discuss-comments .discuss-modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: var(--modal-backdrop);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 200ms, visibility 0ms 200ms;
+      z-index: 200;
+    }
+    #discuss-comments .discuss-modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 200ms, visibility 0ms;
+    }
+    #discuss-comments .discuss-modal {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 12px;
+      background-color: var(--s1);
+      box-shadow: var(--surface-shadow-lg);
+      transform: scale(0.96) translateY(8px);
+      transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease-out;
+      opacity: 0;
+      position: relative;
+      z-index: 201;
+    }
+    #discuss-comments .discuss-modal-overlay.open .modal {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    #discuss-comments .discuss-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--bds);
+    }
+    #discuss-comments .discuss-modal-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--t1);
+    }
+    #discuss-comments .discuss-modal-body {
+      padding: 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--t2);
+    }
+    #discuss-comments .discuss-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--bds);
+      border-radius: 0 0 12px 12px;
+      background-color: var(--s3);
+    }
+    #discuss-comments .discuss-toast-region {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 300;
+      pointer-events: none;
+    }
+    #discuss-comments .discuss-toast {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--toast-fg);
+      background-color: var(--toast-bg);
+      box-shadow: var(--surface-shadow-md);
+      pointer-events: auto;
+      transform: translateX(calc(100% + 1.5rem));
+      opacity: 0;
+      transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 200ms ease-out;
+    }
+    #discuss-comments .discuss-toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    #discuss-comments .discuss-toast.hide {
+      transform: translateX(calc(100% + 1.5rem));
+      opacity: 0;
+      transition: transform 200ms cubic-bezier(0.7,0,1,1), opacity 150ms ease-in;
+    }
+    #discuss-comments .discuss-toast svg, #discuss-comments .discuss-toast i[data-lucide] {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+    #discuss-comments .discuss-toast-success {
+      background-color: var(--color-success-700);
+    }
+    #discuss-comments .discuss-toast-danger {
+      background-color: var(--color-danger-600);
+    }
+    #discuss-comments .discuss-toast-warning {
+      background-color: var(--color-neutral-800);
+    }
+    #discuss-comments .discuss-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    #discuss-comments .discuss-empty-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1rem;
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-empty-icon svg, #discuss-comments .discuss-empty-icon i[data-lucide] {
+      width: 32px;
+      height: 32px;
+    }
+    #discuss-comments .discuss-empty-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 0.375rem;
+    }
+    #discuss-comments .discuss-empty-desc {
+      max-width: 320px;
+      margin: 0 auto 1.25rem;
+      font-size: 0.875rem;
+      color: var(--t4);
+    }
+    #discuss-comments .discuss-app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      background-color: var(--s2);
+    }
+    #discuss-comments .discuss-app-navbar {
+      display: flex;
+      align-items: center;
+      height: 52px;
+      flex-shrink: 0;
+      gap: 0.5rem;
+      padding: 0 1rem;
+      background-color: var(--s1);
+      box-shadow: 0 1px 0 var(--shell-divider);
+      z-index: 100;
+    }
+    #discuss-comments .discuss-app-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+    #discuss-comments .discuss-app-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+      background-color: var(--s1);
+      box-shadow: 1px 0 0 var(--shell-divider);
+      z-index: 1;
+      transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #discuss-comments .discuss-app-content {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+    #discuss-comments .discuss-app-content-page {
+      min-height: 100%;
+      background-color: var(--s1);
+    }
+    #discuss-comments .discuss-app-content-inner {
+      padding: 1.5rem;
+    }
+    #discuss-comments .discuss-sidebar-group-label {
+      padding: 0.5rem 0.5rem 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--t4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    #discuss-comments .discuss-sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      margin-bottom: 4px;
+      font-size: 0.875rem;
+      line-height: 1rem;
+      letter-spacing: 0em;
+      color: var(--t2);
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      outline: none;
+      transition: background-color 100ms, color 100ms, box-shadow 120ms, transform 120ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #discuss-comments .discuss-sidebar-item svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+    #discuss-comments .discuss-sidebar-item:hover {
+      background-color: var(--accent-surface);
+      color: var(--t1);
+      transform: scale(1.02);
+    }
+    #discuss-comments .discuss-sidebar-item:active {
+      transform: scale(0.97);
+      transition: transform 60ms linear, background-color 60ms linear, color 60ms linear;
+    }
+    #discuss-comments .discuss-sidebar-item:focus-visible {
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      @supports (color: color-mix(in lab, red, red)) {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+      }
+      outline: none;
+    }
+    #discuss-comments .discuss-sidebar-item.active {
+      background-color: var(--accent-surface);
+      color: var(--accent-fg);
+      font-weight: 600;
+    }
+    #discuss-comments .discuss-sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 200ms, visibility 0ms 200ms;
+      z-index: 10;
+    }
+    #discuss-comments .discuss-sidebar-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 200ms, visibility 0ms;
+    }
+    @media (max-width: 767px) {
+      #discuss-comments .discuss-app-navbar {
+        padding: 0 0.75rem;
+      }
+      #discuss-comments .discuss-app-sidebar {
+        position: fixed;
+        top: 52px;
+        right: 0;
+        left: auto;
+        height: calc(100vh - 52px);
+        transform: translateX(100%);
+        z-index: 50;
+        box-shadow: -2px 0 8px rgba(15, 23, 42, 0.08);
+      }
+      #discuss-comments .discuss-app-sidebar.open {
+        transform: translateX(0);
+      }
+      #discuss-comments .discuss-sidebar-backdrop {
+        display: block;
+        top: 52px;
+      }
+    }
+    @media (min-width: 768px) {
+      #discuss-comments .discuss-app-content-inner {
+        padding: 2rem;
+      }
+    }
+    #discuss-comments .discuss-theme-light .badge-info {
+      background: var(--color-primary-100);
+      color: var(--color-primary-800);
+    }
+    #discuss-comments .discuss-theme-light .badge-neutral {
+      background: var(--color-neutral-100);
+      color: var(--color-neutral-700);
+    }
+    #discuss-comments .discuss-theme-light .badge-success {
+      background: var(--color-success-100);
+      color: var(--color-success-700);
+    }
+    #discuss-comments .discuss-theme-light .badge-warning {
+      background: var(--color-warning-100);
+      color: var(--color-warning-700);
+    }
+    #discuss-comments .discuss-theme-light .badge-danger {
+      background: var(--color-danger-100);
+      color: var(--color-danger-700);
+    }
+    #discuss-comments .discuss-theme-light .alert-info {
+      background: var(--color-primary-50);
+      border-color: var(--color-primary-200);
+      color: var(--color-primary-800);
+    }
+    #discuss-comments .discuss-theme-light .alert-success {
+      background: var(--color-success-50);
+      border-color: var(--color-success-200);
+      color: var(--color-success-700);
+    }
+    #discuss-comments .discuss-theme-light .alert-warning {
+      background: var(--color-warning-50);
+      border-color: var(--color-warning-200);
+      color: var(--color-warning-700);
+    }
+    #discuss-comments .discuss-theme-light .alert-danger {
+      background: var(--color-danger-50);
+      border-color: var(--color-danger-200);
+      color: var(--color-danger-700);
+    }
+    #discuss-comments .discuss-theme-dark .badge-info {
+      background: #1e1b4b;
+      color: #93c5fd;
+    }
+    #discuss-comments .discuss-theme-dark .badge-neutral {
+      background: var(--color-neutral-800);
+      color: var(--color-neutral-400);
+    }
+    #discuss-comments .discuss-theme-dark .badge-success {
+      background: #14532d;
+      color: #4ade80;
+    }
+    #discuss-comments .discuss-theme-dark .badge-warning {
+      background: #451a03;
+      color: #fbbf24;
+    }
+    #discuss-comments .discuss-theme-dark .badge-danger {
+      background: #450a0a;
+      color: #f87171;
+    }
+    #discuss-comments .discuss-theme-dark .alert-info {
+      background: #1e1b4b;
+      border-color: #312e81;
+      color: #93c5fd;
+    }
+    #discuss-comments .discuss-theme-dark .alert-success {
+      background: #14532d;
+      border-color: #166534;
+      color: #4ade80;
+    }
+    #discuss-comments .discuss-theme-dark .alert-warning {
+      background: #451a03;
+      border-color: #78350f;
+      color: #fbbf24;
+    }
+    #discuss-comments .discuss-theme-dark .alert-danger {
+      background: #450a0a;
+      border-color: #7f1d1d;
+      color: #f87171;
+    }
+    #discuss-comments .discuss-theme-dark .dropdown-item.danger:hover {
+      background: #450a0a;
+    }
   }
-#discuss-comments .discuss-input::-moz-placeholder { color: var(--t5); }
-#discuss-comments .discuss-input::placeholder { color: var(--t5); }
-#discuss-comments .discuss-input:focus,
-  #discuss-comments .discuss-input:focus-visible {
-    border-color: var(--focus-ring);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
-    outline: none;
+  @keyframes checkbox-pop {
+    0% {
+      transform: scale(0.8);
+    }
+    60% {
+      transform: scale(1.12);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
-#discuss-comments .discuss-input:disabled {
-    background-color: var(--s2);
-    color: var(--t5);
+  @keyframes skeleton-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
-#discuss-comments .discuss-textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-/* Animated checkbox \u2014 checkmark draws in via stroke-dashoffset */
-/* position:relative is required \u2014 .checkbox-input is sr-only (position:absolute) and anchors
-     to the nearest positioned ancestor. Without it the browser scrolls the document to reveal
-     the hidden input on focus, shifting the layout unexpectedly. */
-#discuss-comments .discuss-checkbox-label {
-    position: relative;
-    display: inline-flex;
-    cursor: pointer;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-            user-select: none;
-    align-items: center;
-    gap: 0.5rem;
-}
-#discuss-comments .discuss-checkbox-input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-#discuss-comments .discuss-checkbox-box {
-    display: flex;
-    height: 1rem;
-    width: 1rem;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    transition-property: background-color,border-color;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 120ms;
-    transition-timing-function: cubic-bezier(0.4,0,0.2,1);
-    border: 2px solid var(--bd-control);
-    background-color: var(--s1);
-    color: var(--on-primary);
-}
-#discuss-comments .discuss-checkbox-input:checked + .checkbox-box {
-    background-color: var(--b600);
-    border-color: var(--b600);
-    animation: checkbox-pop 250ms cubic-bezier(0.16,1,0.3,1) forwards;
+  #discuss-comments .discuss-dark .skeleton {
+    background-image: linear-gradient( 90deg, transparent 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 55%, transparent 100% );
   }
-#discuss-comments .discuss-checkbox-input:focus-visible + .checkbox-box {
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
+  @keyframes field-shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-5px);
+    }
+    40% {
+      transform: translateX(5px);
+    }
+    60% {
+      transform: translateX(-3px);
+    }
+    80% {
+      transform: translateX(3px);
+    }
   }
-#discuss-comments .discuss-checkbox-input:disabled + .checkbox-box {
-    cursor: not-allowed;
-    opacity: 0.5;
+  @keyframes success-pop {
+    0% {
+      transform: scale(0.72);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.12);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  #discuss-comments .discuss-success-pop {
+    animation: success-pop 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  #discuss-comments .discuss-dark .badge-info {
+    background: #1e1b4b;
+    color: #93c5fd;
+  }
+  #discuss-comments .discuss-dark .badge-neutral {
+    background: var(--color-neutral-800);
+    color: var(--color-neutral-400);
+  }
+  #discuss-comments .discuss-dark .badge-success {
+    background: #14532d;
+    color: #4ade80;
+  }
+  #discuss-comments .discuss-dark .badge-warning {
+    background: #451a03;
+    color: #fbbf24;
+  }
+  #discuss-comments .discuss-dark .badge-danger {
+    background: #450a0a;
+    color: #f87171;
+  }
+  #discuss-comments .discuss-dark .alert-info {
+    background: #1e1b4b;
+    border-color: #312e81;
+    color: #93c5fd;
+  }
+  #discuss-comments .discuss-dark .alert-success {
+    background: #14532d;
+    border-color: #166534;
+    color: #4ade80;
+  }
+  #discuss-comments .discuss-dark .alert-warning {
+    background: #451a03;
+    border-color: #78350f;
+    color: #fbbf24;
+  }
+  #discuss-comments .discuss-dark .alert-danger {
+    background: #450a0a;
+    border-color: #7f1d1d;
+    color: #f87171;
+  }
+  #discuss-comments .discuss-dark .dropdown-item.danger:hover {
+    background: #450a0a;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #discuss-comments *, #discuss-comments *::before, #discuss-comments *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
-#discuss-comments .discuss-checkbox-icon { width: 0.625rem; height: 0.625rem; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-#discuss-comments .discuss-checkbox-icon path { stroke-dasharray: 14; stroke-dashoffset: 14; transition: stroke-dashoffset 150ms ease-out; }
-#discuss-comments .discuss-checkbox-input:checked + .checkbox-box .checkbox-icon path { stroke-dashoffset: 0; transition: stroke-dashoffset 150ms ease-out 80ms; }
-/* Animated radio \u2014 inner dot scales in with spring */
-/* Same position:relative requirement as .checkbox-label \u2014 see note above. */
-/* \u2500\u2500 Help icon tooltip \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/* \u2500\u2500 Card \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/* shadow-sm = three-layer resting shadow. No border. See CLAUDE.md. */
-/* \u2500\u2500 Badge \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/* badge-info uses fixed blue \u2014 semantic signal must hold regardless of brand hue */
-#discuss-comments .discuss-badge-info    { background: #dbeafe; color: #1e40af; }
-#discuss-comments .discuss-badge-neutral { background: var(--s3); color: var(--t2); }
-#discuss-comments .discuss-badge-success {
-    --tw-bg-opacity: 1;
-    background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1));
-    --tw-text-opacity: 1;
-    color: rgb(21 128 61 / var(--tw-text-opacity, 1));
+@layer base;
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
 }
-#discuss-comments .discuss-badge-warning {
-    --tw-bg-opacity: 1;
-    background-color: rgb(254 243 199 / var(--tw-bg-opacity, 1));
-    --tw-text-opacity: 1;
-    color: rgb(180 83 9 / var(--tw-text-opacity, 1));
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
 }
-#discuss-comments .discuss-badge-danger {
-    --tw-bg-opacity: 1;
-    background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
-    --tw-text-opacity: 1;
-    color: rgb(185 28 28 / var(--tw-text-opacity, 1));
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
 }
-/* \u2500\u2500 Alert \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-alert {
-    display: flex;
-    gap: 0.75rem;
-    border-radius: 8px;
-    border-width: 1px;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
 }
-/* alert-info uses fixed blue \u2014 same reason as badge-info */
-#discuss-comments .discuss-alert-info    { background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a; }
-#discuss-comments .discuss-alert-success {
-    --tw-border-opacity: 1;
-    border-color: rgb(187 247 208 / var(--tw-border-opacity, 1));
-    --tw-bg-opacity: 1;
-    background-color: rgb(240 253 244 / var(--tw-bg-opacity, 1));
-    --tw-text-opacity: 1;
-    color: rgb(21 128 61 / var(--tw-text-opacity, 1));
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
 }
-#discuss-comments .discuss-alert-warning {
-    --tw-border-opacity: 1;
-    border-color: rgb(253 230 138 / var(--tw-border-opacity, 1));
-    --tw-bg-opacity: 1;
-    background-color: rgb(255 251 235 / var(--tw-bg-opacity, 1));
-    --tw-text-opacity: 1;
-    color: rgb(180 83 9 / var(--tw-text-opacity, 1));
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
-#discuss-comments .discuss-alert-danger {
-    --tw-border-opacity: 1;
-    border-color: rgb(254 202 202 / var(--tw-border-opacity, 1));
-    --tw-bg-opacity: 1;
-    background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
-    --tw-text-opacity: 1;
-    color: rgb(185 28 28 / var(--tw-text-opacity, 1));
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
 }
-/* \u2500\u2500 Table \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/* \u2500\u2500 Avatar \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-avatar {
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 9999px;
-    font-weight: 500;
-    background-color: var(--s3);
-    color: var(--t3);
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
 }
-/* \u2500\u2500 Spinner \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-spinner {
-    display: inline-block;
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-tracking {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
 }
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-#discuss-comments .discuss-spinner {
-    animation: spin 1s linear infinite;
-    border-radius: 9999px;
-    border-width: 2px;
-    border-color: currentColor;
-    border-top-color: transparent;
-    opacity: 0.75;
-}
-/* \u2500\u2500 Skeleton \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-@keyframes pulse {
-    50% {
-        opacity: .5;
-    }
-}
-#discuss-comments .discuss-skeleton {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    border-radius: 6px;
-    background-color: var(--s3);
-}
-/* \u2500\u2500 Divider \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/* \u2500\u2500 Tooltip (CSS-only) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-tooltip {
-    position: relative;
-    display: inline-block;
-}
-#discuss-comments .discuss-tooltip-content {
-    visibility: hidden;
-    position: absolute;
-    bottom: 100%;
-    z-index: 10;
-    margin-bottom: 0.5rem;
-    white-space: nowrap;
-    border-radius: 6px;
-    padding-left: 0.625rem;
-    padding-right: 0.625rem;
-    padding-top: 0.375rem;
-    padding-bottom: 0.375rem;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    opacity: 0;
-    left: 50%;
-    /* start slightly toward trigger, rise away on enter */
-    color: var(--tooltip-fg);
-    background-color: var(--tooltip-bg);
-    transform: translateX(-50%) translateY(4px);
-    transition: opacity 150ms ease-in, transform 150ms ease-in, visibility 0ms 150ms;
-}
-#discuss-comments .discuss-tooltip-content::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid transparent;
-    border-top-color: var(--tooltip-bg);
+  to {
+    transform: rotate(360deg);
   }
-#discuss-comments .discuss-tooltip:hover .tooltip-content {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-    transition: opacity 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1), visibility 0ms;
-  }
-/* \u2500\u2500 Tabs with sliding indicator \u2500\u2500\u2500 */
-#discuss-comments .discuss-tabs {
-    position: relative;
-    display: flex;
-    border-bottom-width: 1px;
-    border-color: var(--bds);
-    gap: 0;
 }
-/* Single element slides between tabs \u2014 set left/width via JS */
-/* \u2500\u2500 Dropdown \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-dropdown-item {
-    display: flex;
-    cursor: pointer;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 6px;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    text-decoration-line: none;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 75ms;
-    color: var(--t2);
-}
-#discuss-comments .discuss-dropdown-item:hover { background-color: var(--s3); }
-#discuss-comments .discuss-dropdown-item:focus-visible {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
-    outline: none;
-  }
-#discuss-comments .discuss-dropdown-item.danger { color: var(--danger-fg); }
-#discuss-comments .discuss-dropdown-item.danger:hover {
-    --tw-bg-opacity: 1;
-    background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
-}
-/* \u2500\u2500 Page layout helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-section {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-@media (min-width: 640px) {
-    #discuss-comments .discuss-section {
-        padding-top: 3rem;
-        padding-bottom: 3rem;
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    #discuss-comments *, #discuss-comments ::before, #discuss-comments ::after, #discuss-comments ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-space-y-reverse: 0;
+      --tw-border-style: solid;
+      --tw-font-weight: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-ease: initial;
+      --tw-leading: initial;
+      --tw-tracking: initial;
+      --tw-duration: initial;
     }
-}
-/* \u2500\u2500 Composite components \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-#discuss-comments .discuss-sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-#discuss-comments .discuss-visible {
-    visibility: visible;
-}
-#discuss-comments .discuss-collapse {
-    visibility: collapse;
-}
-#discuss-comments .discuss-static {
-    position: static;
-}
-#discuss-comments .discuss-fixed {
-    position: fixed;
-}
-#discuss-comments .discuss-absolute {
-    position: absolute;
-}
-#discuss-comments .discuss-relative {
-    position: relative;
-}
-#discuss-comments .discuss-block {
-    display: block;
-}
-#discuss-comments .discuss-inline {
-    display: inline;
-}
-#discuss-comments .discuss-flex {
-    display: flex;
-}
-#discuss-comments .discuss-inline-flex {
-    display: inline-flex;
-}
-#discuss-comments .discuss-grid {
-    display: grid;
-}
-#discuss-comments .discuss-hidden {
-    display: none;
-}
-#discuss-comments .discuss-max-w-prose {
-    max-width: 65ch;
-}
-#discuss-comments .discuss-flex-shrink {
-    flex-shrink: 1;
-}
-#discuss-comments .discuss-transform {
-    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-#discuss-comments .discuss-resize {
-    resize: both;
-}
-#discuss-comments .discuss-flex-wrap {
-    flex-wrap: wrap;
-}
-#discuss-comments .discuss-gap-1 {
-    gap: 0.25rem;
-}
-#discuss-comments .discuss-rounded-full {
-    border-radius: 9999px;
-}
-#discuss-comments .discuss-border {
-    border-width: 1px;
-}
-#discuss-comments .discuss-px-2\\.5 {
-    padding-left: 0.625rem;
-    padding-right: 0.625rem;
-}
-#discuss-comments .discuss-py-0\\.5 {
-    padding-top: 0.125rem;
-    padding-bottom: 0.125rem;
-}
-#discuss-comments .discuss-py-2 {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-#discuss-comments .discuss-py-3 {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-}
-#discuss-comments .discuss-py-4 {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-#discuss-comments .discuss-text-xs {
-    font-size: 0.75rem;
-    line-height: 1rem;
-}
-#discuss-comments .discuss-font-medium {
-    font-weight: 500;
-}
-#discuss-comments .discuss-uppercase {
-    text-transform: uppercase;
-}
-#discuss-comments .discuss-italic {
-    font-style: italic;
-}
-#discuss-comments .discuss-leading-4 {
-    line-height: 1rem;
-}
-#discuss-comments .discuss-underline {
-    text-decoration-line: underline;
-}
-#discuss-comments .discuss-antialiased {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-#discuss-comments .discuss-shadow {
-    --tw-shadow: 0 0 0 1px rgba(15,23,42,0.05),0 2px 4px -1px rgba(15,23,42,0.06),0 4px 8px rgba(15,23,42,0.045);
-    --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color), 0 2px 4px -1px var(--tw-shadow-color), 0 4px 8px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-#discuss-comments .discuss-shadow-sm {
-    --tw-shadow: 0 0 0 1px rgba(15,23,42,0.04),0 1px 2px -0.5px rgba(15,23,42,0.06),0 2px 4px rgba(15,23,42,0.035);
-    --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color), 0 1px 2px -0.5px var(--tw-shadow-color), 0 2px 4px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-#discuss-comments .discuss-outline {
-    outline-style: solid;
-}
-#discuss-comments .discuss-grayscale {
-    --tw-grayscale: grayscale(100%);
-    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-#discuss-comments .discuss-filter {
-    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-#discuss-comments .discuss-transition {
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-}
-#discuss-comments .discuss-ease-out {
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-}
-
-/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-   BASE
-\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
-
-/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-   COMPONENTS
-\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
-
-/* \u2500\u2500 Motion keyframes \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-@keyframes checkbox-pop {
-  0%   { transform: scale(0.8); }
-  60%  { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-#discuss-comments .discuss-dark .badge-info    { background: #1e1b4b; color: #93c5fd; }
-#discuss-comments .discuss-dark .badge-neutral { background: #1e293b; color: #94a3b8; }
-#discuss-comments .discuss-dark .badge-success { background: #14532d; color: #4ade80; }
-#discuss-comments .discuss-dark .badge-warning { background: #451a03; color: #fbbf24; }
-#discuss-comments .discuss-dark .badge-danger  { background: #450a0a; color: #f87171; }
-
-#discuss-comments .discuss-dark .alert-info    { background: #1e1b4b; border-color: #312e81; color: #93c5fd; }
-#discuss-comments .discuss-dark .alert-success { background: #14532d; border-color: #166534; color: #4ade80; }
-#discuss-comments .discuss-dark .alert-warning { background: #451a03; border-color: #78350f; color: #fbbf24; }
-#discuss-comments .discuss-dark .alert-danger  { background: #450a0a; border-color: #7f1d1d; color: #f87171; }
-#discuss-comments .discuss-dark .dropdown-item.danger:hover { background: #450a0a; }
-
-/* \u2500\u2500 Accessibility: reduced motion (WCAG 2.3.3 AAA) \u2500\u2500\u2500 */
-/* Respect the OS-level prefers-reduced-motion: reduce signal.
-   Kill transitions and slow spinner to near-stop. Skeleton loses pulse
-   (static skeleton is acceptable \u2014 content is still indicated). */
-@media (prefers-reduced-motion: reduce) {
-  #discuss-comments *, #discuss-comments *::before, #discuss-comments *::after {
-    animation-duration:       0.01ms !important;
-    animation-iteration-count: 1     !important;
-    transition-duration:       0.01ms !important;
   }
 }
 `,M=S+`
@@ -1273,7 +2904,7 @@
         border-radius: 0.5rem;
         transition: box-shadow 300ms ease;
     }
-`;function E(){if(document.getElementById("discuss-styles"))return;let d=document.createElement("style");d.id="discuss-styles",d.textContent=M,document.head.appendChild(d)}function A(d){let e=parseInt(d.replace("#",""),16);return[e>>16&255,e>>8&255,e&255]}function z(d,e,s){return"#"+[d,e,s].map(o=>Math.round(Math.max(0,Math.min(255,o))).toString(16).padStart(2,"0")).join("")}function B(d,e,s){d/=255,e/=255,s/=255;let o=Math.max(d,e,s),t=Math.min(d,e,s),i,n,a=(o+t)/2;if(o===t)i=n=0;else{let r=o-t;switch(n=a>.5?r/(2-o-t):r/(o+t),o){case d:i=((e-s)/r+(e<s?6:0))/6;break;case e:i=((s-d)/r+2)/6;break;default:i=((d-e)/r+4)/6}}return[i*360,n,a]}function I(d,e,s){d/=360;let o=(n,a,r)=>(r<0&&(r+=1),r>1&&(r-=1),r<1/6?n+(a-n)*6*r:r<1/2?a:r<2/3?n+(a-n)*(2/3-r)*6:n);if(e===0){let n=Math.round(s*255);return[n,n,n]}let t=s<.5?s*(1+e):s+e-s*e,i=2*s-t;return[o(i,t,d+1/3),o(i,t,d),o(i,t,d-1/3)].map(n=>Math.round(n*255))}function j(d){let[e,s,o]=A(d),[t,i]=B(e,s,o),n={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},a={};for(let[r,c]of Object.entries(n)){let[l,m,b]=I(t,Math.min(i,.85),c);a[r]=z(l,m,b)}return a}var g=class{constructor(e){window.DiscussWidgetInstance=this,this.container=e.container,this.container&&(this.postUrl=e.postUrl||window.location.pathname,this.serverUrl=e.serverUrl||T,this.fetchUrl=e.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=e.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(e){if(!e||!/^#[0-9a-fA-F]{6}$/.test(e))return;let s=j(e),o=this.container;o.style.setProperty("--b50",s[50]),o.style.setProperty("--b100",s[100]),o.style.setProperty("--b200",s[200]),o.style.setProperty("--b300",s[300]),o.style.setProperty("--b400",s[400]),o.style.setProperty("--b500",s[500]),o.style.setProperty("--b600",s[600]),o.style.setProperty("--b700",s[700]),o.style.setProperty("--b800",s[800]),o.style.setProperty("--b900",s[900]),o.style.setProperty("--accent-fg",s[700]),o.style.setProperty("--accent-surface",s[50]),o.style.setProperty("--focus-ring",s[700])}async init(){E(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let e=await fetch(`${this.serverUrl}/api/comments/config`);e.ok&&(this.config=await e.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let s=await fetch(this.fetchUrl);if(!s.ok)throw new Error("Failed to load comments");let o=await s.json();this.render(o)}catch(e){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",e)}}buildTree(e){let s={},o=[];return e.forEach(t=>{t.children=[],s[t.id]=t}),e.forEach(t=>{t.parent_id===0||!s[t.parent_id]?o.push(t):s[t.parent_id].children.push(t)}),o}render(e){let s=this.buildTree(e);this.container.innerHTML=`
+`;function E(){if(document.getElementById("discuss-styles"))return;let d=document.createElement("style");d.id="discuss-styles",d.textContent=M,document.head.appendChild(d)}function A(d){let e=parseInt(d.replace("#",""),16);return[e>>16&255,e>>8&255,e&255]}function z(d,e,s){return"#"+[d,e,s].map(o=>Math.round(Math.max(0,Math.min(255,o))).toString(16).padStart(2,"0")).join("")}function B(d,e,s){d/=255,e/=255,s/=255;let o=Math.max(d,e,s),t=Math.min(d,e,s),i,n,a=(o+t)/2;if(o===t)i=n=0;else{let r=o-t;switch(n=a>.5?r/(2-o-t):r/(o+t),o){case d:i=((e-s)/r+(e<s?6:0))/6;break;case e:i=((s-d)/r+2)/6;break;default:i=((d-e)/r+4)/6}}return[i*360,n,a]}function I(d,e,s){d/=360;let o=(n,a,r)=>(r<0&&(r+=1),r>1&&(r-=1),r<1/6?n+(a-n)*6*r:r<1/2?a:r<2/3?n+(a-n)*(2/3-r)*6:n);if(e===0){let n=Math.round(s*255);return[n,n,n]}let t=s<.5?s*(1+e):s+e-s*e,i=2*s-t;return[o(i,t,d+1/3),o(i,t,d),o(i,t,d-1/3)].map(n=>Math.round(n*255))}function j(d){let[e,s,o]=A(d),[t,i]=B(e,s,o),n={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},a={};for(let[r,c]of Object.entries(n)){let[l,m,f]=I(t,Math.min(i,.85),c);a[r]=z(l,m,f)}return a}var g=class{constructor(e){window.DiscussWidgetInstance=this,this.container=e.container,this.container&&(this.postUrl=e.postUrl||window.location.pathname,this.serverUrl=e.serverUrl||T,this.fetchUrl=e.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=e.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(e){if(!e||!/^#[0-9a-fA-F]{6}$/.test(e))return;let s=j(e),o=this.container;o.style.setProperty("--b50",s[50]),o.style.setProperty("--b100",s[100]),o.style.setProperty("--b200",s[200]),o.style.setProperty("--b300",s[300]),o.style.setProperty("--b400",s[400]),o.style.setProperty("--b500",s[500]),o.style.setProperty("--b600",s[600]),o.style.setProperty("--b700",s[700]),o.style.setProperty("--b800",s[800]),o.style.setProperty("--b900",s[900]),o.style.setProperty("--accent-fg",s[700]),o.style.setProperty("--accent-surface",s[50]),o.style.setProperty("--focus-ring",s[700])}async init(){E(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let e=await fetch(`${this.serverUrl}/api/comments/config`);e.ok&&(this.config=await e.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let s=await fetch(this.fetchUrl);if(!s.ok)throw new Error("Failed to load comments");let o=await s.json();this.render(o)}catch(e){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",e)}}buildTree(e){let s={},o=[];return e.forEach(t=>{t.children=[],s[t.id]=t}),e.forEach(t=>{t.parent_id===0||!s[t.parent_id]?o.push(t):s[t.parent_id].children.push(t)}),o}render(e){let s=this.buildTree(e);this.container.innerHTML=`
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
                     <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
@@ -1295,17 +2926,17 @@
                      onload="this.style.opacity='1';this.style.visibility='visible'" 
                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;visibility:hidden;transition:opacity 0.2s;" />
             </div>
-        `}getAdminBadges(e){return""}getAdminTooltip(e){return""}getAdminControls(e){return""}renderComment(e,s,o,t){s=s||0;let i=e.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",n=e.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",a=new Date(e.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),r=this.getAdminBadges(e),c=this.getAdminTooltip(e),l=this.getAdminControls(e),m=o?`<a href="#comment-${t}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${o}</a>`:"",b=`
+        `}getAdminBadges(e){return""}getAdminTooltip(e){return""}getAdminControls(e){return""}renderComment(e,s,o,t){s=s||0;let i=e.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",n=e.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",a=new Date(e.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),r=this.getAdminBadges(e),c=this.getAdminTooltip(e),l=this.getAdminControls(e),m=o?`<a href="#comment-${t}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${o}</a>`:"",f=`
             <button class="discuss-collapse-btn" data-id="${e.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--t4);display:inline-flex;align-items:center;margin-left:0.25rem;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;"><path d="m6 9 6 6 6-6"/></svg>
             </button>
-        `,h="";if(e.children.length>0)if(s>=3){let f=e.children.map(C=>this.renderComment(C,3,e.name,e.id)).join("");h=`
+        `,b="";if(e.children.length>0)if(s>=3){let v=e.children.map(C=>this.renderComment(C,3,e.name,e.id)).join("");b=`
                     <div id="discuss-children-${e.id}" style="display:contents">
-                        ${f}
+                        ${v}
                     </div>
-                `}else h=`
+                `}else b=`
                     <div class="discuss-nested discuss-flex discuss-flex-col discuss-gap-4" id="discuss-children-${e.id}">
-                        ${e.children.map(f=>this.renderComment(f,s+1)).join("")}
+                        ${e.children.map(v=>this.renderComment(v,s+1)).join("")}
                     </div>
                 `;let p=e.content;m&&(p.startsWith("<p>")?p=p.replace("<p>",`<p>${m}`):p=m+p);let $=e.children.length>0&&s<3?`
             <div class="discuss-collapse-line" data-id="${e.id}" aria-label="Collapse thread">
@@ -1323,7 +2954,7 @@
                         ${n}${i}${r}${c}
                         <span style="color:var(--t5);font-size:0.75rem">\xB7</span>
                         <span style="font-size:0.8125rem;color:var(--t4)">${a}</span>
-                        ${b}
+                        ${f}
                     </div>
                     
                     <div id="discuss-collapse-target-${e.id}">
@@ -1342,11 +2973,11 @@
                             ${this.renderForm(e.id)}
                         </div>
 
-                        ${s<3?h:""}
+                        ${s<3?b:""}
                     </div>
                 </div>
             </div>
-        `;return s<3?w:w+h}renderForm(e){let s=this.config.honeypot_question?`<input type="text" name="honeypot_answer_given" placeholder="${this.config.honeypot_question}" style="display:none" tabindex="-1" autocomplete="off">`:"";return`
+        `;return s<3?w:w+b}renderForm(e){let s=this.config.honeypot_question?`<input type="text" name="honeypot_answer_given" placeholder="${this.config.honeypot_question}" style="display:none" tabindex="-1" autocomplete="off">`:"";return`
             <form data-parent="${e}" style="width:100%">
                 <div class="discuss-form-container">
                     <textarea name="content" class="discuss-form-textarea" placeholder="Share your thoughts... (*markdown* supported)" required></textarea>
@@ -1374,7 +3005,7 @@
                     </div>
                 </div>
             </form>
-        `}async handleSubmit(e){e.preventDefault();let s=e.target,o=s.dataset.parent,t=s.querySelector('[type="submit"]');t.disabled=!0,t.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let i={name:s.name.value.trim(),email:s.email.value.trim(),content:s.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(o,10),honeypot_field:s.honeypot_field.value,honeypot_answer_given:s.honeypot_answer_given?s.honeypot_answer_given.value:void 0};try{let n=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(i)});if(n.ok){if(s.reset(),parseInt(o,10)!==0){let a=document.getElementById(`discuss-reply-form-${o}`);a&&a.classList.add("discuss-hidden")}this.init()}else{let a=await n.json();alert(a.error||"Failed to post comment.")}}catch(n){console.error("[Discuss]",n),alert("Network error. Please try again.")}finally{t.disabled=!1,t.textContent="Post Comment"}}};window.DiscussWidget=g;var v=document.getElementById("discuss-comments");v&&v.dataset.isAdmin!=="true"&&new g({container:v});var y=class extends g{constructor(e){super(e),this.isAdmin=!0}getAdminBadges(e){return e.is_approved?"":'<span class="discuss-badge discuss-badge-warning" style="margin-left:0.375rem">Pending</span>'}getAdminTooltip(e){return e.email?`
+        `}async handleSubmit(e){e.preventDefault();let s=e.target,o=s.dataset.parent,t=s.querySelector('[type="submit"]');t.disabled=!0,t.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let i={name:s.name.value.trim(),email:s.email.value.trim(),content:s.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(o,10),honeypot_field:s.honeypot_field.value,honeypot_answer_given:s.honeypot_answer_given?s.honeypot_answer_given.value:void 0};try{let n=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(i)});if(n.ok){if(s.reset(),parseInt(o,10)!==0){let a=document.getElementById(`discuss-reply-form-${o}`);a&&a.classList.add("discuss-hidden")}this.init()}else{let a=await n.json();alert(a.error||"Failed to post comment.")}}catch(n){console.error("[Discuss]",n),alert("Network error. Please try again.")}finally{t.disabled=!1,t.textContent="Post Comment"}}};window.DiscussWidget=g;var h=document.getElementById("discuss-comments");if(h&&h.dataset.isAdmin!=="true"){let d={container:h};h.dataset.url&&(d.postUrl=h.dataset.url),new g(d)}var y=class extends g{constructor(e){super(e),this.isAdmin=!0}getAdminBadges(e){return e.is_approved?"":'<span class="discuss-badge discuss-badge-warning" style="margin-left:0.375rem">Pending</span>'}getAdminTooltip(e){return e.email?`
             <span style="position:relative;display:inline-flex;align-items:center;color:var(--t5);cursor:help;padding:0.125rem;line-height:0;margin-left:0.25rem"
                   onmouseenter="this.querySelector('.em-tip').style.opacity='1';this.querySelector('.em-tip').style.visibility='visible'"
                   onmouseleave="this.querySelector('.em-tip').style.opacity='0';this.querySelector('.em-tip').style.visibility='hidden'">

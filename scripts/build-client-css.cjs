@@ -1,38 +1,33 @@
 /**
  * build-client-css.cjs
- * Compiles globals.css through Tailwind + autoprefixer + postcss-prefix-selector
- * using the PostCSS Node API directly (avoids postcss-cli v11 ESM/CJS config issues).
+ * Compiles the client CSS through Tailwind v4 + autoprefixer + postcss-prefix-selector.
  */
 
 const postcss = require('postcss');
-const tailwindcss = require('tailwindcss');
+const tailwindcss = require('@tailwindcss/postcss');
 const autoprefixer = require('autoprefixer');
 const prefixSelector = require('postcss-prefix-selector');
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const inputPath = path.join(ROOT, 'src/design-system/globals.css');
+const inputPath = path.join(ROOT, 'src/design-system/client.css');
 const outputPath = path.join(ROOT, 'public/client.css');
-const twConfig = require(path.join(ROOT, 'tailwind.client.config.cjs'));
 
 const input = fs.readFileSync(inputPath, 'utf8');
 
 postcss([
-  tailwindcss(twConfig),
+  tailwindcss(),
   autoprefixer(),
   prefixSelector({
     prefix: '#discuss-comments',
     transform(prefix, selector) {
-      // Scope global resets to the widget container
       if (['html', 'body', ':root'].includes(selector)) return '#discuss-comments';
-      // Prefix utility classes with "discuss-" and scope to container
       if (selector.startsWith('.')) {
         const cls = selector.slice(1);
         const finalCls = cls.startsWith('discuss-') ? cls : 'discuss-' + cls;
         return `${prefix} .${finalCls}`;
       }
-      // Scope element selectors (p, a, strong, etc.)
       return `${prefix} ${selector}`;
     }
   })

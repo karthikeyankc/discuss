@@ -1,0 +1,5 @@
+@import "@karthikeyankc/ken-design-system" layer(ken);
+
+@layer base {
+  /* Disable preflight resets — the widget renders inside a host page */
+}

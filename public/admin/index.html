@@ -67,7 +67,7 @@
         .inbox-avatar {
             width: 2rem; height: 2rem; border-radius: 50%; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 600; font-size: 0.8125rem; color: #fff;
+            font-weight: 600; font-size: 0.875rem; color: #fff;
         }
         .inbox-excerpt {
             display: -webkit-box; -webkit-line-clamp: 2;
@@ -92,9 +92,9 @@
         /* ── Section heading (Gestalt common-region via rule, not box) ── */
         .section-heading {
             display: flex; align-items: center; gap: 0.75rem;
-            padding-bottom: 1rem;
+            padding-bottom: 0.875rem;
             border-bottom: 1px solid var(--bds);
-            margin-bottom: 1.75rem;
+            margin-bottom: 1.5rem;
         }
         .section-heading-icon {
             display: flex; align-items: center; justify-content: center;
@@ -112,7 +112,7 @@
             color: var(--accent-fg); flex-shrink: 0;
         }
         .section-heading h2 {
-            font-size: 1rem; font-weight: 600;
+            font-size: 1.125rem; font-weight: 600;
             color: var(--t1); margin: 0;
         }
 
@@ -153,11 +153,11 @@
                     <h1 style="font-size:1.125rem;font-weight:700;color:var(--t1);margin:0 0 0.25rem">Sign in to your dashboard</h1>
                     <p style="font-size:0.875rem;color:var(--t4);margin:0">Discuss Admin</p>
                 </div>
-                <div class="field-group mb-0">
+                <div class="field-group">
                     <label class="label" for="login-username">Username</label>
                     <input type="text" id="login-username" class="input" required autocomplete="username">
                 </div>
-                <div class="field-group mb-0">
+                <div class="field-group">
                     <label class="label" for="login-password">Password</label>
                     <input type="password" id="login-password" class="input" required autocomplete="current-password">
                 </div>
@@ -241,7 +241,7 @@
                         <div class="page-title-row">
                             <h1 class="page-title">Overview</h1>
                         </div>
-                        <p class="text-neutral-500 text-sm mt-1">A snapshot of your comment activity.</p>
+                        <p class="text-sm mt-1" style="color:var(--t3)">A snapshot of your comment activity.</p>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
                         <div class="stat-card">
@@ -278,7 +278,7 @@
                         <div class="page-title-row">
                             <h1 class="page-title">Comments</h1>
                         </div>
-                        <p class="text-neutral-500 text-sm mt-1">Moderate comments across all your sites.</p>
+                        <p class="text-sm mt-1" style="color:var(--t3)">Moderate comments across all your sites.</p>
                     </div>
 
                     <div class="tabs mb-6" id="inbox-tabs" role="tablist">
@@ -295,7 +295,7 @@
                     <div style="display:flex;align-items:center;gap:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--bds);margin-bottom:0.25rem">
                         <input type="checkbox" id="inbox-select-all" onchange="app.toggleSelectAll(this.checked)"
                                style="width:1rem;height:1rem;cursor:pointer;accent-color:var(--b600)">
-                        <label for="inbox-select-all" class="text-sm text-neutral-500 cursor-pointer select-none">Select all</label>
+                        <label for="inbox-select-all" class="text-sm cursor-pointer select-none" style="color:var(--t3)">Select all</label>
                     </div>
                     <div id="inbox-list">
                         <div style="padding:3rem;text-align:center;color:var(--t4)">
@@ -323,7 +323,7 @@
                         <div class="page-title-row">
                             <h1 class="page-title">Domains</h1>
                         </div>
-                        <p class="text-neutral-500 text-sm mt-1">Manage sites that can use this Discuss instance.</p>
+                        <p class="text-sm mt-1" style="color:var(--t3)">Manage sites that can use this Discuss instance.</p>
                     </div>
 
                     <!-- Add domain -->
@@ -331,23 +331,23 @@
                         <div class="section-heading-icon"><i data-lucide="plus-circle"></i></div>
                         <h2>Add New Domain</h2>
                     </div>
-                    <form id="add-domain-form" class="space-y-4 max-w-2xl mb-10">
+                    <form id="add-domain-form" class="max-w-2xl mb-10" style="display:block">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="field-group mb-0">
+                            <div class="field-group">
                                 <label class="label" for="domain-name">Domain</label>
                                 <input type="text" id="domain-name" class="input" placeholder="example.com" required>
                                 <p class="field-help-text">Hostname only — no <code>https://</code> or trailing slash.</p>
                             </div>
-                            <div class="field-group mb-0">
+                            <div class="field-group">
                                 <label class="label" for="domain-site-name">Site Name</label>
                                 <input type="text" id="domain-site-name" class="input" placeholder="My Blog" required>
                                 <p class="field-help-text">A friendly label shown in your admin dashboard.</p>
                             </div>
                         </div>
-                        <div class="field-group mb-0 max-w-sm">
+                        <div class="field-group max-w-sm">
                             <label class="label" for="domain-hq">
                                 Spam Trap Label
-                                <span class="text-neutral-400 font-normal">(Optional)</span>
+                                <span style="color:var(--t4);font-weight:400">(Optional)</span>
                                 <span class="help-icon-wrap" tabindex="0" aria-describedby="domain-hq-tip">
                                     <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
                                     <span class="help-tooltip" id="domain-hq-tip" role="tooltip">
@@ -358,7 +358,7 @@
                             <input type="text" id="domain-hq" class="input" placeholder="e.g. What's the name of the red planet?">
                             <p class="field-help-text">A hidden field that spam bots fill in automatically — real visitors never see it. Leave empty to disable.</p>
                         </div>
-                        <button type="submit" class="btn btn-primary">Add Domain</button>
+                        <div><button type="submit" class="btn btn-primary">Add Domain</button></div>
                     </form>
 
                     <!-- Domain list -->
@@ -392,7 +392,7 @@
                         <div class="page-title-row">
                             <h1 class="page-title">Posts</h1>
                         </div>
-                        <p class="text-neutral-500 text-sm mt-1">Select a post to moderate its comments.</p>
+                        <p class="text-sm mt-1" style="color:var(--t3)">Select a post to moderate its comments.</p>
                     </div>
                     <div class="section-heading">
                         <div class="section-heading-icon"><i data-lucide="file-text"></i></div>
@@ -425,9 +425,9 @@
                         <div class="page-title-row">
                             <h1 class="page-title">Comments</h1>
                         </div>
-                        <p class="text-neutral-500 text-sm mt-1 truncate" id="comments-subtitle"></p>
+                        <p class="text-sm mt-1 truncate" style="color:var(--t3)" id="comments-subtitle"></p>
                     </div>
-                    <div class="space-y-4" id="comments-list"></div>
+                    <div class="space-y-6" id="comments-list"></div>
                 </div>
 
                 <!-- Site Settings Section -->
@@ -452,13 +452,13 @@
                                 <div class="section-heading-icon"><i data-lucide="globe"></i></div>
                                 <h2>General</h2>
                             </div>
-                            <div class="space-y-4">
-                                <div class="field-group mb-0">
+                            <div>
+                                <div class="field-group">
                                     <label class="label" for="settings-domain">Domain</label>
                                     <input type="text" id="settings-domain" class="input" placeholder="example.com" required>
                                     <p class="field-help-text">Hostname only — no <code>https://</code> or trailing slash. Comments posted from any other origin will be blocked.</p>
                                 </div>
-                                <div class="field-group mb-0">
+                                <div class="field-group">
                                     <label class="label" for="settings-site-name">Site Name</label>
                                     <input type="text" id="settings-site-name" class="input" placeholder="My Blog" required>
                                     <p class="field-help-text">A friendly label shown in your admin dashboard.</p>
@@ -472,8 +472,8 @@
                                 <div class="section-heading-icon"><i data-lucide="palette"></i></div>
                                 <h2>Appearance</h2>
                             </div>
-                            <div class="space-y-4">
-                                <div class="field-group mb-0">
+                            <div style="display:block">
+                                <div class="field-group">
                                     <label class="label">Brand Colour</label>
                                     <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
                                         <input type="color" id="settings-color-picker" value="#2563eb"
@@ -502,11 +502,11 @@
                                 <div class="section-heading-icon"><i data-lucide="shield"></i></div>
                                 <h2>Spam Protection</h2>
                             </div>
-                            <div class="space-y-4">
-                                <div class="field-group mb-0">
+                            <div style="display:block">
+                                <div class="field-group">
                                     <label class="label" for="settings-hq">
                                         Spam Trap Label
-                                        <span class="text-neutral-400 font-normal">(Optional)</span>
+                                        <span style="color:var(--t4);font-weight:400">(Optional)</span>
                                         <span class="help-icon-wrap" tabindex="0" aria-describedby="settings-hq-tip">
                                             <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
                                             <span class="help-tooltip" id="settings-hq-tip" role="tooltip">
@@ -515,10 +515,10 @@
                                         </span>
                                     </label>
                                     <input type="text" id="settings-hq" class="input" placeholder="e.g. What's the name of the red planet?">
-                                    <p class="field-help-text">A hidden field that spam bots fill in automatically — real visitors never see it. Leave empty to disable.</p>
+                                    <p class="field-help-text" style="display:block">A hidden field that spam bots fill in automatically — real visitors never see it. Leave empty to disable.</p>
                                 </div>
-                                <div class="field-group mb-0">
-                                    <label class="label">Blocked Words <span class="text-neutral-400 font-normal">(Optional)</span></label>
+                                <div class="field-group">
+                                    <label class="label">Blocked Words <span style="color:var(--t4);font-weight:400">(Optional)</span></label>
                                     <div id="blocked-words-input"
                                          style="display:flex;flex-wrap:wrap;align-items:center;gap:0.375rem;min-height:2.75rem;padding:0.375rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;background:var(--s1);cursor:text;transition:border-color 120ms,box-shadow 120ms"
                                          onclick="document.getElementById('blocked-words-field').focus()">
@@ -527,7 +527,7 @@
                                                autocomplete="off" autocorrect="off" spellcheck="false"
                                                style="border:none;outline:none;background:transparent;font-size:0.9375rem;color:var(--t1);min-width:14rem;flex:1;padding:0.25rem 0;line-height:1.4">
                                     </div>
-                                    <p class="field-help-text">Comments containing any of these words are silently held for moderation — the commenter sees no error. Case-insensitive, whole-word match. Press <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">Enter</kbd> or <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">,</kbd> to add a word.</p>
+                                    <p class="field-help-text" style="display:block">Comments containing any of these words are silently held for moderation — the commenter sees no error. Case-insensitive, whole-word match. Press <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">Enter</kbd> or <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">,</kbd> to add a word.</p>
                                 </div>
                             </div>
                         </div>
@@ -538,7 +538,7 @@
                                 <div class="section-heading-icon"><i data-lucide="code-2"></i></div>
                                 <h2>Embed Code</h2>
                             </div>
-                            <p class="field-help-text" style="margin-bottom:0.875rem">Drop this snippet on any page where you want comments to appear. The <code>primaryColor</code> option pre-applies your brand colour instantly — no flash of unstyled content.</p>
+                            <p class="section-desc">Drop this snippet on any page where you want comments to appear. The <code>primaryColor</code> option pre-applies your brand colour instantly — no flash of unstyled content.</p>
                             <div style="position:relative">
                                 <pre id="settings-embed-snippet" style="font-size:0.75rem;line-height:1.6;white-space:pre;overflow-x:auto;padding-right:6rem"></pre>
                                 <button type="button" id="settings-copy-btn"

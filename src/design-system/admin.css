@@ -1,0 +1,78 @@
+@import "@karthikeyankc/ken-design-system";
+
+/* Help icon tooltip — info (ℹ) icon with hover/focus popover */
+@layer components {
+  .help-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+  .help-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 17rem;
+    padding: 0.625rem 0.75rem;
+    background: var(--t1);
+    color: var(--s1);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.55;
+    border-radius: 7px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    white-space: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    pointer-events: none;
+    z-index: 50;
+  }
+  .help-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--t1);
+  }
+  .help-icon-wrap:hover .help-tooltip,
+  .help-icon-wrap:focus .help-tooltip { display: block; }
+}
+
+/* Inbox action buttons — same visual style as widget's discuss-action-btn */
+@layer components {
+  .discuss-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--bd-button);
+    background: transparent;
+    color: var(--t4);
+    cursor: pointer;
+    transition: background-color 120ms, color 120ms, border-color 120ms, box-shadow 120ms;
+    white-space: nowrap;
+    text-decoration: none;
+    outline: none;
+  }
+  .discuss-action-btn:hover {
+    background-color: var(--s3);
+    color: var(--t1);
+    border-color: var(--bd-control);
+  }
+  .discuss-action-btn:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
+  }
+  .discuss-action-btn svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+}

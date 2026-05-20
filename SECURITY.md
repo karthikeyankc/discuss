@@ -8,7 +8,7 @@ Only the latest release receives security fixes. We recommend always running the
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-To report a vulnerability, email **karthikeyank@signeasy.com** with:
+To report a vulnerability, please open a GitHub issue with:
 
 - A description of the vulnerability and its potential impact
 - Steps to reproduce or a proof-of-concept
