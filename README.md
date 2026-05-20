@@ -113,22 +113,18 @@ Go to **Admin > Domains > Settings** for your domain and copy the embed snippet.
 
 That's it — no JavaScript configuration required. The widget infers the server URL from the script `src` and fetches its colour and settings from the server automatically. Use `new DiscussWidget({...})` only if you need to override defaults programmatically.
 
-The widget resolves the comment thread key in this order:
+The widget uses `window.location.pathname` as the thread key automatically — each page gets its own thread with no configuration needed.
 
-1. **`data-url` attribute** on the container — for power users who want an explicit stable key
-2. **`<link rel="canonical">`** on the page — automatically used if present (most blog platforms emit this)
-3. **`window.location.pathname`** — fallback if neither of the above exists
-
-For most sites nothing extra is needed. If your platform emits a canonical tag (Ghost, Hugo, Jekyll, WordPress all do), thread keys are already stable across slug changes automatically.
-
-**Pinning to a stable key manually** — if your platform does not emit a canonical tag, add a `data-url` attribute with a value that will never change (a post ID, a UUID, etc.):
+**If you ever rename a post's URL** and want to keep its comments, pin the thread to a stable key by adding a `data-url` attribute before the rename:
 
 ```html
-<div id="discuss-comments" data-url="/posts/123"></div>
+<div id="discuss-comments" data-url="/posts/my-stable-slug"></div>
 ```
 
+Use a value that will never change — a post ID, a UUID, or a slug you commit to permanently. The `data-url` takes priority over `window.location.pathname` when present.
+
 > [!IMPORTANT]
-> If you already have comments stored under one URL and then change the thread key, existing comments will not migrate automatically. They remain in the database under the old key. To reassign them, run: `UPDATE comments SET post_url = '/new-key' WHERE post_url = '/old-key'` directly on your SQLite database.
+> If you already renamed a URL and lost access to comments, they are still in the database under the old path. To reassign them run: `UPDATE comments SET post_url = '/new-path' WHERE post_url = '/old-path'` directly on your SQLite database.
 
 ---
 
