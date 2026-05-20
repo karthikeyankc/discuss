@@ -501,7 +501,8 @@ export class DiscussWidget {
         window.DiscussWidgetInstance = this;
         this.container = options.container;
         if (!this.container) return;
-        const canonical = document.querySelector('link[rel="canonical"]')?.getAttribute('href');
+        const canonicalHref = document.querySelector('link[rel="canonical"]')?.getAttribute('href');
+        const canonical = canonicalHref ? new URL(canonicalHref, window.location.href).pathname : null;
         this.postUrl = options.postUrl
             || this.container.dataset.url
             || canonical
