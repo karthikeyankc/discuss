@@ -226,7 +226,7 @@ The server runs schema migrations automatically on startup. No manual SQL needed
 
 ## Roadmap
 
-### v0.2.0
+### v0.3.0
 - Export and import comments
 - Comment reporting
 

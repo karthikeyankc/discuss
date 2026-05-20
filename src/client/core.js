@@ -15,6 +15,15 @@ const cssContent = injectedCss + `
 
     #discuss-comments { text-align: left; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: transparent; }
     #discuss-comments * { box-sizing: inherit; }
+    #discuss-comments button, #discuss-comments input, #discuss-comments textarea, #discuss-comments select {
+        appearance: none; -webkit-appearance: none;
+        background-image: none; box-shadow: none;
+        font: inherit; margin: 0;
+    }
+    #discuss-comments button { border: none; padding: 0; background: transparent; cursor: pointer; }
+    #discuss-comments input:focus, #discuss-comments textarea:focus, #discuss-comments select:focus,
+    #discuss-comments button:focus { outline: none; }
+    #discuss-comments input::placeholder, #discuss-comments textarea::placeholder { color: var(--t5); opacity: 1; }
     
     #discuss-comments .em-tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 4px; border-style: solid; border-color: #1e293b transparent transparent transparent; }
     #discuss-comments .discuss-badge-warning { background: #fef3c7; color: #b45309; }
