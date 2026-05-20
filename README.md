@@ -106,6 +106,13 @@ Visit `/admin`, log in, and add your site's domain where you want to use the com
 
 Go to **Admin > Domains > Settings** for your domain and copy the embed snippet. Paste it into any page where you want comments to appear.
 
+```html
+<div id="discuss-comments"></div>
+<script src="https://discuss.example.com/client.js"></script>
+```
+
+That's it — no JavaScript configuration required. The widget infers the server URL from the script `src` and fetches its colour and settings from the server automatically. Use `new DiscussWidget({...})` only if you need to override defaults programmatically.
+
 The widget resolves the comment thread key in this order:
 
 1. **`data-url` attribute** on the container — for power users who want an explicit stable key

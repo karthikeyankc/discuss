@@ -1,7 +1,6 @@
 import { ICONS } from './icons.js';
 
-const scripts = document.getElementsByTagName('script');
-const currentScript = scripts[scripts.length - 1];
+const currentScript = document.currentScript;
 const defaultServerUrl = currentScript ? new URL(currentScript.src).origin : window.location.origin;
 
 const injectedCss = typeof INJECTED_CSS_CONTENT !== 'undefined' ? INJECTED_CSS_CONTENT : "";
