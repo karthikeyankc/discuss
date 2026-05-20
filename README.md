@@ -106,7 +106,22 @@ Visit `/admin`, log in, and add your site's domain where you want to use the com
 
 Go to **Admin > Domains > Settings** for your domain and copy the embed snippet. Paste it into any page where you want comments to appear.
 
-The widget uses the current page URL as the comment thread key, so each page gets its own thread automatically.
+The widget resolves the comment thread key in this order:
+
+1. **`data-url` attribute** on the container — for power users who want an explicit stable key
+2. **`<link rel="canonical">`** on the page — automatically used if present (most blog platforms emit this)
+3. **`window.location.pathname`** — fallback if neither of the above exists
+
+For most sites nothing extra is needed. If your platform emits a canonical tag (Ghost, Hugo, Jekyll, WordPress all do), thread keys are already stable across slug changes automatically.
+
+**Pinning to a stable key manually** — if your platform does not emit a canonical tag, add a `data-url` attribute with a value that will never change (a post ID, a UUID, etc.):
+
+```html
+<div id="discuss-comments" data-url="/posts/123"></div>
+```
+
+> [!IMPORTANT]
+> If you already have comments stored under one URL and then change the thread key, existing comments will not migrate automatically. They remain in the database under the old key. To reassign them, run: `UPDATE comments SET post_url = '/new-key' WHERE post_url = '/old-key'` directly on your SQLite database.
 
 ---
 
@@ -205,7 +220,6 @@ The server runs schema migrations automatically on startup. No manual SQL needed
 ## Roadmap
 
 ### v0.2.0
-- `data-url` attribute support on the widget container for a stable thread key independent of the page URL
 - Export and import comments
 - Comment reporting
 

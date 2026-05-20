@@ -464,7 +464,11 @@ export class DiscussWidget {
         window.DiscussWidgetInstance = this;
         this.container = options.container;
         if (!this.container) return;
-        this.postUrl = options.postUrl || window.location.pathname;
+        const canonical = document.querySelector('link[rel="canonical"]')?.getAttribute('href');
+        this.postUrl = options.postUrl
+            || this.container.dataset.url
+            || canonical
+            || window.location.pathname;
         this.serverUrl = options.serverUrl || defaultServerUrl;
         this.fetchUrl = options.fetchUrl || `${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`;
         this.config = {};
@@ -868,7 +872,5 @@ window.DiscussWidget = DiscussWidget;
 // Auto-init for public facing sites
 const autoContainer = document.getElementById('discuss-comments');
 if (autoContainer && autoContainer.dataset.isAdmin !== 'true') {
-    const initOpts = { container: autoContainer };
-    if (autoContainer.dataset.url) initOpts.postUrl = autoContainer.dataset.url;
-    new DiscussWidget(initOpts);
+    new DiscussWidget({ container: autoContainer });
 }
