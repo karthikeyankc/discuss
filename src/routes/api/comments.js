@@ -11,16 +11,19 @@ const router = express.Router();
 // Helper to get domain by origin or return error
 function getDomainOrError(req, res) {
     const origin = req.headers.origin;
-    if (!origin) {
-        return null; // Local testing might not have origin, but in production we want it.
-    }
 
     let domainToMatch;
-    try {
-        const url = new URL(origin);
-        domainToMatch = url.hostname;
-    } catch(e) {
-        domainToMatch = origin;
+    if (origin) {
+        try {
+            domainToMatch = new URL(origin).hostname;
+        } catch(e) {
+            domainToMatch = origin;
+        }
+    } else {
+        // Same-origin request — no Origin header. Fall back to Host.
+        const host = req.headers.host;
+        if (!host) return null;
+        domainToMatch = host.split(':')[0];
     }
 
     const domain = db.prepare('SELECT * FROM domains WHERE domain = ?').get(domainToMatch);
@@ -56,7 +59,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    let { name, email, content, post_url, parent_id, honeypot_answer_given, honeypot_field } = req.body;
+    let { name, email, content, post_url, parent_id, honeypot_answer_given, honeypot_field, domain_id } = req.body;
 
     if (!name || !content || !post_url) {
         return res.status(400).json({ error: 'Name, content, and post_url are required' });
@@ -70,11 +73,19 @@ router.post('/', (req, res) => {
         return res.status(400).json({ error: 'Spam detected' });
     }
 
-    // Domain validation
-    const domain = getDomainOrError(req, res);
+    // Domain validation — try origin/host first, then fall back to admin token + explicit domain_id
+    let domain = getDomainOrError(req, res);
+    if (!domain && domain_id && req.cookies && req.cookies.admin_token) {
+        try {
+            const decoded = jwt.verify(req.cookies.admin_token, JWT_SECRET);
+            if (decoded && decoded.id) {
+                const candidate = db.prepare('SELECT * FROM domains WHERE id = ? AND admin_id = ?')
+                    .get(parseInt(domain_id, 10), decoded.id);
+                if (candidate) domain = candidate;
+            }
+        } catch (_) {}
+    }
     if (!domain) {
-        // If testing locally without origin, we can skip or block. Let's block if no domain matched, 
-        // unless they pass a specific header for testing? Let's just use localhost in domains table.
         return res.status(403).json({ error: 'Unauthorized domain' });
     }
 
