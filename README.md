@@ -188,6 +188,7 @@ Copy `.env.example` to `.env` and set the values before starting the server.
 |---|---|---|---|
 | `JWT_SECRET` | *(none)* | **Yes** | Signs admin session tokens. Generate with: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 | `PORT` | `3000` | No | Port the server listens on |
+| `HOST` | `127.0.0.1` | No | Interface the server binds to. Default is localhost-only, which is correct behind a reverse proxy. Do not set to `0.0.0.0` unless you have a specific reason to expose the port directly. |
 | `NODE_ENV` | `development` | No | Set to `production` for production |
 
 The server will refuse to start in production if `JWT_SECRET` is not set.

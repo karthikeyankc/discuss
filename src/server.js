@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dynamicCors } from './middleware/cors.js';
-import { PORT } from './config.js';
+import { PORT, HOST } from './config.js';
 
 // Route imports
 import commentsRoutes from './routes/api/comments.js';
@@ -72,6 +72,6 @@ app.use('/admin', (req, res, next) => {
 // Static files
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.listen(PORT, () => {
-    console.log(`Discuss server running on http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+    console.log(`Discuss server running on http://${HOST}:${PORT}`);
 });
