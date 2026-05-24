@@ -265,6 +265,103 @@ const app = {
         } catch (err) { console.error(err); }
     },
 
+    // ── Renderer (shared avatar/tooltip logic from DiscussAdminWidget) ────
+    _initRenderer() {
+        if (!this._renderer) {
+            // Use the widget prototype so getAvatarHtml, getInitialsColor, getAdminTooltip
+            // are available without constructing a full widget (which triggers init/fetch).
+            this._renderer = Object.create(window.DiscussWidget.prototype);
+        }
+    },
+
+    // ── Search (inline within Comments section) ────────────────────────────
+
+    searchQuery: '',
+    _searchTimer: null,
+
+    onInboxSearch(value) {
+        clearTimeout(this._searchTimer);
+        const q = value.trim();
+        if (q.length < 2) {
+            if (this.searchQuery) {
+                this.searchQuery = '';
+                this._exitSearchMode();
+                this.loadInbox();
+            }
+            return;
+        }
+        this._searchTimer = setTimeout(() => this.runSearch(q), 300);
+    },
+
+    _enterSearchMode() {
+        document.getElementById('inbox-tabs').style.display = 'none';
+        document.getElementById('inbox-select-row').style.display = 'none';
+        document.getElementById('bulk-bar').style.display = 'none';
+        this.selectedComments.clear();
+    },
+
+    _exitSearchMode() {
+        document.getElementById('inbox-tabs').style.display = '';
+        document.getElementById('inbox-select-row').style.display = '';
+    },
+
+    async runSearch(q) {
+        this.searchQuery = q;
+        this._initRenderer();
+        this._enterSearchMode();
+        const list = document.getElementById('inbox-list');
+        list.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--t4)"><span class="spinner spinner-md"></span></div>';
+        try {
+            const res = await fetch(`/api/admin/search?q=${encodeURIComponent(q)}`);
+            if (!res.ok) throw new Error();
+            const comments = await res.json();
+            if (comments.length === 0) {
+                list.innerHTML = `<div style="padding:3rem;text-align:center;color:var(--t4)">
+                    <p style="font-size:0.9375rem">No results for "<strong>${this._esc(q)}</strong>"</p>
+                </div>`;
+                return;
+            }
+            list.innerHTML = `
+                <p style="font-size:0.8125rem;color:var(--t4);margin-bottom:0.25rem">${comments.length} result${comments.length !== 1 ? 's' : ''}</p>
+                <div>${comments.map(c => this._buildSearchCard(c)).join('')}</div>`;
+            if (window.lucide) lucide.createIcons();
+        } catch {
+            list.innerHTML = '<p style="color:var(--danger-fg);padding:1rem">Search failed. Please try again.</p>';
+        }
+    },
+
+    _buildSearchCard(c) {
+        return this._buildCommentCard(c, { showCheckbox: false, onApprove: `app.searchSetApproval(${c.id},`, onDelete: `app.searchDeleteOne(${c.id})` });
+    },
+
+    async searchSetApproval(id, approve) {
+        try {
+            const res = await fetch(`/api/admin/comments/${id}/approve`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_approved: approve }),
+            });
+            if (res.ok) {
+                this.showToast(approve ? 'Comment approved.' : 'Comment unapproved.');
+                this.refreshPendingBadge();
+                this.runSearch(this.searchQuery);
+            } else { this.showToast('Failed to update comment.', 'error'); }
+        } catch { this.showToast('Network error.', 'error'); }
+    },
+
+    async searchDeleteOne(id) {
+        const confirmed = await this.showConfirm({ title: 'Delete comment?', message: 'This comment will be permanently removed. This cannot be undone.', confirmLabel: 'Delete', isDanger: true });
+        if (!confirmed) return;
+        try {
+            const res = await fetch(`/api/admin/comments/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                this.showToast('Comment deleted.');
+                this.refreshPendingBadge();
+                this.runSearch(this.searchQuery);
+            } else { this.showToast('Failed to delete comment.', 'error'); }
+        } catch { this.showToast('Network error.', 'error'); }
+    },
+
     // ── Inbox ──────────────────────────────────────────────────────────────
 
     async loadInbox(status) {
@@ -272,6 +369,14 @@ const app = {
         this.selectedComments.clear();
         document.getElementById('bulk-bar').style.display = 'none';
         document.getElementById('inbox-select-all').checked = false;
+        if (this.searchQuery) {
+            this.searchQuery = '';
+            const inp = document.getElementById('inbox-search');
+            if (inp) inp.value = '';
+            this._exitSearchMode();
+        }
+
+        this._initRenderer();
 
         const list = document.getElementById('inbox-list');
         list.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--t4)"><span class="spinner spinner-md"></span></div>';
@@ -283,9 +388,8 @@ const app = {
 
             if (comments.length === 0) {
                 const msgs = {
-                    all:      { icon: 'message-circle', title: 'No comments yet',          desc: 'Comments will appear here once visitors start engaging with your content.' },
-                    pending:  { icon: 'check-circle',   title: 'All caught up!',            desc: 'There are no comments pending review.' },
-                    approved: { icon: 'thumbs-up',      title: 'No approved comments yet', desc: 'Approved comments will appear here.' },
+                    all:     { icon: 'message-circle', title: 'No comments yet', desc: 'Comments will appear here once visitors start engaging with your content.' },
+                    pending: { icon: 'check-circle',   title: 'All caught up!',  desc: 'There are no comments pending review.' },
                 };
                 const m = msgs[this.currentInboxStatus] || msgs.all;
                 list.innerHTML = `
@@ -326,47 +430,47 @@ const app = {
     },
 
     renderInboxItem(c) {
-        const palette = ['#1d4ed8','#16a34a','#b45309','#7c3aed','#dc2626','#0891b2','#be185d','#0369a1'];
-        let hash = 0;
-        for (let i = 0; i < (c.name || '').length; i++) hash = c.name.charCodeAt(i) + ((hash << 5) - hash);
-        const bg = palette[Math.abs(hash) % palette.length];
-        const initials = (c.name || 'U').charAt(0).toUpperCase();
+        return this._buildCommentCard(c, { showCheckbox: true, onApprove: `app.inboxSetApproval(${c.id},`, onDelete: `app.inboxDeleteOne(${c.id})` });
+    },
 
-        const tmp = document.createElement('div');
-        tmp.innerHTML = c.content;
-        const plain = (tmp.textContent || tmp.innerText || '').trim();
-        const excerpt = plain.length > 160 ? plain.slice(0, 160) + '…' : plain;
-
+    // Single card template shared by inbox and search results.
+    // Avatar and email tooltip are delegated to DiscussAdminWidget prototype via this._renderer.
+    _buildCommentCard(c, { showCheckbox, onApprove, onDelete }) {
+        const avatarHtml = this._renderer.getAvatarHtml(c);
+        const emailTip   = this._renderer.getAdminTooltip(c);
         const date = new Date(c.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-        const statusBadge = c.is_approved
-            ? `<span class="badge badge-success">Approved</span>`
-            : `<span class="badge badge-warning">Pending</span>`;
+        const statusBadge = c.is_approved ? '' : `<span class="badge badge-warning">Pending</span>`;
+        const fullUrl = this.postFullUrl(c.domain, c.post_url);
+        const checkbox = showCheckbox
+            ? `<input type="checkbox" class="comment-checkbox" value="${c.id}"
+                      style="width:1rem;height:1rem;margin-top:0.375rem;flex-shrink:0;cursor:pointer;accent-color:var(--b600)"
+                      onchange="app.onCheckboxChange(this)">`
+            : '';
 
         return `
             <div class="inbox-item" id="inbox-item-${c.id}">
-                <input type="checkbox" class="comment-checkbox" value="${c.id}"
-                       style="width:1rem;height:1rem;margin-top:0.25rem;flex-shrink:0;cursor:pointer;accent-color:var(--b600)"
-                       onchange="app.onCheckboxChange(this)">
-                <div class="inbox-avatar" style="background:${bg}">${initials}</div>
+                ${checkbox}
+                <div class="inbox-avatar" style="overflow:hidden">${avatarHtml}</div>
                 <div style="flex:1;min-width:0">
-                    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.375rem">
+                    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.25rem">
                         <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${c.name}</span>
+                        ${emailTip}
                         ${statusBadge}
                         <span class="badge badge-neutral">${c.domain}</span>
                         <span style="font-size:0.8125rem;color:var(--t4);margin-left:auto;white-space:nowrap">${date}</span>
                     </div>
-                    <p class="inbox-excerpt" style="font-size:0.9375rem;color:var(--t2);margin:0 0 0.25rem">${excerpt}</p>
+                    <div class="inbox-excerpt">${c.content}</div>
                     <div style="font-size:0.75rem;color:var(--t5);margin-bottom:0.625rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
-                        <a href="${c.post_url}" target="_blank" rel="noopener noreferrer" style="color:var(--t5);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${c.post_url}</a>
+                        <a href="${fullUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--t5);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${fullUrl}</a>
                         <a href="#" style="color:var(--accent-fg);font-weight:500;white-space:nowrap;text-decoration:none;flex-shrink:0" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.preventDefault();app.inboxViewThread(${c.domain_id},'${c.post_url.replace(/'/g, "\\'")}')">View thread →</a>
                     </div>
                     <div style="display:flex;gap:0.25rem;flex-wrap:wrap;align-items:center">
                         ${c.is_approved
-                            ? `<button class="discuss-action-btn" onclick="app.inboxSetApproval(${c.id}, 0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Unapprove</span></button>`
-                            : `<button class="discuss-action-btn" style="color:#16a34a" onclick="app.inboxSetApproval(${c.id}, 1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Approve</span></button>`
+                            ? `<button class="discuss-action-btn" onclick="${onApprove} 0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>Unapprove</span></button>`
+                            : `<button class="discuss-action-btn" style="color:#16a34a" onclick="${onApprove} 1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Approve</span></button>`
                         }
                         <div style="width:1px;height:12px;background:var(--bds);margin:0 0.25rem"></div>
-                        <button class="discuss-action-btn" id="inbox-pin-btn-${c.id}" onclick="app.inboxTogglePin(${c.id}, ${c.is_pinned})">
+                        <button class="discuss-action-btn" onclick="app.inboxTogglePin(${c.id}, ${c.is_pinned})">
                             ${c.is_pinned
                                 ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/><line x1="2" x2="22" y1="2" y2="22"/></svg><span>Unpin</span>`
                                 : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg><span>Pin</span>`
@@ -376,21 +480,15 @@ const app = {
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
                             <span>Edit</span>
                         </button>
-                        <button class="discuss-action-btn" style="color:#ef4444" onclick="app.inboxDeleteOne(${c.id})">
+                        <button class="discuss-action-btn" style="color:#ef4444" onclick="${onDelete}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                             <span>Delete</span>
                         </button>
                     </div>
                     <div id="inbox-edit-form-${c.id}" style="display:none;margin-top:0.75rem;padding:1rem;border:1px solid var(--bds);border-radius:8px;background:var(--s2)">
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
-                            <div>
-                                <label class="label">Name</label>
-                                <input type="text" id="inbox-edit-name-${c.id}" class="input" value="${(c.name || '').replace(/"/g, '&quot;')}">
-                            </div>
-                            <div>
-                                <label class="label">Email</label>
-                                <input type="email" id="inbox-edit-email-${c.id}" class="input" value="${(c.email || '').replace(/"/g, '&quot;')}">
-                            </div>
+                            <div><label class="label">Name</label><input type="text" id="inbox-edit-name-${c.id}" class="input" value="${(c.name || '').replace(/"/g, '&quot;')}"></div>
+                            <div><label class="label">Email</label><input type="email" id="inbox-edit-email-${c.id}" class="input" value="${(c.email || '').replace(/"/g, '&quot;')}"></div>
                         </div>
                         <div style="margin-bottom:0.75rem">
                             <label class="label">Content (Markdown)</label>
@@ -639,6 +737,12 @@ const app = {
             });
             if (window.lucide) lucide.createIcons();
         } catch (err) { console.error(err); }
+    },
+
+    postFullUrl(domain, pathname) {
+        if (!domain) return pathname;
+        const scheme = (domain === 'localhost' || domain.startsWith('localhost:')) ? 'http' : 'https';
+        return `${scheme}://${domain}${pathname}`;
     },
 
     selectDomain(id, name) {
@@ -973,8 +1077,8 @@ const app = {
                 tr.style.cursor = 'pointer';
                 tr.onclick = () => this.selectPost(p.post_url);
                 tr.innerHTML = `
-                    <td class="font-medium truncate max-w-xs" title="${p.post_url}">
-                        <a href="${p.post_url}" target="_blank" rel="noopener noreferrer" style="color:var(--accent-fg);text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.stopPropagation()">${p.post_url}</a>
+                    <td class="font-medium truncate max-w-xs" title="${this.postFullUrl(this.currentDomainName, p.post_url)}">
+                        <a href="${this.postFullUrl(this.currentDomainName, p.post_url)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent-fg);text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" onclick="event.stopPropagation()">${this.postFullUrl(this.currentDomainName, p.post_url)}</a>
                     </td>
                     <td style="color:var(--t2)">${p.comment_count}</td>
                     <td class="text-sm" style="color:var(--t3)">${new Date(p.last_comment_at).toLocaleString()}</td>`;
@@ -1000,6 +1104,7 @@ const app = {
             fetchUrl: `/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`,
             serverUrl: window.location.origin,
             postUrl: this.currentPostUrl,
+            domainId: this.currentDomainId,
         });
     },
 };

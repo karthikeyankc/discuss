@@ -70,9 +70,64 @@
             font-weight: 600; font-size: 0.875rem; color: #fff;
         }
         .inbox-excerpt {
-            display: -webkit-box; -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical; overflow: hidden;
+            font-size: 0.9375rem;
+            line-height: 1.65;
+            color: var(--t2);
+            margin: 0 0 0.25rem;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
+        .inbox-excerpt p { margin: 0 0 0.5em; }
+        .inbox-excerpt p:first-child { margin-top: 0; }
+        .inbox-excerpt p:last-child  { margin-bottom: 0; }
+        .inbox-excerpt blockquote {
+            border-left: 3px solid var(--bds);
+            padding-left: 1rem;
+            margin: 0.5rem 0;
+            color: var(--t4);
+            font-style: italic;
+        }
+        .inbox-excerpt code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.875em;
+            padding: 0.15em 0.4em;
+            background: var(--s3);
+            color: var(--t2);
+            border-radius: 4px;
+        }
+        .inbox-excerpt pre {
+            margin: 0.875em 0;
+            padding: 1rem 1.25rem;
+            background: var(--t1);
+            color: var(--s2);
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .inbox-excerpt pre code { background: transparent; color: inherit; padding: 0; font-size: inherit; border-radius: 0; }
+        .inbox-excerpt ul, .inbox-excerpt ol { margin: 0.625em 0 0.75em; padding-left: 1.5rem; }
+        .inbox-excerpt ul { list-style-type: disc; }
+        .inbox-excerpt ol { list-style-type: decimal; }
+        .inbox-excerpt li { margin: 0.3em 0; }
+        .inbox-excerpt mark { background: #fef9c3; color: #713f12; padding: 0.1em 0.2em; border-radius: 3px; }
+        .inbox-excerpt del { color: var(--t4); text-decoration: line-through; }
+        .inbox-excerpt ins { text-decoration: none; background: #dcfce7; color: #15803d; padding: 0.1em 0.2em; border-radius: 3px; }
+        .inbox-excerpt cite { font-style: italic; color: var(--t3); }
+        .inbox-excerpt sup, .inbox-excerpt sub { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
+        .inbox-excerpt sup { top: -0.5em; }
+        .inbox-excerpt sub { bottom: -0.25em; }
+        .inbox-excerpt kbd {
+            display: inline-block;
+            padding: 0.15em 0.5em 0.2em;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8125em; line-height: 1.4;
+            color: var(--t2); background: var(--s2);
+            border: 1px solid var(--bd); border-bottom: 2px solid var(--bd-strong);
+            border-radius: 4px; white-space: nowrap; vertical-align: baseline;
+        }
+        .inbox-excerpt abbr[title] { text-decoration: underline dotted; cursor: help; }
 
         /* ── Bulk action bar ──────────────────────── */
         #bulk-bar {
@@ -281,6 +336,11 @@
                         <p class="text-sm mt-1" style="color:var(--t3)">Moderate comments across all your sites.</p>
                     </div>
 
+                    <div style="position:relative;margin-bottom:1.25rem">
+                        <svg style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);width:1rem;height:1rem;color:var(--t4);pointer-events:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <input type="search" id="inbox-search" class="input" placeholder="Search by name, email, or comment…" autocomplete="off" oninput="app.onInboxSearch(this.value)" style="padding-left:2.25rem;max-width:380px">
+                    </div>
+
                     <div class="tabs mb-6" id="inbox-tabs" role="tablist">
                         <button class="tab active" role="tab" data-status="all" onclick="app.switchInboxTab('all')">All</button>
                         <button class="tab" role="tab" data-status="pending" onclick="app.switchInboxTab('pending')"
@@ -288,11 +348,10 @@
                             Pending
                             <span id="inbox-pending-badge" class="badge badge-warning hidden"></span>
                         </button>
-                        <button class="tab" role="tab" data-status="approved" onclick="app.switchInboxTab('approved')">Approved</button>
                         <span class="tab-indicator" id="inbox-tab-indicator"></span>
                     </div>
 
-                    <div style="display:flex;align-items:center;gap:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--bds);margin-bottom:0.25rem">
+                    <div id="inbox-select-row" style="display:flex;align-items:center;gap:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--bds);margin-bottom:0.25rem">
                         <input type="checkbox" id="inbox-select-all" onchange="app.toggleSelectAll(this.checked)"
                                style="width:1rem;height:1rem;cursor:pointer;accent-color:var(--b600)">
                         <label for="inbox-select-all" class="text-sm cursor-pointer select-none" style="color:var(--t3)">Select all</label>
@@ -324,6 +383,25 @@
                             <h1 class="page-title">Domains</h1>
                         </div>
                         <p class="text-sm mt-1" style="color:var(--t3)">Manage sites that can use this Discuss instance.</p>
+                    </div>
+
+                    <!-- Domain list -->
+                    <div class="section-heading">
+                        <div class="section-heading-icon"><i data-lucide="globe"></i></div>
+                        <h2>Your Domains</h2>
+                    </div>
+                    <div class="table-wrap mb-10">
+                        <table class="table w-full text-left">
+                            <thead>
+                                <tr>
+                                    <th>Domain</th>
+                                    <th>Site Name</th>
+                                    <th>Comments</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="domains-tbody"></tbody>
+                        </table>
                     </div>
 
                     <!-- Add domain -->
@@ -360,25 +438,6 @@
                         </div>
                         <div><button type="submit" class="btn btn-primary">Add Domain</button></div>
                     </form>
-
-                    <!-- Domain list -->
-                    <div class="section-heading">
-                        <div class="section-heading-icon"><i data-lucide="globe"></i></div>
-                        <h2>Your Domains</h2>
-                    </div>
-                    <div class="table-wrap">
-                        <table class="table w-full text-left">
-                            <thead>
-                                <tr>
-                                    <th>Domain</th>
-                                    <th>Site Name</th>
-                                    <th>Comments</th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="domains-tbody"></tbody>
-                        </table>
-                    </div>
                 </div>
 
                 <!-- Posts Section -->
