@@ -311,6 +311,29 @@ router.patch('/comments/:id/pin', (req, res) => {
     }
 });
 
+router.get('/search', (req, res) => {
+    const { q } = req.query;
+    if (!q || q.trim().length < 2) {
+        return res.json([]);
+    }
+    const term = `%${q.trim()}%`;
+    try {
+        const results = db.prepare(`
+            SELECT c.*, d.domain
+            FROM comments c
+            JOIN domains d ON c.domain_id = d.id
+            WHERE d.admin_id = ?
+              AND c.is_deleted = 0
+              AND (c.content_raw LIKE ? OR c.name LIKE ? OR c.email LIKE ? OR c.post_url LIKE ?)
+            ORDER BY c.created_at DESC
+            LIMIT 50
+        `).all(req.adminId, term, term, term, term);
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ error: 'Search failed' });
+    }
+});
+
 router.delete('/comments/:id', (req, res) => {
     try {
         // Soft delete

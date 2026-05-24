@@ -2641,7 +2641,7 @@
     }
 
     /* \u2500\u2500 Comment body prose \u2500\u2500 */
-    #discuss-comments .discuss-comment-body {
+    #discuss-comments .discuss-comment-body, .inbox-excerpt {
         font-size: 0.9375rem;
         line-height: 1.65;
         color: var(--t2);
@@ -2649,16 +2649,16 @@
         word-break: break-word;
         overflow-wrap: break-word;
     }
-    #discuss-comments .discuss-comment-body p { margin: 0 0 0.5em; }
-    #discuss-comments .discuss-comment-body p:last-child { margin-bottom: 0; }
-    #discuss-comments .discuss-comment-body blockquote {
+    #discuss-comments .discuss-comment-body p, .inbox-excerpt p { margin: 0 0 0.5em; }
+    #discuss-comments .discuss-comment-body p:last-child, .inbox-excerpt p:last-child { margin-bottom: 0; }
+    #discuss-comments .discuss-comment-body blockquote, .inbox-excerpt blockquote {
         border-left: 3px solid var(--bds);
         padding-left: 1rem;
         margin: 0.5rem 0;
         color: var(--t4);
         font-style: italic;
     }
-    #discuss-comments .discuss-comment-body kbd {
+    #discuss-comments .discuss-comment-body kbd, .inbox-excerpt kbd {
         display: inline-block;
         padding: 0.15em 0.5em 0.2em;
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -2673,17 +2673,17 @@
         white-space: nowrap;
         vertical-align: baseline;
     }
-    #discuss-comments .discuss-comment-body mark {
+    #discuss-comments .discuss-comment-body mark, .inbox-excerpt mark {
         background: #fef9c3;
         color: #713f12;
         padding: 0.1em 0.2em;
         border-radius: 3px;
     }
-    #discuss-comments .discuss-comment-body abbr[title] {
+    #discuss-comments .discuss-comment-body abbr[title], .inbox-excerpt abbr[title] {
         text-decoration: underline dotted;
         cursor: help;
     }
-    #discuss-comments .discuss-comment-body code {
+    #discuss-comments .discuss-comment-body code, .inbox-excerpt code {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         font-size: 0.875em;
         padding: 0.15em 0.4em;
@@ -2691,7 +2691,7 @@
         color: var(--t2);
         border-radius: 4px;
     }
-    #discuss-comments .discuss-comment-body pre {
+    #discuss-comments .discuss-comment-body pre, .inbox-excerpt pre {
         margin: 0.875em 0;
         padding: 1rem 1.25rem;
         background: var(--t1);
@@ -2702,34 +2702,34 @@
         font-size: 0.875rem;
         line-height: 1.6;
     }
-    #discuss-comments .discuss-comment-body pre code {
+    #discuss-comments .discuss-comment-body pre code, .inbox-excerpt pre code {
         background: transparent;
         color: inherit;
         padding: 0;
         font-size: inherit;
         border-radius: 0;
     }
-    #discuss-comments .discuss-comment-body ul,
-    #discuss-comments .discuss-comment-body ol {
+    #discuss-comments .discuss-comment-body ul, .inbox-excerpt ul,
+    #discuss-comments .discuss-comment-body ol, .inbox-excerpt ol {
         margin: 0.625em 0 0.75em;
         padding-left: 1.5rem;
     }
-    #discuss-comments .discuss-comment-body ul { list-style-type: disc; }
-    #discuss-comments .discuss-comment-body ol { list-style-type: decimal; }
-    #discuss-comments .discuss-comment-body li { margin: 0.3em 0; }
-    #discuss-comments .discuss-comment-body del { color: var(--t4); text-decoration: line-through; }
-    #discuss-comments .discuss-comment-body ins {
+    #discuss-comments .discuss-comment-body ul, .inbox-excerpt ul { list-style-type: disc; }
+    #discuss-comments .discuss-comment-body ol, .inbox-excerpt ol { list-style-type: decimal; }
+    #discuss-comments .discuss-comment-body li, .inbox-excerpt li { margin: 0.3em 0; }
+    #discuss-comments .discuss-comment-body del, .inbox-excerpt del { color: var(--t4); text-decoration: line-through; }
+    #discuss-comments .discuss-comment-body ins, .inbox-excerpt ins {
         text-decoration: none;
         background: #dcfce7;
         color: #15803d;
         padding: 0.1em 0.2em;
         border-radius: 3px;
     }
-    #discuss-comments .discuss-comment-body cite { font-style: italic; color: var(--t3); }
-    #discuss-comments .discuss-comment-body sup,
-    #discuss-comments .discuss-comment-body sub { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
-    #discuss-comments .discuss-comment-body sup { top: -0.5em; }
-    #discuss-comments .discuss-comment-body sub { bottom: -0.25em; }
+    #discuss-comments .discuss-comment-body cite, .inbox-excerpt cite { font-style: italic; color: var(--t3); }
+    #discuss-comments .discuss-comment-body sup, .inbox-excerpt sup,
+    #discuss-comments .discuss-comment-body sub, .inbox-excerpt sub { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
+    #discuss-comments .discuss-comment-body sup, .inbox-excerpt sup { top: -0.5em; }
+    #discuss-comments .discuss-comment-body sub, .inbox-excerpt sub { bottom: -0.25em; }
 
     /* \u2500\u2500 Badge (also purged by scanner) \u2500\u2500 */
     /* \u2500\u2500 Badge \u2014 exact DS spec: inline-flex gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full \u2500\u2500 */
@@ -2942,7 +2942,7 @@
         border-radius: 0.5rem;
         transition: box-shadow 300ms ease;
     }
-`;function T(){if(document.getElementById("discuss-styles"))return;let a=document.createElement("style");a.id="discuss-styles",a.textContent=S,document.head.appendChild(a)}function z(a){let s=parseInt(a.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function E(a,s,e){return"#"+[a,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function M(a,s,e){a/=255,s/=255,e/=255;let t=Math.max(a,s,e),i=Math.min(a,s,e),c,o,r=(t+i)/2;if(t===i)c=o=0;else{let n=t-i;switch(o=r>.5?n/(2-t-i):n/(t+i),t){case a:c=((s-e)/n+(s<e?6:0))/6;break;case s:c=((e-a)/n+2)/6;break;default:c=((a-s)/n+4)/6}}return[c*360,o,r]}function _(a,s,e){a/=360;let t=(o,r,n)=>(n<0&&(n+=1),n>1&&(n-=1),n<1/6?o+(r-o)*6*n:n<1/2?r:n<2/3?o+(r-o)*(2/3-n)*6:o);if(s===0){let o=Math.round(e*255);return[o,o,o]}let i=e<.5?e*(1+s):e+s-e*s,c=2*e-i;return[t(c,i,a+1/3),t(c,i,a),t(c,i,a-1/3)].map(o=>Math.round(o*255))}function j(a){let[s,e,t]=z(a),[i,c]=M(s,e,t),o={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},r={};for(let[n,d]of Object.entries(o)){let[l,p,g]=_(i,Math.min(c,.85),d);r[n]=E(l,p,g)}return r}var b=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||this.container.dataset.url||window.location.pathname,this.serverUrl=s.serverUrl||C,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=j(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){T(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
+`;function T(){if(document.getElementById("discuss-styles"))return;let a=document.createElement("style");a.id="discuss-styles",a.textContent=S,document.head.appendChild(a)}function z(a){let s=parseInt(a.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function E(a,s,e){return"#"+[a,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function M(a,s,e){a/=255,s/=255,e/=255;let t=Math.max(a,s,e),i=Math.min(a,s,e),c,o,r=(t+i)/2;if(t===i)c=o=0;else{let n=t-i;switch(o=r>.5?n/(2-t-i):n/(t+i),t){case a:c=((s-e)/n+(s<e?6:0))/6;break;case s:c=((e-a)/n+2)/6;break;default:c=((a-s)/n+4)/6}}return[c*360,o,r]}function I(a,s,e){a/=360;let t=(o,r,n)=>(n<0&&(n+=1),n>1&&(n-=1),n<1/6?o+(r-o)*6*n:n<1/2?r:n<2/3?o+(r-o)*(2/3-n)*6:o);if(s===0){let o=Math.round(e*255);return[o,o,o]}let i=e<.5?e*(1+s):e+s-e*s,c=2*e-i;return[t(c,i,a+1/3),t(c,i,a),t(c,i,a-1/3)].map(o=>Math.round(o*255))}function _(a){let[s,e,t]=z(a),[i,c]=M(s,e,t),o={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},r={};for(let[n,d]of Object.entries(o)){let[l,p,g]=I(i,Math.min(c,.85),d);r[n]=E(l,p,g)}return r}var b=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||this.container.dataset.url||window.location.pathname,this.serverUrl=s.serverUrl||C,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.domainId=s.domainId||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=_(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){T(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
                     <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
@@ -3043,4 +3043,4 @@
                     </div>
                 </div>
             </form>
-        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let c={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0};try{let o=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(c)});if(o.ok){if(e.reset(),parseInt(t,10)!==0){let r=document.getElementById(`discuss-reply-form-${t}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await o.json();alert(r.error||"Failed to post comment.")}}catch(o){console.error("[Discuss]",o),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=b;var y=document.getElementById("discuss-comments");y&&y.dataset.isAdmin!=="true"&&new b({container:y});})();
+        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let c={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0,...this.domainId?{domain_id:this.domainId}:{}};try{let o=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(c)});if(o.ok){if(e.reset(),parseInt(t,10)!==0){let r=document.getElementById(`discuss-reply-form-${t}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await o.json();alert(r.error||"Failed to post comment.")}}catch(o){console.error("[Discuss]",o),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=b;var y=document.getElementById("discuss-comments");y&&y.dataset.isAdmin!=="true"&&new b({container:y});})();

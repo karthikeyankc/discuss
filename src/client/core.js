@@ -508,6 +508,7 @@ export class DiscussWidget {
         this.fetchUrl = options.fetchUrl || `${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`;
         this.config = {};
         this.primaryColor = options.primaryColor || null;
+        this.domainId = options.domainId || null;
 
         this.init = this.init.bind(this);
         this.render = this.render.bind(this);
@@ -870,7 +871,8 @@ export class DiscussWidget {
             post_url: this.postUrl,
             parent_id: parseInt(parentId, 10),
             honeypot_field: form.honeypot_field.value,
-            honeypot_answer_given: form.honeypot_answer_given ? form.honeypot_answer_given.value : undefined
+            honeypot_answer_given: form.honeypot_answer_given ? form.honeypot_answer_given.value : undefined,
+            ...(this.domainId ? { domain_id: this.domainId } : {})
         };
 
         try {
