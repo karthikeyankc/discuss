@@ -708,7 +708,7 @@ const app = {
                     <div class="empty-state">
                         <div style="margin-bottom:1rem;color:var(--t4)"><i data-lucide="globe" style="width:2rem;height:2rem"></i></div>
                         <div class="empty-title">No domains yet</div>
-                        <p class="empty-desc">Add your first domain above to start collecting comments.</p>
+                        <p class="empty-desc">Click <strong>+ Add Domain</strong> to register your first site and start collecting comments.</p>
                     </div>
                 </td></tr>`;
                 if (window.lucide) lucide.createIcons();

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.3.2] - 2026-06-05
+
+### Fixed
+- Email logo now loads from a remote URL instead of base64 — email clients (Gmail, Outlook) strip data: URI images
+- Domains empty state copy updated to point to the new "+ Add Domain" button
+- Express `trust proxy` set to 1 so express-rate-limit reads the correct client IP behind Nginx/Apache
+
 ## [0.3.0] - 2026-06-05
 
 ### Added
