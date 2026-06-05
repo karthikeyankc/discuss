@@ -1,14 +1,12 @@
 import nodemailer from 'nodemailer';
 import { decrypt } from './encrypt.js';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 
 const GITHUB_URL = 'https://github.com/KarthikeyanKC/discuss';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const LOGO_B64 = readFileSync(join(__dirname, '../../public/logo.png')).toString('base64');
-const LOGO_SRC = `data:image/png;base64,${LOGO_B64}`;
+function logoSrc() {
+    const base = process.env.APP_URL ? process.env.APP_URL.replace(/\/$/, '') : null;
+    return base ? `${base}/logo.png` : null;
+}
 
 function buildTransport(domain) {
     const host = decrypt(domain.smtp_host);
@@ -48,7 +46,7 @@ function commentEmailHtml({ domain, comment, isReply }) {
     return `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:#f8fafc;margin:0;padding:2rem">
 <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
   <div style="background:#f8fafc;padding:1.25rem 1.75rem;border-bottom:1px solid #e2e8f0">
-    <img src="${LOGO_SRC}" alt="Discuss" style="height:28px;width:auto;display:inline-block">
+    ${logoSrc() ? `<img src="${logoSrc()}" alt="Discuss" style="height:28px;width:auto;display:inline-block">` : `<span style="color:#1e40af;font-size:1rem;font-weight:700">Discuss</span>`}
   </div>
   <div style="padding:1.75rem">
     <h2 style="margin:0 0 0.25rem;font-size:1.0625rem;color:#0f172a">
@@ -112,7 +110,7 @@ function buildReplyToCommenterHtml(domain, parentComment, replyComment) {
     return `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:#f8fafc;margin:0;padding:2rem">
 <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
   <div style="background:#f8fafc;padding:1.25rem 1.75rem;border-bottom:1px solid #e2e8f0">
-    <img src="${LOGO_SRC}" alt="Discuss" style="height:28px;width:auto;display:inline-block">
+    ${logoSrc() ? `<img src="${logoSrc()}" alt="Discuss" style="height:28px;width:auto;display:inline-block">` : `<span style="color:#1e40af;font-size:1rem;font-weight:700">Discuss</span>`}
   </div>
   <div style="padding:1.75rem">
     <h2 style="margin:0 0 1.25rem;font-size:1.0625rem;color:#0f172a">
@@ -166,7 +164,7 @@ export async function sendTestEmail(domain) {
         html: `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:#f8fafc;margin:0;padding:2rem">
 <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
   <div style="background:#f8fafc;padding:1.25rem 1.75rem;border-bottom:1px solid #e2e8f0">
-    <img src="${LOGO_SRC}" alt="Discuss" style="height:28px;width:auto;display:inline-block">
+    ${logoSrc() ? `<img src="${logoSrc()}" alt="Discuss" style="height:28px;width:auto;display:inline-block">` : `<span style="color:#1e40af;font-size:1rem;font-weight:700">Discuss</span>`}
   </div>
   <div style="padding:1.75rem">
     <p style="font-size:1rem;color:#0f172a;margin:0 0 0.5rem">Your email notifications are set up for <strong>${domain.site_name}</strong>.</p>

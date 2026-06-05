@@ -36,9 +36,19 @@ test('preview type "reply-to-commenter" returns HTML with replied context', () =
     assert.match(html, /Your comment/);
 });
 
-test('preview HTML contains embedded base64 logo', () => {
+test('preview HTML contains logo img when APP_URL is set', () => {
+    process.env.APP_URL = 'https://discuss.example.com';
     const html = previewEmailHtml(fakeDomain, 'comment');
-    assert.match(html, /data:image\/png;base64,/);
+    assert.match(html, /logo\.png/);
+    delete process.env.APP_URL;
+});
+
+test('preview HTML falls back to text logo when APP_URL is not set', () => {
+    const prev = process.env.APP_URL;
+    delete process.env.APP_URL;
+    const html = previewEmailHtml(fakeDomain, 'comment');
+    assert.match(html, /Discuss/);
+    if (prev) process.env.APP_URL = prev;
 });
 
 test('preview HTML contains site name in footer', () => {
