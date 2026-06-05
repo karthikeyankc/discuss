@@ -1,6 +1,7 @@
 import express from 'express';
 import defaultDb from '../../db/index.js';
 import { renderMarkdown } from '../../lib/render.js';
+import { sendCommentNotification, sendReplyNotification } from '../../lib/mailer.js';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../config.js';
@@ -147,6 +148,28 @@ router.post('/', (req, res) => {
         }
 
         res.status(201).json({ message: 'Comment posted successfully', id: info.lastInsertRowid });
+
+        // Fire notifications asynchronously — don't block the response
+        const newComment = { id: info.lastInsertRowid, name, content: cleanHtml, post_url, parent_id: pId };
+        const isReply = pId > 0;
+
+        if (!isReply && domain.notify_on_comment) {
+            sendCommentNotification(domain, newComment, { isReply: false }).catch(e => console.error('Notify error:', e));
+        }
+
+        if (isReply) {
+            const parent = db.prepare('SELECT id, name, email, content, post_url, is_author FROM comments WHERE id = ?').get(pId);
+            if (parent) {
+                // Notify admin if the reply is to their comment
+                if (parent.is_author && domain.notify_on_reply) {
+                    sendCommentNotification(domain, newComment, { isReply: true }).catch(e => console.error('Notify error:', e));
+                }
+                // Notify the original commenter if they left an email (and they are not the admin)
+                if (!parent.is_author && parent.email) {
+                    sendReplyNotification(domain, parent, newComment).catch(e => console.error('Notify error:', e));
+                }
+            }
+        }
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to post comment' });

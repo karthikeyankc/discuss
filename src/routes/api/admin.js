@@ -2,8 +2,27 @@ import express from 'express';
 import argon2 from 'argon2';
 import { rateLimit } from 'express-rate-limit';
 import { renderMarkdown } from '../../lib/render.js';
+import { encrypt, decrypt } from '../../lib/encrypt.js';
+import { sendTestEmail, previewEmailHtml } from '../../lib/mailer.js';
 import defaultDb from '../../db/index.js';
 import { authenticateAdmin, generateToken } from '../../middleware/auth.js';
+
+const SMTP_ENCRYPTED_FIELDS = ['smtp_host', 'smtp_user', 'smtp_pass', 'smtp_from', 'notify_email'];
+
+// Decrypt sensitive fields for API responses; never expose smtp_pass — return smtp_pass_set instead.
+function decryptDomain(d) {
+    if (!d) return d;
+    const out = { ...d };
+    for (const f of SMTP_ENCRYPTED_FIELDS) {
+        if (f === 'smtp_pass') {
+            out.smtp_pass_set = !!d.smtp_pass;
+            delete out.smtp_pass;
+        } else {
+            out[f] = decrypt(d[f]);
+        }
+    }
+    return out;
+}
 
 const loginRateLimit = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -139,14 +158,18 @@ router.get('/domains/:id', (req, res) => {
     try {
         const domain = db.prepare('SELECT * FROM domains WHERE id = ? AND admin_id = ?').get(req.params.id, req.adminId);
         if (!domain) return res.status(404).json({ error: 'Domain not found or unauthorized' });
-        res.json(domain);
+        res.json(decryptDomain(domain));
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch domain' });
     }
 });
 
 router.patch('/domains/:id', (req, res) => {
-    const { domain, site_name, honeypot_question, primary_color, blocked_words } = req.body;
+    const {
+        domain, site_name, honeypot_question, primary_color, blocked_words,
+        smtp_host, smtp_port, smtp_secure, smtp_user, smtp_pass, smtp_from,
+        notify_email, notify_on_comment, notify_on_reply,
+    } = req.body;
     if (!domain || !site_name) {
         return res.status(400).json({ error: 'Domain and site name are required' });
     }
@@ -157,11 +180,31 @@ router.patch('/domains/:id', (req, res) => {
 
     try {
         const now = Date.now();
+
+        // Only overwrite smtp_pass if a new one was supplied; otherwise preserve existing.
+        let passVal;
+        if (smtp_pass && smtp_pass.trim()) {
+            passVal = encrypt(smtp_pass.trim());
+        } else {
+            const existing = db.prepare('SELECT smtp_pass FROM domains WHERE id = ? AND admin_id = ?').get(req.params.id, req.adminId);
+            passVal = existing ? existing.smtp_pass : null;
+        }
+
         const info = db.prepare(`
             UPDATE domains
-            SET domain = ?, site_name = ?, honeypot_question = ?, primary_color = ?, blocked_words = ?, updated_at = ?
+            SET domain = ?, site_name = ?, honeypot_question = ?, primary_color = ?, blocked_words = ?,
+                smtp_host = ?, smtp_port = ?, smtp_secure = ?, smtp_user = ?, smtp_pass = ?,
+                smtp_from = ?, notify_email = ?, notify_on_comment = ?, notify_on_reply = ?,
+                updated_at = ?
             WHERE id = ? AND admin_id = ?
-        `).run(domain.trim(), site_name.trim(), honeypot_question || null, primary_color || null, blockedJson, now, req.params.id, req.adminId);
+        `).run(
+            domain.trim(), site_name.trim(), honeypot_question || null, primary_color || null, blockedJson,
+            encrypt(smtp_host || null), smtp_port ? parseInt(smtp_port, 10) : 587, smtp_secure ? 1 : 0,
+            encrypt(smtp_user || null), passVal,
+            encrypt(smtp_from || null), encrypt(notify_email || null),
+            notify_on_comment ? 1 : 0, notify_on_reply ? 1 : 0,
+            now, req.params.id, req.adminId,
+        );
 
         if (info.changes === 0) {
             return res.status(404).json({ error: 'Domain not found or unauthorized' });
@@ -184,6 +227,30 @@ router.delete('/domains/:id', (req, res) => {
         res.json({ message: 'Domain deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Failed to delete domain' });
+    }
+});
+
+router.get('/domains/:id/email-preview', (req, res) => {
+    try {
+        const domain = db.prepare('SELECT * FROM domains WHERE id = ? AND admin_id = ?').get(req.params.id, req.adminId);
+        if (!domain) return res.status(404).json({ error: 'Domain not found or unauthorized' });
+        const type = req.query.type || 'comment';
+        const html = previewEmailHtml(decryptDomain(domain), type);
+        res.setHeader('Content-Type', 'text/html');
+        res.send(html);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to render preview' });
+    }
+});
+
+router.post('/domains/:id/test-email', async (req, res) => {
+    try {
+        const domain = db.prepare('SELECT * FROM domains WHERE id = ? AND admin_id = ?').get(req.params.id, req.adminId);
+        if (!domain) return res.status(404).json({ error: 'Domain not found or unauthorized' });
+        await sendTestEmail(domain);
+        res.json({ message: 'Test email sent' });
+    } catch (err) {
+        res.status(500).json({ error: err.message || 'Failed to send test email' });
     }
 });
 

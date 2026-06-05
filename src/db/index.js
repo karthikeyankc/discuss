@@ -23,6 +23,15 @@ db.exec(schema);
 // Migrations
 try { db.exec('ALTER TABLE domains ADD COLUMN primary_color TEXT'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN blocked_words TEXT'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN smtp_host TEXT'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN smtp_port INTEGER DEFAULT 587'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN smtp_secure INTEGER DEFAULT 0'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN smtp_user TEXT'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN smtp_pass TEXT'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN smtp_from TEXT'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN notify_email TEXT'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN notify_on_comment INTEGER DEFAULT 0'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN notify_on_reply INTEGER DEFAULT 0'); } catch {}
 try { db.exec('ALTER TABLE comments ADD COLUMN content_raw TEXT'); } catch {}
 // Backfill: existing rows get content (rendered HTML) as their raw value — not ideal
 // but recoverable; any admin edit will replace it with true markdown going forward.
