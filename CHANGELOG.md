@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.3.0] - 2026-06-05
+
+### Added
+- **Email notifications** — per-domain SMTP configuration in Site Settings. Admins receive alerts on new comments and replies to their own comments. SMTP credentials are encrypted at rest using AES-256-GCM via a server-side `ENCRYPTION_KEY`.
+- **Commenter reply notifications** — when a visitor leaves an email address and someone replies to their comment, they receive a notification automatically.
+- **Email preview** — preview all three email templates (new comment, reply to admin, reply to commenter) directly from the dashboard in a modal with desktop/mobile width toggle.
+- **Global comment search** — search bar inside the Comments section searches name, email, content, and post URL across all domains.
+- **Configurable server bind address** — `HOST` environment variable (default `127.0.0.1`) controls which interface the server listens on.
+- `ENCRYPTION_KEY` and `APP_URL` environment variables documented in `.env.example`.
+
+### Changed
+- **Admin inbox** — full comment content shown (no truncation). Cards reuse the same avatar, mail-icon tooltip, and action controls as the thread view (DRY). Only "Pending" badge shown; "Approved" badge removed as redundant.
+- **Inbox tabs** — simplified to All and Pending. Approved tab removed.
+- **Domains page** — domain list moved to the top; Add New Domain form moved to the bottom.
+- **Site Settings** — sections reorganised into horizontal tabs (General, Appearance, Anti-spam, Notifications, Embed). Save/Cancel row anchored at the bottom with a separator.
+- **Admin sidebar** — wider (240 px), more generous item padding, larger icons.
+- **SMTP password field** — shows masked saved state with a "Change password" link; real input only revealed on demand.
+- **Email templates** — logo embedded as base64 (no remote load), CTA links replaced with button-styled anchors, footer split into per-audience copy.
+
+### Upgrading from v0.2.x
+
+Set `ENCRYPTION_KEY` in your `.env` before entering SMTP credentials in the dashboard — see [docs/upgrading.md](docs/upgrading.md#upgrading-to-v030).
+
+### Fixed
+- Same-origin commenting from the admin dashboard — `getDomainOrError` now falls back to the `Host` header when no `Origin` header is present.
+- Admin dashboard commenting — accepts `domain_id` from the POST body when a valid admin JWT is present, enabling the admin to comment from the thread view.
+
 ## [0.2.0] - 2026-05-20
 
 ### Added
