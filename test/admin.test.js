@@ -3,11 +3,13 @@ import assert from 'node:assert/strict';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import argon2 from 'argon2';
+import crypto from 'crypto';
 import { createTestDb, seedTestDb } from './helpers/db.js';
 import { buildAdminRouter } from '../src/routes/api/admin.js';
 import { generateToken } from '../src/middleware/auth.js';
 
 process.env.JWT_SECRET = 'test-secret-for-admin-tests';
+process.env.ENCRYPTION_KEY = crypto.randomBytes(32).toString('hex');
 process.env.NODE_ENV = 'test';
 
 const db = createTestDb();
@@ -24,9 +26,11 @@ function req(method, path, { body, cookies = {} } = {}) {
         const res = {
             statusCode: 200,
             _body: null,
+            _raw: null,
             _cookies: {},
             status(c) { this.statusCode = c; return this; },
             json(d) { this._body = d; resolve(this); },
+            send(d) { this._raw = d; resolve(this); },
             cookie(k, v) { this._cookies[k] = v; return this; },
             clearCookie() { return this; },
             setHeader() { return this; },
@@ -200,4 +204,150 @@ test('PATCH /comments/:id/pin pins a comment', async () => {
     assert.equal(res.statusCode, 200);
     const row = db.prepare('SELECT is_pinned FROM comments WHERE id = ?').get(comment.lastInsertRowid);
     assert.equal(row.is_pinned, 1);
+});
+
+// --- Search ---
+
+test('GET /search returns 401 without a token', async () => {
+    const res = await req('GET', '/api/admin/search?q=hello');
+    assert.equal(res.statusCode, 401);
+});
+
+test('GET /search returns empty array for a query shorter than 2 chars', async () => {
+    const res = await req('GET', '/api/admin/search?q=a', auth);
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(res._body, []);
+});
+
+test('GET /search returns empty array when query is absent', async () => {
+    const res = await req('GET', '/api/admin/search', auth);
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(res._body, []);
+});
+
+test('GET /search finds a comment by content', async () => {
+    const now = Date.now();
+    db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Searcher', 'search@test.com', '', '<p>uniqueterm</p>', 'uniqueterm', now, now, '/search-post', domainId);
+
+    const res = await req('GET', '/api/admin/search?q=uniqueterm', auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.length >= 1);
+    assert.ok(res._body.some(c => c.name === 'Searcher'));
+});
+
+test('GET /search finds a comment by author name', async () => {
+    const now = Date.now();
+    db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('UniqueName99', '', '', '<p>hi</p>', 'hi', now, now, '/search-post-2', domainId);
+
+    const res = await req('GET', '/api/admin/search?q=UniqueName99', auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.some(c => c.name === 'UniqueName99'));
+});
+
+test('GET /search does not return deleted comments', async () => {
+    const now = Date.now();
+    const c = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id, is_deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)'
+    ).run('DeletedSearcher', '', '', '<p>ghostterm</p>', 'ghostterm', now, now, '/del-post', domainId);
+
+    const res = await req('GET', '/api/admin/search?q=ghostterm', auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(!res._body.some(c => c.name === 'DeletedSearcher'));
+});
+
+// --- Domain SMTP settings ---
+
+test('PATCH /domains/:id saves and encrypts SMTP fields', async () => {
+    const res = await req('PATCH', `/api/admin/domains/${domainId}`, {
+        ...auth,
+        body: {
+            domain: 'example.com',
+            site_name: 'Test Site',
+            smtp_host: 'smtp.gmail.com',
+            smtp_port: 587,
+            smtp_user: 'user@gmail.com',
+            smtp_pass: 'mysecretpass',
+            notify_email: 'admin@gmail.com',
+            notify_on_comment: true,
+            notify_on_reply: false,
+        },
+    });
+    assert.equal(res.statusCode, 200);
+
+    // Verify password is stored encrypted (not plaintext)
+    const row = db.prepare('SELECT smtp_pass, smtp_host FROM domains WHERE id = ?').get(domainId);
+    assert.notEqual(row.smtp_pass, 'mysecretpass');
+    assert.ok(row.smtp_pass.includes(':')); // iv:tag:data format
+    assert.ok(row.smtp_host.includes(':'));  // also encrypted
+});
+
+test('GET /domains/:id returns decrypted SMTP fields without exposing password', async () => {
+    const res = await req('GET', `/api/admin/domains/${domainId}`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.equal(res._body.smtp_host, 'smtp.gmail.com');
+    assert.equal(res._body.smtp_user, 'user@gmail.com');
+    assert.equal(res._body.notify_email, 'admin@gmail.com');
+    assert.equal(res._body.notify_on_comment, 1);
+    // Password must never be returned
+    assert.equal(res._body.smtp_pass, undefined);
+    // But the hint that a password is saved should be present
+    assert.equal(res._body.smtp_pass_set, true);
+});
+
+test('PATCH /domains/:id preserves existing password when new one is blank', async () => {
+    // Save with a password first
+    await req('PATCH', `/api/admin/domains/${domainId}`, {
+        ...auth,
+        body: {
+            domain: 'example.com', site_name: 'Test Site',
+            smtp_pass: 'original-password',
+        },
+    });
+    const before = db.prepare('SELECT smtp_pass FROM domains WHERE id = ?').get(domainId).smtp_pass;
+
+    // Update without sending a password
+    await req('PATCH', `/api/admin/domains/${domainId}`, {
+        ...auth,
+        body: { domain: 'example.com', site_name: 'Test Site', smtp_pass: '' },
+    });
+    const after = db.prepare('SELECT smtp_pass FROM domains WHERE id = ?').get(domainId).smtp_pass;
+
+    assert.equal(before, after);
+});
+
+test('PATCH /domains/:id updates smtp_pass_set to false when no password ever saved', async () => {
+    // Create a fresh domain with no password
+    const now = Date.now();
+    const fresh = db.prepare(
+        'INSERT INTO domains (domain, site_name, admin_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)'
+    ).run('fresh.com', 'Fresh', adminId, now, now);
+
+    const res = await req('GET', `/api/admin/domains/${fresh.lastInsertRowid}`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.equal(res._body.smtp_pass_set, false);
+});
+
+// --- Email preview ---
+
+test('GET /domains/:id/email-preview returns HTML for type comment', async () => {
+    const res = await req('GET', `/api/admin/domains/${domainId}/email-preview?type=comment`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(typeof res._raw === 'string');
+    assert.match(res._raw, /<!DOCTYPE html>/);
+    assert.match(res._raw, /New comment/);
+});
+
+test('GET /domains/:id/email-preview returns HTML for type reply-to-commenter', async () => {
+    const res = await req('GET', `/api/admin/domains/${domainId}/email-preview?type=reply-to-commenter`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.match(res._raw, /replied to your comment/);
+});
+
+test('GET /domains/:id/email-preview returns 401 without a token', async () => {
+    const res = await req('GET', `/api/admin/domains/${domainId}/email-preview?type=comment`);
+    assert.equal(res.statusCode, 401);
 });

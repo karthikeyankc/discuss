@@ -1,6 +1,6 @@
 {
   "name": "discuss",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "A self-hosted, lightweight SQLite comment system for static sites.",
   "main": "src/server.js",
   "type": "module",
@@ -16,7 +16,8 @@
     "build:client:inject": "node scripts/build-client.js",
     "build:client": "npm run build:client:css && npm run build:client:inject",
     "build": "npm run build:css && npm run build:client",
-    "test": "node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js"
+    "test": "node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js test/encrypt.test.js test/mailer.test.js",
+    "test:coverage": "c8 --reporter=text --reporter=lcov node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js test/encrypt.test.js test/mailer.test.js"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,7 @@
     "express-rate-limit": "^8.4.1",
     "jsonwebtoken": "^9.0.3",
     "markdown-it": "^14.1.1",
+    "nodemailer": "^8.0.10",
     "sanitize-html": "^2.17.3"
   },
   "devDependencies": {
@@ -50,6 +52,7 @@
     "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/postcss": "^4.3.0",
     "autoprefixer": "^10.5.0",
+    "c8": "^11.0.0",
     "esbuild": "^0.28.0",
     "postcss": "^8.5.10",
     "postcss-prefix-selector": "^2.1.1",
