@@ -14,6 +14,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Trust the first proxy (Nginx/Apache) — required for express-rate-limit to
+// read the real client IP from X-Forwarded-For in production.
+app.set('trust proxy', 1);
+
 // Security headers middleware
 app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
