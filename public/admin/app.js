@@ -751,6 +751,18 @@ const app = {
         this.showSection('posts');
     },
 
+    showAddDomainForm() {
+        const panel = document.getElementById('add-domain-panel');
+        panel.classList.remove('hidden');
+        document.getElementById('domain-name').focus();
+        if (window.lucide) lucide.createIcons();
+    },
+
+    hideAddDomainForm() {
+        document.getElementById('add-domain-panel').classList.add('hidden');
+        document.getElementById('add-domain-form').reset();
+    },
+
     async handleAddDomain(e) {
         e.preventDefault();
         const btn = e.target.querySelector('[type="submit"]');
@@ -766,7 +778,7 @@ const app = {
                 }),
             });
             if (res.ok) {
-                e.target.reset();
+                this.hideAddDomainForm();
                 this.loadDomains();
                 this.showToast('Domain added successfully.');
             } else {
@@ -896,7 +908,19 @@ const app = {
             this.initBlockedWordsInput();
             this._renderBlockedTags();
 
-            // Reveal the section only after all fields are populated
+            // SMTP / Notifications
+            document.getElementById('settings-smtp-host').value         = d.smtp_host || '';
+            document.getElementById('settings-smtp-port').value         = d.smtp_port || 587;
+            document.getElementById('settings-smtp-secure').checked     = !!d.smtp_secure;
+            document.getElementById('settings-smtp-user').value         = d.smtp_user || '';
+            document.getElementById('settings-smtp-from').value         = d.smtp_from || '';
+            document.getElementById('settings-notify-email').value      = d.notify_email || '';
+            document.getElementById('settings-notify-on-comment').checked = !!d.notify_on_comment;
+            document.getElementById('settings-notify-on-reply').checked   = !!d.notify_on_reply;
+            this._smtpPassSetSavedState(!!d.smtp_pass_set);
+
+            // Reset to General tab and reveal
+            this.switchSettingsTab('general');
             document.getElementById('settings-section').classList.remove('hidden');
         } catch (err) {
             console.error(err);
@@ -959,8 +983,8 @@ const app = {
         const apcaOk  = apca >= 60;
 
         const pill = (label, ok, title) =>
-            `<span title="${title}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.625rem;border-radius:9999px;font-size:0.75rem;font-weight:600;background:${ok ? '#dcfce7' : '#fee2e2'};color:${ok ? '#15803d' : '#b91c1c'}">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${ok ? '<polyline points="20 6 9 17 4 12"/>' : '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'}</svg>
+            `<span title="${title}" style="display:inline-flex;align-items:center;gap:0.25rem;padding:0.2rem 0.5rem;border-radius:6px;font-size:0.6875rem;font-weight:600;letter-spacing:0.01em;background:${ok ? '#dcfce7' : '#fee2e2'};color:${ok ? '#15803d' : '#b91c1c'}">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${ok ? '<polyline points="20 6 9 17 4 12"/>' : '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'}</svg>
                 ${label}
             </span>`;
 
@@ -1019,20 +1043,39 @@ const app = {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    domain:            document.getElementById('settings-domain').value.trim(),
-                    site_name:         document.getElementById('settings-site-name').value.trim(),
-                    honeypot_question: document.getElementById('settings-hq').value.trim(),
-                    primary_color:     /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : null,
-                    blocked_words:     this.blockedWords,
+                    domain:              document.getElementById('settings-domain').value.trim(),
+                    site_name:           document.getElementById('settings-site-name').value.trim(),
+                    honeypot_question:   document.getElementById('settings-hq').value.trim(),
+                    primary_color:       /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : null,
+                    blocked_words:       this.blockedWords,
+                    smtp_host:           document.getElementById('settings-smtp-host').value.trim(),
+                    smtp_port:           parseInt(document.getElementById('settings-smtp-port').value, 10) || 587,
+                    smtp_secure:         document.getElementById('settings-smtp-secure').checked,
+                    smtp_user:           document.getElementById('settings-smtp-user').value.trim(),
+                    smtp_pass:           document.getElementById('settings-smtp-pass').value,
+                    smtp_from:           document.getElementById('settings-smtp-from').value.trim(),
+                    notify_email:        document.getElementById('settings-notify-email').value.trim(),
+                    notify_on_comment:   document.getElementById('settings-notify-on-comment').checked,
+                    notify_on_reply:     document.getElementById('settings-notify-on-reply').checked,
                 }),
             });
             if (res.ok) {
-                // Refresh local cache
+                // Refresh local cache and re-populate SMTP fields
                 const updated = await fetch(`/api/admin/domains/${id}`);
                 if (updated.ok) {
                     const d = await updated.json();
                     const idx = this.domains.findIndex(x => x.id == id);
                     if (idx !== -1) this.domains[idx] = { ...this.domains[idx], ...d };
+                    // Refresh SMTP UI state without re-running the full loadSettings
+                    document.getElementById('settings-smtp-host').value         = d.smtp_host || '';
+                    document.getElementById('settings-smtp-port').value         = d.smtp_port || 587;
+                    document.getElementById('settings-smtp-secure').checked     = !!d.smtp_secure;
+                    document.getElementById('settings-smtp-user').value         = d.smtp_user || '';
+                    document.getElementById('settings-smtp-from').value         = d.smtp_from || '';
+                    document.getElementById('settings-notify-email').value      = d.notify_email || '';
+                    document.getElementById('settings-notify-on-comment').checked = !!d.notify_on_comment;
+                    document.getElementById('settings-notify-on-reply').checked   = !!d.notify_on_reply;
+                    this._smtpPassSetSavedState(!!d.smtp_pass_set);
                 }
                 this.showToast('Settings saved.');
             } else {
@@ -1041,6 +1084,111 @@ const app = {
             }
         } catch { this.showToast('Network error. Please try again.', 'error'); }
         finally { btn.disabled = false; }
+    },
+
+    toggleSmtpPassVisibility() {
+        const input = document.getElementById('settings-smtp-pass');
+        const icon  = document.getElementById('smtp-pass-eye');
+        const show  = input.type === 'password';
+        input.type  = show ? 'text' : 'password';
+        if (icon) { icon.setAttribute('data-lucide', show ? 'eye-off' : 'eye'); lucide.createIcons(); }
+    },
+
+    _smtpPassSetSavedState(isSet) {
+        const saved  = document.getElementById('smtp-pass-saved');
+        const edit   = document.getElementById('smtp-pass-edit');
+        const cancel = document.getElementById('smtp-pass-cancel');
+        const input  = document.getElementById('settings-smtp-pass');
+        if (isSet) {
+            saved.style.display = 'flex';
+            saved.style.flexDirection = 'column';
+            saved.classList.remove('hidden');
+            edit.style.display  = 'none';
+            cancel.classList.add('hidden');
+            input.value = '';
+        } else {
+            saved.style.display = 'none';
+            saved.classList.add('hidden');
+            edit.style.display  = 'block';
+            cancel.classList.add('hidden');
+            input.value = '';
+        }
+    },
+
+    smtpPassStartChange() {
+        const saved  = document.getElementById('smtp-pass-saved');
+        const edit   = document.getElementById('smtp-pass-edit');
+        const cancel = document.getElementById('smtp-pass-cancel');
+        saved.style.display = 'none';
+        edit.style.display  = 'block';
+        cancel.classList.remove('hidden');
+        document.getElementById('settings-smtp-pass').focus();
+    },
+
+    smtpPassCancelChange() {
+        this._smtpPassSetSavedState(true);
+    },
+
+    switchSettingsTab(tab) {
+        document.querySelectorAll('#settings-tabs .tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.stab === tab);
+        });
+        document.querySelectorAll('.settings-tab-panel').forEach(p => {
+            p.classList.toggle('hidden', p.id !== `stab-${tab}`);
+        });
+        requestAnimationFrame(() => {
+            const indicator  = document.getElementById('settings-tab-indicator');
+            const activeTab  = document.querySelector(`#settings-tabs .tab[data-stab="${tab}"]`);
+            if (!indicator || !activeTab) return;
+            indicator.style.left  = activeTab.offsetLeft + 'px';
+            indicator.style.width = activeTab.offsetWidth + 'px';
+        });
+    },
+
+    async previewEmail(type) {
+        const id = document.getElementById('settings-domain-id').value;
+        if (!id) return;
+        const modal = document.getElementById('email-preview-modal');
+        const frame = document.getElementById('email-preview-frame');
+        frame.srcdoc = '<div style="font-family:sans-serif;padding:2rem;color:#94a3b8;text-align:center">Loading…</div>';
+        frame.style.width = '600px';
+        document.getElementById('preview-btn-desktop').style.color = 'var(--accent-fg)';
+        document.getElementById('preview-btn-mobile').style.color  = '';
+        modal.classList.add('open');
+        if (window.lucide) lucide.createIcons();
+        try {
+            const res = await fetch(`/api/admin/domains/${id}/email-preview?type=${type}`, { credentials: 'same-origin' });
+            const html = await res.text();
+            frame.srcdoc = html;
+        } catch {
+            frame.srcdoc = '<div style="font-family:sans-serif;padding:2rem;color:#ef4444;text-align:center">Failed to load preview.</div>';
+        }
+    },
+
+    closeEmailPreview() {
+        document.getElementById('email-preview-modal').classList.remove('open');
+        document.getElementById('email-preview-frame').srcdoc = '';
+    },
+
+    setEmailPreviewWidth(mode) {
+        const frame  = document.getElementById('email-preview-frame');
+        const mobile = mode === 'mobile';
+        frame.style.width = mobile ? '375px' : '600px';
+        document.getElementById('preview-btn-desktop').style.color = mobile ? '' : 'var(--accent-fg)';
+        document.getElementById('preview-btn-mobile').style.color  = mobile ? 'var(--accent-fg)' : '';
+    },
+
+    async sendTestEmail() {
+        const id = document.getElementById('settings-domain-id').value;
+        if (!id) return;
+        try {
+            const res = await fetch(`/api/admin/domains/${id}/test-email`, { method: 'POST' });
+            const data = await res.json();
+            if (res.ok) this.showToast('Test email sent — check your inbox.');
+            else this.showToast(data.error || 'Failed to send test email.', 'error');
+        } catch {
+            this.showToast('Network error. Please try again.', 'error');
+        }
     },
 
     // ── Posts ──────────────────────────────────────────────────────────────

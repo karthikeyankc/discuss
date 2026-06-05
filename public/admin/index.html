@@ -389,8 +389,11 @@
                     <div class="section-heading">
                         <div class="section-heading-icon"><i data-lucide="globe"></i></div>
                         <h2>Your Domains</h2>
+                        <button type="button" class="btn btn-primary btn-sm" style="margin-left:auto" onclick="app.showAddDomainForm()">
+                            <i data-lucide="plus"></i> Add Domain
+                        </button>
                     </div>
-                    <div class="table-wrap mb-10">
+                    <div class="table-wrap mb-6">
                         <table class="table w-full text-left">
                             <thead>
                                 <tr>
@@ -404,40 +407,46 @@
                         </table>
                     </div>
 
-                    <!-- Add domain -->
-                    <div class="section-heading">
-                        <div class="section-heading-icon"><i data-lucide="plus-circle"></i></div>
-                        <h2>Add New Domain</h2>
-                    </div>
-                    <form id="add-domain-form" class="max-w-2xl mb-10" style="display:block">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="field-group">
-                                <label class="label" for="domain-name">Domain</label>
-                                <input type="text" id="domain-name" class="input" placeholder="example.com" required>
-                                <p class="field-help-text">Hostname only — no <code>https://</code> or trailing slash.</p>
-                            </div>
-                            <div class="field-group">
-                                <label class="label" for="domain-site-name">Site Name</label>
-                                <input type="text" id="domain-site-name" class="input" placeholder="My Blog" required>
-                                <p class="field-help-text">A friendly label shown in your admin dashboard.</p>
-                            </div>
+                    <!-- Add domain form (hidden until button clicked) -->
+                    <div id="add-domain-panel" class="hidden" style="border:1px solid var(--bds);border-radius:10px;padding:1.5rem;margin-bottom:2rem;background:var(--s2)">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+                            <h3 style="margin:0;font-size:1rem;font-weight:600;color:var(--t1)">Add New Domain</h3>
+                            <button type="button" class="btn btn-ghost btn-sm" onclick="app.hideAddDomainForm()">
+                                <i data-lucide="x" style="width:1rem;height:1rem"></i>
+                            </button>
                         </div>
-                        <div class="field-group max-w-sm">
-                            <label class="label" for="domain-hq">
-                                Spam Trap Label
-                                <span style="color:var(--t4);font-weight:400">(Optional)</span>
-                                <span class="help-icon-wrap" tabindex="0" aria-describedby="domain-hq-tip">
-                                    <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
-                                    <span class="help-tooltip" id="domain-hq-tip" role="tooltip">
-                                        A <strong>honeypot field</strong> — a hidden form field that real visitors never see or fill in. Spam bots, which blindly complete every input, will fill it in and get silently rejected. No captchas, no friction for your readers.
+                        <form id="add-domain-form" class="max-w-2xl">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="field-group">
+                                    <label class="label" for="domain-name">Domain</label>
+                                    <input type="text" id="domain-name" class="input" placeholder="example.com" required>
+                                    <p class="field-help-text">Hostname only — no <code>https://</code> or trailing slash.</p>
+                                </div>
+                                <div class="field-group">
+                                    <label class="label" for="domain-site-name">Site Name</label>
+                                    <input type="text" id="domain-site-name" class="input" placeholder="My Blog" required>
+                                    <p class="field-help-text">How this site is identified in your dashboard.</p>
+                                </div>
+                            </div>
+                            <div class="field-group max-w-sm">
+                                <label class="label" for="domain-hq">
+                                    Honeypot Field
+                                    <span style="color:var(--t4);font-weight:400">(Optional)</span>
+                                    <span class="help-icon-wrap" tabindex="0" aria-describedby="domain-hq-tip">
+                                        <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
+                                        <span class="help-tooltip" id="domain-hq-tip" role="tooltip">
+                                            A hidden field bots fill in but humans never see. Any submission that includes it is silently dropped.
+                                        </span>
                                     </span>
-                                </span>
-                            </label>
-                            <input type="text" id="domain-hq" class="input" placeholder="e.g. What's the name of the red planet?">
-                            <p class="field-help-text">A hidden field that spam bots fill in automatically — real visitors never see it. Leave empty to disable.</p>
-                        </div>
-                        <div><button type="submit" class="btn btn-primary">Add Domain</button></div>
-                    </form>
+                                </label>
+                                <input type="text" id="domain-hq" class="input" placeholder="e.g. Leave this blank">
+                            </div>
+                            <div style="display:flex;gap:0.75rem">
+                                <button type="submit" class="btn btn-primary">Add Domain</button>
+                                <button type="button" class="btn btn-ghost" onclick="app.hideAddDomainForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Posts Section -->
@@ -505,99 +514,183 @@
                     <form id="settings-form" class="max-w-2xl">
                         <input type="hidden" id="settings-domain-id">
 
+                        <!-- Settings Tabs -->
+                        <div class="tabs mb-6" id="settings-tabs" role="tablist">
+                            <button type="button" class="tab active" role="tab" data-stab="general"       onclick="app.switchSettingsTab('general')">General</button>
+                            <button type="button" class="tab"        role="tab" data-stab="appearance"    onclick="app.switchSettingsTab('appearance')">Appearance</button>
+                            <button type="button" class="tab"        role="tab" data-stab="spam"          onclick="app.switchSettingsTab('spam')">Anti-spam</button>
+                            <button type="button" class="tab"        role="tab" data-stab="notifications" onclick="app.switchSettingsTab('notifications')">Notifications</button>
+                            <button type="button" class="tab"        role="tab" data-stab="embed"         onclick="app.switchSettingsTab('embed')">Embed</button>
+                            <span class="tab-indicator" id="settings-tab-indicator"></span>
+                        </div>
+
                         <!-- General -->
-                        <div class="settings-section">
-                            <div class="section-heading">
-                                <div class="section-heading-icon"><i data-lucide="globe"></i></div>
-                                <h2>General</h2>
+                        <div class="settings-tab-panel" id="stab-general">
+                            <div class="field-group">
+                                <label class="label" for="settings-domain">Domain</label>
+                                <input type="text" id="settings-domain" class="input" placeholder="example.com" required>
+                                <p class="field-help-text">The hostname of your site — no <code>https://</code> or trailing slash. Comments from other origins will be rejected.</p>
                             </div>
-                            <div>
-                                <div class="field-group">
-                                    <label class="label" for="settings-domain">Domain</label>
-                                    <input type="text" id="settings-domain" class="input" placeholder="example.com" required>
-                                    <p class="field-help-text">Hostname only — no <code>https://</code> or trailing slash. Comments posted from any other origin will be blocked.</p>
-                                </div>
-                                <div class="field-group">
-                                    <label class="label" for="settings-site-name">Site Name</label>
-                                    <input type="text" id="settings-site-name" class="input" placeholder="My Blog" required>
-                                    <p class="field-help-text">A friendly label shown in your admin dashboard.</p>
-                                </div>
+                            <div class="field-group">
+                                <label class="label" for="settings-site-name">Site Name</label>
+                                <input type="text" id="settings-site-name" class="input" placeholder="My Blog" required>
+                                <p class="field-help-text">How this site is identified in your dashboard and email notifications.</p>
                             </div>
                         </div>
 
                         <!-- Appearance -->
-                        <div class="settings-section">
-                            <div class="section-heading">
-                                <div class="section-heading-icon"><i data-lucide="palette"></i></div>
-                                <h2>Appearance</h2>
+                        <div class="settings-tab-panel hidden" id="stab-appearance">
+                            <div class="field-group">
+                                <label class="label">Brand Colour</label>
+                                <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+                                    <input type="color" id="settings-color-picker" value="#2563eb"
+                                           style="width:2.5rem;height:2.5rem;padding:0.125rem;border:1px solid var(--bd-control);border-radius:6px;cursor:pointer;background:var(--s1)"
+                                           oninput="app.onColorPickerInput(this.value)">
+                                    <input type="text" id="settings-color-hex" class="input" placeholder="#2563eb"
+                                           style="width:8rem;font-family:monospace"
+                                           oninput="app.onColorHexInput(this.value)"
+                                           maxlength="7">
+                                    <span id="settings-color-preview"
+                                          style="display:inline-flex;align-items:center;justify-content:center;padding:0.375rem 0.875rem;border-radius:6px;font-size:0.8125rem;font-weight:600;color:#fff;background:#2563eb;transition:background 150ms">
+                                        Preview
+                                    </span>
+                                </div>
+                                <p class="field-help-text">Applied to buttons and links in the comment widget — pick something that matches your site.</p>
                             </div>
-                            <div style="display:block">
-                                <div class="field-group">
-                                    <label class="label">Brand Colour</label>
-                                    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
-                                        <input type="color" id="settings-color-picker" value="#2563eb"
-                                               style="width:2.5rem;height:2.5rem;padding:0.125rem;border:1px solid var(--bd-control);border-radius:6px;cursor:pointer;background:var(--s1)"
-                                               oninput="app.onColorPickerInput(this.value)">
-                                        <input type="text" id="settings-color-hex" class="input" placeholder="#2563eb"
-                                               style="width:8rem;font-family:monospace"
-                                               oninput="app.onColorHexInput(this.value)"
-                                               maxlength="7">
-                                        <span id="settings-color-preview"
-                                              style="display:inline-flex;align-items:center;justify-content:center;padding:0.375rem 0.875rem;border-radius:6px;font-size:0.8125rem;font-weight:600;color:#fff;background:#2563eb;transition:background 150ms">
-                                            Preview
-                                        </span>
-                                    </div>
-                                    <p class="field-help-text">Used for buttons and interactive elements in the embedded comment widget.</p>
-                                </div>
-                                <div id="settings-a11y" style="display:none">
-                                    <div id="settings-a11y-inner" style="display:flex;gap:0.5rem;flex-wrap:wrap"></div>
-                                </div>
+                            <div id="settings-a11y" style="display:none">
+                                <div id="settings-a11y-inner" style="display:flex;gap:0.5rem;flex-wrap:wrap"></div>
                             </div>
                         </div>
 
                         <!-- Spam Protection -->
-                        <div class="settings-section">
-                            <div class="section-heading">
-                                <div class="section-heading-icon"><i data-lucide="shield"></i></div>
-                                <h2>Spam Protection</h2>
-                            </div>
-                            <div style="display:block">
-                                <div class="field-group">
-                                    <label class="label" for="settings-hq">
-                                        Spam Trap Label
-                                        <span style="color:var(--t4);font-weight:400">(Optional)</span>
-                                        <span class="help-icon-wrap" tabindex="0" aria-describedby="settings-hq-tip">
-                                            <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
-                                            <span class="help-tooltip" id="settings-hq-tip" role="tooltip">
-                                                A <strong>honeypot field</strong> — a hidden form field that real visitors never see or fill in. Spam bots, which blindly complete every input, will fill it in and get silently rejected. No captchas, no friction for your readers.
-                                            </span>
+                        <div class="settings-tab-panel hidden" id="stab-spam">
+                            <div class="field-group">
+                                <label class="label" for="settings-hq">
+                                    Honeypot Field
+                                    <span style="color:var(--t4);font-weight:400">(Optional)</span>
+                                    <span class="help-icon-wrap" tabindex="0" aria-describedby="settings-hq-tip">
+                                        <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
+                                        <span class="help-tooltip" id="settings-hq-tip" role="tooltip">
+                                            A hidden field bots fill in but humans never see. Any submission that includes it is silently dropped — no captchas, no friction for real readers.
                                         </span>
-                                    </label>
-                                    <input type="text" id="settings-hq" class="input" placeholder="e.g. What's the name of the red planet?">
-                                    <p class="field-help-text" style="display:block">A hidden field that spam bots fill in automatically — real visitors never see it. Leave empty to disable.</p>
+                                    </span>
+                                </label>
+                                <input type="text" id="settings-hq" class="input" placeholder="e.g. Leave this blank">
+                                <p class="field-help-text">The label bots see on the hidden field. Leave empty to disable.</p>
+                            </div>
+                            <div class="field-group">
+                                <label class="label">Blocked Words <span style="color:var(--t4);font-weight:400">(Optional)</span></label>
+                                <div id="blocked-words-input"
+                                     style="display:flex;flex-wrap:wrap;align-items:center;gap:0.375rem;min-height:2.75rem;padding:0.375rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;background:var(--s1);cursor:text;transition:border-color 120ms,box-shadow 120ms"
+                                     onclick="document.getElementById('blocked-words-field').focus()">
+                                    <input id="blocked-words-field" type="text"
+                                           placeholder="Type a word and press Enter…"
+                                           autocomplete="off" autocorrect="off" spellcheck="false"
+                                           style="border:none;outline:none;background:transparent;font-size:0.9375rem;color:var(--t1);min-width:14rem;flex:1;padding:0.25rem 0;line-height:1.4">
+                                </div>
+                                <p class="field-help-text">Held for review, silently. Press <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">Enter</kbd> or <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">,</kbd> to add a word.</p>
+                            </div>
+                        </div>
+
+                        <!-- Notifications -->
+                        <div class="settings-tab-panel hidden" id="stab-notifications">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="field-group">
+                                    <label class="label" for="settings-smtp-host">SMTP Host</label>
+                                    <input type="text" id="settings-smtp-host" class="input" placeholder="smtp.example.com">
+                                    <p class="field-help-text">Your provider's outgoing mail server.</p>
                                 </div>
                                 <div class="field-group">
-                                    <label class="label">Blocked Words <span style="color:var(--t4);font-weight:400">(Optional)</span></label>
-                                    <div id="blocked-words-input"
-                                         style="display:flex;flex-wrap:wrap;align-items:center;gap:0.375rem;min-height:2.75rem;padding:0.375rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;background:var(--s1);cursor:text;transition:border-color 120ms,box-shadow 120ms"
-                                         onclick="document.getElementById('blocked-words-field').focus()">
-                                        <input id="blocked-words-field" type="text"
-                                               placeholder="Type a word and press Enter…"
-                                               autocomplete="off" autocorrect="off" spellcheck="false"
-                                               style="border:none;outline:none;background:transparent;font-size:0.9375rem;color:var(--t1);min-width:14rem;flex:1;padding:0.25rem 0;line-height:1.4">
-                                    </div>
-                                    <p class="field-help-text" style="display:block">Comments containing any of these words are silently held for moderation — the commenter sees no error. Case-insensitive, whole-word match. Press <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">Enter</kbd> or <kbd style="font-size:0.7rem;padding:0.1rem 0.35rem;border:1px solid var(--bd);border-radius:3px;background:var(--s3)">,</kbd> to add a word.</p>
+                                    <label class="label" for="settings-smtp-port">Port</label>
+                                    <input type="number" id="settings-smtp-port" class="input" placeholder="587" min="1" max="65535">
+                                    <p class="field-help-text">587 (STARTTLS) or 465 (TLS).</p>
                                 </div>
+                            </div>
+
+                            <div class="field-group">
+                                <label style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.9375rem;color:var(--t2)">
+                                    <input type="checkbox" id="settings-smtp-secure" style="width:1rem;height:1rem;accent-color:var(--b600)">
+                                    Use SSL/TLS on connect (port 465)
+                                </label>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="field-group">
+                                    <label class="label" for="settings-smtp-user">Username</label>
+                                    <input type="text" id="settings-smtp-user" class="input" placeholder="you@example.com" autocomplete="off">
+                                    <p class="field-help-text">Usually your full email address.</p>
+                                </div>
+
+                                <div class="field-group">
+                                <label class="label" for="settings-smtp-pass">
+                                    Password / API Key
+                                    <span class="help-icon-wrap" tabindex="0" aria-describedby="smtp-pass-tip">
+                                        <i data-lucide="info" style="width:0.9rem;height:0.9rem;vertical-align:middle;color:var(--t4);margin-left:0.25rem;cursor:help"></i>
+                                        <span class="help-tooltip" id="smtp-pass-tip" role="tooltip">
+                                            Stored encrypted — never saved in plain text. For Gmail, use an App Password. For Postmark, Resend, or similar, use the API key they provide.
+                                        </span>
+                                    </span>
+                                </label>
+                                <!-- Saved state: masked input full-width + Change link below -->
+                                <div id="smtp-pass-saved" class="hidden" style="display:none;flex-direction:column;gap:0.375rem">
+                                    <input type="password" class="input" value="placeholder" disabled
+                                           style="color:var(--t4);cursor:default" tabindex="-1">
+                                    <a href="#" onclick="app.smtpPassStartChange();return false;" style="font-size:0.8125rem;color:var(--accent-fg);text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Change password</a>
+                                </div>
+                                <!-- Edit state: real input + Cancel button -->
+                                <div id="smtp-pass-edit" style="position:relative">
+                                    <input type="password" id="settings-smtp-pass" class="input" placeholder="Password or API key" autocomplete="new-password" style="padding-right:2.5rem">
+                                    <button type="button" onclick="app.toggleSmtpPassVisibility()"
+                                            style="position:absolute;right:0.625rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--t4);display:flex;align-items:center;padding:0"
+                                            aria-label="Toggle password visibility">
+                                        <i data-lucide="eye" id="smtp-pass-eye" style="width:1rem;height:1rem"></i>
+                                    </button>
+                                </div>
+                                <button type="button" id="smtp-pass-cancel" class="btn btn-ghost btn-sm hidden" style="margin-top:0.375rem" onclick="app.smtpPassCancelChange()">Cancel</button>
+                                </div>
+                            </div><!-- end username/password grid -->
+
+                            <div class="field-group">
+                                <label class="label" for="settings-smtp-from">Sender Name <span style="color:var(--t4);font-weight:400">(Optional)</span></label>
+                                <input type="text" id="settings-smtp-from" class="input" placeholder="Discuss">
+                                <p class="field-help-text">The name recipients see in their inbox. Defaults to your username if left blank.</p>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="label" for="settings-notify-email">Send notifications to</label>
+                                <input type="email" id="settings-notify-email" class="input" placeholder="you@example.com">
+                                <p class="field-help-text">Where alerts land — typically your own email.</p>
+                            </div>
+
+                            <div style="display:flex;flex-direction:column;gap:0.625rem;margin-bottom:1.25rem">
+                                <label style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.9375rem;color:var(--t2)">
+                                    <input type="checkbox" id="settings-notify-on-comment" style="width:1rem;height:1rem;accent-color:var(--b600)">
+                                    New comment on any post
+                                </label>
+                                <label style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.9375rem;color:var(--t2)">
+                                    <input type="checkbox" id="settings-notify-on-reply" style="width:1rem;height:1rem;accent-color:var(--b600)">
+                                    Someone replies to one of your comments
+                                </label>
+                            </div>
+
+                            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="app.sendTestEmail()">
+                                    <i data-lucide="send" style="width:0.875rem;height:0.875rem"></i>
+                                    Send test email
+                                </button>
+                                <span style="font-size:0.8125rem;color:var(--t4)">Preview:
+                                    <a href="#" onclick="app.previewEmail('comment');return false" style="color:var(--accent-fg);margin-left:0.375rem">New comment</a>
+                                    <span style="color:var(--bds);margin:0 0.25rem">·</span>
+                                    <a href="#" onclick="app.previewEmail('reply-to-admin');return false" style="color:var(--accent-fg)">Reply to you</a>
+                                    <span style="color:var(--bds);margin:0 0.25rem">·</span>
+                                    <a href="#" onclick="app.previewEmail('reply-to-commenter');return false" style="color:var(--accent-fg)">Reply to commenter</a>
+                                </span>
                             </div>
                         </div>
 
                         <!-- Embed Code -->
-                        <div class="settings-section">
-                            <div class="section-heading">
-                                <div class="section-heading-icon"><i data-lucide="code-2"></i></div>
-                                <h2>Embed Code</h2>
-                            </div>
-                            <p class="section-desc">Drop this snippet on any page where you want comments to appear. The <code>primaryColor</code> option pre-applies your brand colour instantly — no flash of unstyled content.</p>
+                        <div class="settings-tab-panel hidden" id="stab-embed">
+                            <p class="section-desc">Paste this snippet wherever you want comments to appear. That's it.</p>
                             <div style="position:relative">
                                 <pre id="settings-embed-snippet" style="font-size:0.75rem;line-height:1.6;white-space:pre;overflow-x:auto;padding-right:6rem"></pre>
                                 <button type="button" id="settings-copy-btn"
@@ -609,7 +702,7 @@
                             </div>
                         </div>
 
-                        <div style="display:flex;gap:0.75rem;padding-bottom:2rem">
+                        <div style="display:flex;gap:0.75rem;padding-top:2rem;padding-bottom:2rem;border-top:1px solid var(--bds);margin-top:2rem">
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                             <button type="button" class="btn btn-ghost" onclick="app.showSection('domains')">Cancel</button>
                         </div>
@@ -617,6 +710,30 @@
                 </div>
 
             </main>
+        </div>
+    </div>
+
+    <!-- Email Preview Modal -->
+    <div id="email-preview-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="email-preview-title" onclick="if(event.target===this)app.closeEmailPreview()">
+        <div class="modal" style="max-width:680px;width:100%;display:flex;flex-direction:column;max-height:90vh">
+            <div class="modal-header" style="flex-shrink:0">
+                <h2 class="modal-title" id="email-preview-title">Email Preview</h2>
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto">
+                    <button type="button" class="btn btn-ghost btn-sm" id="preview-btn-desktop" onclick="app.setEmailPreviewWidth('desktop')" style="color:var(--accent-fg)">
+                        <i data-lucide="monitor" style="width:1rem;height:1rem"></i>
+                    </button>
+                    <button type="button" class="btn btn-ghost btn-sm" id="preview-btn-mobile" onclick="app.setEmailPreviewWidth('mobile')">
+                        <i data-lucide="smartphone" style="width:1rem;height:1rem"></i>
+                    </button>
+                    <div style="width:1px;height:1rem;background:var(--bds);margin:0 0.25rem"></div>
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="app.closeEmailPreview()">
+                        <i data-lucide="x" style="width:1rem;height:1rem"></i>
+                    </button>
+                </div>
+            </div>
+            <div style="flex:1;overflow:auto;background:var(--s3);padding:1.5rem;display:flex;justify-content:center">
+                <iframe id="email-preview-frame" style="border:none;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,0.12);width:600px;height:600px;transition:width 300ms ease;background:#fff"></iframe>
+            </div>
         </div>
     </div>
 
