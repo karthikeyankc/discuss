@@ -13,7 +13,7 @@ const cssContent = injectedCss + `
         --accent-fg:#93c5fd; --accent-surface:color-mix(in srgb,#1e40af 32%,#111827); --focus-ring:#93c5fd;
     }
 
-    #discuss-comments { text-align: left; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: transparent; }
+    #discuss-comments { text-align: left; box-sizing: border-box; font-family: var(--discuss-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif); background-color: transparent; }
     #discuss-comments * { box-sizing: inherit; }
     #discuss-comments button, #discuss-comments input, #discuss-comments textarea, #discuss-comments select {
         appearance: none; -webkit-appearance: none;

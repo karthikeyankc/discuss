@@ -48,6 +48,18 @@ Use `new DiscussWidget({...})` only if you need to override defaults:
 | `primaryColor` | fetched from server | Brand colour for buttons and links |
 | `domainId` | *(none)* | Required when posting from a cross-origin admin context |
 
+## Custom font
+
+The widget uses the system font stack by default. To use a custom font, set the `--discuss-font-family` CSS variable on any ancestor element — no `!important` required:
+
+```css
+#discuss-comments {
+    --discuss-font-family: 'Inter', sans-serif;
+}
+```
+
+The host page is responsible for loading the font (e.g. via Google Fonts). The variable just tells the widget which font to use.
+
 ## Cross-origin setup
 
 If your Discuss server is on a different domain from your site (e.g. `discuss.example.com` serving comments for `myblog.com`), register `myblog.com` as a domain in the admin dashboard. The widget handles the rest — CORS is configured automatically per registered domain.
