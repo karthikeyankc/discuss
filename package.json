@@ -48,7 +48,6 @@
     "sanitize-html": "^2.17.3"
   },
   "devDependencies": {
-    "@karthikeyankc/ken-design-system": "file:../../ken-design-system",
     "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/postcss": "^4.3.0",
     "autoprefixer": "^10.5.0",
