@@ -729,9 +729,6 @@ const app = {
                         <button onclick="app.openSettings(${d.id})" class="btn btn-ghost btn-sm">
                             <i data-lucide="settings"></i> Settings
                         </button>
-                        <button onclick="app.deleteDomain(${d.id})" class="btn btn-ghost btn-sm text-danger-600 hover:text-danger-700 hover:bg-danger-50">
-                            <i data-lucide="trash-2"></i> Delete
-                        </button>
                     </td>`;
                 tbody.appendChild(tr);
             });
@@ -787,6 +784,23 @@ const app = {
             }
         } catch { this.showToast('Network error. Please try again.', 'error'); }
         finally { btn.disabled = false; }
+    },
+
+    async exportDomain() {
+        const id = this.currentDomainId;
+        const d = this.domains.find(d => d.id == id);
+        try {
+            const res = await fetch(`/api/admin/comments?domain_id=${id}`);
+            if (!res.ok) return this.showToast('Export failed.', 'error');
+            const comments = await res.json();
+            const blob = new Blob([JSON.stringify(comments, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${d?.domain || 'comments'}-export.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch { this.showToast('Export failed.', 'error'); }
     },
 
     async deleteDomain(id) {
@@ -888,11 +902,16 @@ const app = {
             if (!res.ok) return this.showSection('domains');
             const d = await res.json();
 
-            document.getElementById('settings-domain-id').value  = d.id;
-            document.getElementById('settings-domain').value     = d.domain;
-            document.getElementById('settings-site-name').value  = d.site_name;
-            document.getElementById('settings-hq').value         = d.honeypot_question || '';
+            document.getElementById('settings-domain-id').value       = d.id;
+            document.getElementById('settings-domain').value           = d.domain;
+            document.getElementById('settings-site-name').value        = d.site_name;
+            document.getElementById('settings-allowed-origins').value  = d.allowed_origins || '';
+            document.getElementById('settings-hq').value               = d.honeypot_question || '';
             document.getElementById('settings-breadcrumb-domain').textContent = d.domain;
+
+            const domainMeta = this.domains.find(x => x.id == id);
+            const count = domainMeta?.total_count ?? 0;
+            document.getElementById('export-count-note').textContent = `This domain has ${count.toLocaleString()} comment${count !== 1 ? 's' : ''}.`;
 
             const color = d.primary_color || '#2563eb';
             document.getElementById('settings-color-picker').value = color;
@@ -1045,6 +1064,7 @@ const app = {
                 body: JSON.stringify({
                     domain:              document.getElementById('settings-domain').value.trim(),
                     site_name:           document.getElementById('settings-site-name').value.trim(),
+                    allowed_origins:     document.getElementById('settings-allowed-origins').value,
                     honeypot_question:   document.getElementById('settings-hq').value.trim(),
                     primary_color:       /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : null,
                     blocked_words:       this.blockedWords,
@@ -1196,6 +1216,7 @@ const app = {
     async loadPosts() {
         if (!this.currentDomainId) return this.showSection('domains');
         const name = this.getDomainName(this.currentDomainId);
+        this.currentDomainName = name;
         document.getElementById('posts-breadcrumb-domain').textContent  = name;
         document.getElementById('comments-breadcrumb-domain').textContent = name;
 
@@ -1244,12 +1265,16 @@ const app = {
 
     async loadComments() {
         if (!this.currentDomainId || !this.currentPostUrl) return this.showSection('domains');
+        const domainName = this.getDomainName(this.currentDomainId);
+        this.currentDomainName = domainName;
+        document.getElementById('comments-breadcrumb-domain').textContent = domainName;
         document.getElementById('comments-subtitle').textContent = `Post: ${this.currentPostUrl}`;
         const list = document.getElementById('comments-list');
         list.innerHTML = '<div id="discuss-comments"></div>';
         new window.DiscussWidget({
             container: document.getElementById('discuss-comments'),
             fetchUrl: `/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`,
+            configUrl: `/api/admin/domains/${this.currentDomainId}/config`,
             serverUrl: window.location.origin,
             postUrl: this.currentPostUrl,
             domainId: this.currentDomainId,
@@ -1257,4 +1282,5 @@ const app = {
     },
 };
 
+window.app = app;
 document.addEventListener('DOMContentLoaded', () => app.init());

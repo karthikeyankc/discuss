@@ -521,6 +521,7 @@
                             <button type="button" class="tab"        role="tab" data-stab="spam"          onclick="app.switchSettingsTab('spam')">Anti-spam</button>
                             <button type="button" class="tab"        role="tab" data-stab="notifications" onclick="app.switchSettingsTab('notifications')">Notifications</button>
                             <button type="button" class="tab"        role="tab" data-stab="embed"         onclick="app.switchSettingsTab('embed')">Embed</button>
+                            <button type="button" class="tab"        role="tab" data-stab="advanced"      onclick="app.switchSettingsTab('advanced')">Advanced</button>
                             <span class="tab-indicator" id="settings-tab-indicator"></span>
                         </div>
 
@@ -535,6 +536,11 @@
                                 <label class="label" for="settings-site-name">Site Name</label>
                                 <input type="text" id="settings-site-name" class="input" placeholder="My Blog" required>
                                 <p class="field-help-text">How this site is identified in your dashboard and email notifications.</p>
+                            </div>
+                            <div class="field-group">
+                                <label class="label" for="settings-allowed-origins">Additional allowed origins</label>
+                                <textarea id="settings-allowed-origins" class="input" rows="3" placeholder="http://localhost:4321&#10;http://localhost:3000" style="font-family:monospace;font-size:0.8125rem;resize:vertical"></textarea>
+                                <p class="field-help-text">One origin per line, including protocol and port. Use this to allow your local dev server to post comments to this domain.</p>
                             </div>
                         </div>
 
@@ -702,11 +708,37 @@
                             </div>
                         </div>
 
+                        <!-- Advanced -->
+                        <div class="settings-tab-panel hidden" id="stab-advanced">
+                            <div class="settings-section">
+                                <h3 style="margin:0 0 1rem;font-size:0.875rem;font-weight:600;color:var(--t1)">Export</h3>
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem">
+                                    <div>
+                                        <p style="margin:0;font-size:0.875rem;font-weight:500">Export comments</p>
+                                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--t3)">Download all comments for this domain as a JSON file.</p>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary btn-sm" style="white-space:nowrap" onclick="app.exportDomain()">Export JSON</button>
+                                </div>
+                                <p id="export-count-note" style="margin:0.75rem 0 0;font-size:0.8125rem;color:var(--t3)"></p>
+                            </div>
+                            <div class="settings-section">
+                                <h3 style="margin:0 0 1rem;font-size:0.875rem;font-weight:600;color:var(--danger-fg)">Danger Zone</h3>
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1rem 1.25rem;border:1px solid #fca5a5;border-radius:8px">
+                                    <div>
+                                        <p style="margin:0;font-size:0.875rem;font-weight:500">Delete this domain</p>
+                                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--t3)">Permanently removes this domain and all its comments. This cannot be undone.</p>
+                                    </div>
+                                    <button type="button" class="btn btn-danger btn-sm" style="white-space:nowrap" onclick="app.deleteDomain(app.currentDomainId)">Delete Domain</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div style="display:flex;gap:0.75rem;padding-top:2rem;padding-bottom:2rem;border-top:1px solid var(--bds);margin-top:2rem">
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                             <button type="button" class="btn btn-ghost" onclick="app.showSection('domains')">Cancel</button>
                         </div>
                     </form>
+
                 </div>
 
             </main>

@@ -32,10 +32,14 @@ try { db.exec('ALTER TABLE domains ADD COLUMN smtp_from TEXT'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN notify_email TEXT'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN notify_on_comment INTEGER DEFAULT 0'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN notify_on_reply INTEGER DEFAULT 0'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN allowed_origins TEXT'); } catch {}
 try { db.exec('ALTER TABLE comments ADD COLUMN content_raw TEXT'); } catch {}
 // Backfill: existing rows get content (rendered HTML) as their raw value — not ideal
 // but recoverable; any admin edit will replace it with true markdown going forward.
 try { db.exec("UPDATE comments SET content_raw = content WHERE content_raw IS NULL"); } catch {}
+
+// Normalize post_url: strip trailing slashes so /guestbook and /guestbook/ resolve to the same post.
+try { db.exec("UPDATE comments SET post_url = RTRIM(post_url, '/') WHERE post_url LIKE '%/'"); } catch {}
 
 // Backfill comments that were written before domain_id was wired up (domain_id = 0).
 // Assigns them to the first domain in the database so they show up in the admin.

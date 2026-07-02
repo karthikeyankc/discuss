@@ -8,12 +8,16 @@ function logoSrc() {
     return base ? `${base}/logo.png` : null;
 }
 
+// Replaceable in tests — call _setTransportForTest(fn) to swap the factory.
+let _createTransport = (...args) => nodemailer.createTransport(...args);
+export function _setTransportForTest(fn) { _createTransport = fn; }
+
 function buildTransport(domain) {
     const host = decrypt(domain.smtp_host);
     const user = decrypt(domain.smtp_user);
     const pass = decrypt(domain.smtp_pass);
     if (!host) return null;
-    return nodemailer.createTransport({
+    return _createTransport({
         host,
         port: domain.smtp_port || 587,
         secure: !!domain.smtp_secure,

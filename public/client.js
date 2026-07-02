@@ -1,4 +1,4 @@
-(()=>{var m={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var x=document.currentScript,C=x?new URL(x.src).origin:window.location.origin,$=`/*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */
+(()=>{var m={reply:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 18v-2a4 4 0 0 0-4-4H4"/><path d="m9 17-5-5 5-5"/></svg>',share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>'};var x=document.currentScript,C=x?new URL(x.src).origin:window.location.origin,$=`/*! tailwindcss v4.3.2 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer ken {
   @layer theme, base, components, utilities;
@@ -286,7 +286,7 @@
       }
     }
     #discuss-comments .discuss-mt-1 {
-      margin-top: calc(var(--spacing) * 1);
+      margin-top: var(--spacing);
     }
     #discuss-comments .discuss-mt-2 {
       margin-top: calc(var(--spacing) * 2);
@@ -376,7 +376,7 @@
       justify-content: center;
     }
     #discuss-comments .discuss-gap-1 {
-      gap: calc(var(--spacing) * 1);
+      gap: var(--spacing);
     }
     #discuss-comments .discuss-gap-3 {
       gap: calc(var(--spacing) * 3);
@@ -780,7 +780,7 @@
     #discuss-comments pre code {
       border-radius: var(--radius-none);
       background-color: transparent;
-      padding: calc(var(--spacing) * 0);
+      padding: 0;
       color: inherit;
     }
     #discuss-comments hr {
@@ -950,7 +950,7 @@
       color: var(--t2);
     }
     #discuss-comments .discuss-label {
-      margin-bottom: calc(var(--spacing) * 1);
+      margin-bottom: var(--spacing);
       display: block;
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
@@ -976,14 +976,14 @@
       color: var(--t4);
     }
     #discuss-comments .discuss-label-mono {
-      margin-top: calc(var(--spacing) * 1);
+      margin-top: var(--spacing);
       font-family: var(--font-mono);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
       color: var(--t4);
     }
     #discuss-comments .discuss-section-title {
-      margin-bottom: calc(var(--spacing) * 1);
+      margin-bottom: var(--spacing);
       font-size: var(--text-lg);
       line-height: var(--tw-leading, var(--text-lg--line-height));
       --tw-font-weight: var(--font-weight-semibold);
@@ -1201,12 +1201,12 @@
       margin-bottom: calc(var(--spacing) * 4);
       display: flex;
       flex-direction: column;
-      gap: calc(var(--spacing) * 1);
+      gap: var(--spacing);
     }
     #discuss-comments .discuss-field-help-text {
       display: flex;
       align-items: center;
-      gap: calc(var(--spacing) * 1);
+      gap: var(--spacing);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
       color: var(--t4);
@@ -1215,7 +1215,7 @@
     #discuss-comments .discuss-field-error-text {
       display: flex;
       align-items: center;
-      gap: calc(var(--spacing) * 1);
+      gap: var(--spacing);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
       color: var(--danger-fg);
@@ -1257,7 +1257,7 @@
     #discuss-comments .discuss-badge {
       display: inline-flex;
       align-items: center;
-      gap: calc(var(--spacing) * 1);
+      gap: var(--spacing);
       border-radius: calc(infinity * 1px);
       padding-inline: calc(var(--spacing) * 2.5);
       padding-block: calc(var(--spacing) * 0.5);
@@ -1571,7 +1571,7 @@
       z-index: 50;
       min-width: 180px;
       border-radius: var(--radius-lg);
-      padding: calc(var(--spacing) * 1);
+      padding: var(--spacing);
       top: calc(100% + 6px);
       left: 0;
       background-color: var(--s1);
@@ -1631,13 +1631,13 @@
       background-color: var(--color-danger-50);
     }
     #discuss-comments .discuss-dropdown-divider {
-      margin-block: calc(var(--spacing) * 1);
+      margin-block: var(--spacing);
       height: 1px;
       background-color: var(--bds);
     }
     #discuss-comments .discuss-dropdown-header {
       padding-inline: calc(var(--spacing) * 3);
-      padding-block: calc(var(--spacing) * 1);
+      padding-block: var(--spacing);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
       --tw-font-weight: var(--font-weight-semibold);
@@ -2516,7 +2516,7 @@
     }
   }
 }
-`,S=$+`
+`,T=$+`
     .dark #discuss-comments {
         --t1:#f8fafc; --t2:#e2e8f0; --t3:#cbd5e1; --t4:#94a3b8; --t5:#64748b;
         --s1:#111827; --s2:#0a1120; --s3:#1e293b;
@@ -2551,7 +2551,7 @@
     #discuss-comments .discuss-flex-col { flex-direction: column; }
     #discuss-comments .discuss-flex-wrap { flex-wrap: wrap; }
     #discuss-comments .discuss-font-semibold { font-weight: 600; }
-    #discuss-comments .discuss-font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    #discuss-comments .discuss-font-sans { font-family: inherit; }
     #discuss-comments .discuss-text-sm { font-size: 0.875rem; line-height: 1.25rem; }
     #discuss-comments .discuss-text-xs { font-size: 0.75rem; line-height: 1rem; }
     #discuss-comments .discuss-text-lg { font-size: 1.125rem; line-height: 1.75rem; }
@@ -2939,7 +2939,7 @@
         border-radius: 0.5rem;
         transition: box-shadow 300ms ease;
     }
-`;function T(){if(document.getElementById("discuss-styles"))return;let c=document.createElement("style");c.id="discuss-styles",c.textContent=S,document.head.appendChild(c)}function z(c){let s=parseInt(c.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function E(c,s,e){return"#"+[c,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function M(c,s,e){c/=255,s/=255,e/=255;let t=Math.max(c,s,e),i=Math.min(c,s,e),a,o,r=(t+i)/2;if(t===i)a=o=0;else{let n=t-i;switch(o=r>.5?n/(2-t-i):n/(t+i),t){case c:a=((s-e)/n+(s<e?6:0))/6;break;case s:a=((e-c)/n+2)/6;break;default:a=((c-s)/n+4)/6}}return[a*360,o,r]}function I(c,s,e){c/=360;let t=(o,r,n)=>(n<0&&(n+=1),n>1&&(n-=1),n<1/6?o+(r-o)*6*n:n<1/2?r:n<2/3?o+(r-o)*(2/3-n)*6:o);if(s===0){let o=Math.round(e*255);return[o,o,o]}let i=e<.5?e*(1+s):e+s-e*s,a=2*e-i;return[t(a,i,c+1/3),t(a,i,c),t(a,i,c-1/3)].map(o=>Math.round(o*255))}function _(c){let[s,e,t]=z(c),[i,a]=M(s,e,t),o={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},r={};for(let[n,d]of Object.entries(o)){let[l,p,g]=I(i,Math.min(a,.85),d);r[n]=E(l,p,g)}return r}var b=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||this.container.dataset.url||window.location.pathname,this.serverUrl=s.serverUrl||C,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.config={},this.primaryColor=s.primaryColor||null,this.domainId=s.domainId||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=_(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){T(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments\u2026</div>';try{let s=await fetch(`${this.serverUrl}/api/comments/config`);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
+`;function S(){if(document.getElementById("discuss-styles"))return;let a=document.createElement("style");a.id="discuss-styles",a.textContent=T,document.head.appendChild(a)}function z(a){let s=parseInt(a.replace("#",""),16);return[s>>16&255,s>>8&255,s&255]}function E(a,s,e){return"#"+[a,s,e].map(t=>Math.round(Math.max(0,Math.min(255,t))).toString(16).padStart(2,"0")).join("")}function M(a,s,e){a/=255,s/=255,e/=255;let t=Math.max(a,s,e),i=Math.min(a,s,e),c,o,r=(t+i)/2;if(t===i)c=o=0;else{let n=t-i;switch(o=r>.5?n/(2-t-i):n/(t+i),t){case a:c=((s-e)/n+(s<e?6:0))/6;break;case s:c=((e-a)/n+2)/6;break;default:c=((a-s)/n+4)/6}}return[c*360,o,r]}function I(a,s,e){a/=360;let t=(o,r,n)=>(n<0&&(n+=1),n>1&&(n-=1),n<1/6?o+(r-o)*6*n:n<1/2?r:n<2/3?o+(r-o)*(2/3-n)*6:o);if(s===0){let o=Math.round(e*255);return[o,o,o]}let i=e<.5?e*(1+s):e+s-e*s,c=2*e-i;return[t(c,i,a+1/3),t(c,i,a),t(c,i,a-1/3)].map(o=>Math.round(o*255))}function _(a){let[s,e,t]=z(a),[i,c]=M(s,e,t),o={50:.96,100:.93,200:.86,300:.74,400:.6,500:.48,600:.38,700:.3,800:.22,900:.15},r={};for(let[n,d]of Object.entries(o)){let[l,p,g]=I(i,Math.min(c,.85),d);r[n]=E(l,p,g)}return r}var b=class{constructor(s){window.DiscussWidgetInstance=this,this.container=s.container,this.container&&(this.postUrl=s.postUrl||this.container.dataset.url||window.location.pathname,this.serverUrl=s.serverUrl||C,this.fetchUrl=s.fetchUrl||`${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`,this.configUrl=s.configUrl||`${this.serverUrl}/api/comments/config`,this.config={},this.primaryColor=s.primaryColor||null,this.domainId=s.domainId||null,this.init=this.init.bind(this),this.render=this.render.bind(this),this.renderComment=this.renderComment.bind(this),this.renderForm=this.renderForm.bind(this),this.handleSubmit=this.handleSubmit.bind(this),this.primaryColor&&this.applyTheme(this.primaryColor),this.init())}applyTheme(s){if(!s||!/^#[0-9a-fA-F]{6}$/.test(s))return;let e=_(s),t=this.container;t.style.setProperty("--b50",e[50]),t.style.setProperty("--b100",e[100]),t.style.setProperty("--b200",e[200]),t.style.setProperty("--b300",e[300]),t.style.setProperty("--b400",e[400]),t.style.setProperty("--b500",e[500]),t.style.setProperty("--b600",e[600]),t.style.setProperty("--b700",e[700]),t.style.setProperty("--b800",e[800]),t.style.setProperty("--b900",e[900]),t.style.setProperty("--accent-fg",e[700]),t.style.setProperty("--accent-surface",e[50]),t.style.setProperty("--focus-ring",e[700])}async init(){S(),this.container.innerHTML='<div style="padding:1rem;color:#64748b;font-family:inherit">Loading comments\u2026</div>';try{let s=await fetch(this.configUrl);s.ok&&(this.config=await s.json(),this.config.primary_color&&this.applyTheme(this.config.primary_color));let e=await fetch(this.fetchUrl);if(!e.ok)throw new Error("Failed to load comments");let t=await e.json();this.render(t)}catch(s){this.container.innerHTML='<div style="padding:1rem;color:#dc2626;font-family:inherit">Error loading comments.</div>',console.error("[Discuss]",s)}}buildTree(s){let e={},t=[];return s.forEach(i=>{i.children=[],e[i.id]=i}),s.forEach(i=>{i.parent_id===0||!e[i.parent_id]?t.push(i):e[i.parent_id].children.push(i)}),t}render(s){let e=this.buildTree(s);this.container.innerHTML=`
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
                     <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
@@ -2953,7 +2953,7 @@
                     </div>
                 </div>`:""}
             </div>
-        `,this.container.querySelectorAll("form[data-parent]").forEach(i=>{i.addEventListener("submit",this.handleSubmit)}),this.container.querySelectorAll(".discuss-reply-tag").forEach(i=>{i.addEventListener("click",a=>{a.preventDefault();let o=a.currentTarget.getAttribute("href"),r=o.startsWith("#")?o.substring(1):o,n=document.getElementById(r);if(n){n.scrollIntoView({behavior:"smooth",block:"center"});let d=n.style.backgroundColor,l=document.documentElement.classList.contains("dark")||document.body.classList.contains("dark");n.style.backgroundColor=l?"#1e293b":"var(--b50)",n.style.borderRadius="8px",setTimeout(()=>{n.style.transition="background-color 500ms ease",n.style.backgroundColor=d,setTimeout(()=>{n.style.transition="",n.style.borderRadius=""},500)},1500)}})}),this.container.querySelectorAll(".discuss-reply-btn").forEach(i=>{i.addEventListener("click",a=>{let o=a.currentTarget.dataset.id,r=document.getElementById(`discuss-reply-form-${o}`);r&&r.classList.toggle("discuss-hidden")})});let t=i=>{let a=i.currentTarget.dataset.id,o=!1,r=document.getElementById(`discuss-collapse-target-${a}`);r&&(o=r.classList.toggle("discuss-hidden"));let n=document.getElementById(`discuss-children-${a}`);n&&(r?n.classList.toggle("discuss-hidden",o):o=n.classList.toggle("discuss-hidden"));let d=document.querySelector(`.discuss-collapse-btn[data-id="${a}"]`);if(d){let l=d.querySelector("svg");l&&(l.style.transform=o?"rotate(-90deg)":"rotate(0deg)")}};this.container.querySelectorAll(".discuss-collapse-btn, .discuss-collapse-line").forEach(i=>{i.addEventListener("click",t)}),this.container.querySelectorAll(".discuss-share-btn").forEach(i=>{i.addEventListener("click",async a=>{let o=a.currentTarget,r=o.dataset.id,n=`${window.location.origin}${window.location.pathname}#comment-${r}`;if(navigator.share){try{await navigator.share({title:document.title,url:n})}catch(d){if(d.name==="AbortError")return;await this.copyToClipboard(o,n)}return}await this.copyToClipboard(o,n)})})}async copyToClipboard(s,e){try{if(navigator.clipboard)await navigator.clipboard.writeText(e);else{window.prompt("Copy link:",e);return}s.innerHTML=`${m.share} <span>Copied!</span>`,setTimeout(()=>{s.innerHTML=`${m.share} <span>Share</span>`},2e3)}catch{window.prompt("Copy link:",e)}}getInitialsColor(s){let e=["#0d4891","#16a34a","#b45309","#1e40af","#dc2626","#6b21a8","#be185d","#0369a1"],t=0;for(let i=0;i<s.length;i++)t=s.charCodeAt(i)+((t<<5)-t);return e[Math.abs(t)%e.length]}getAvatarHtml(s){let e=s.name?s.name.charAt(0).toUpperCase():"U";return`
+        `,this.container.querySelectorAll("form[data-parent]").forEach(i=>{i.addEventListener("submit",this.handleSubmit)}),this.container.querySelectorAll(".discuss-reply-tag").forEach(i=>{i.addEventListener("click",c=>{c.preventDefault();let o=c.currentTarget.getAttribute("href"),r=o.startsWith("#")?o.substring(1):o,n=document.getElementById(r);if(n){n.scrollIntoView({behavior:"smooth",block:"center"});let d=n.style.backgroundColor,l=document.documentElement.classList.contains("dark")||document.body.classList.contains("dark");n.style.backgroundColor=l?"#1e293b":"var(--b50)",n.style.borderRadius="8px",setTimeout(()=>{n.style.transition="background-color 500ms ease",n.style.backgroundColor=d,setTimeout(()=>{n.style.transition="",n.style.borderRadius=""},500)},1500)}})}),this.container.querySelectorAll(".discuss-reply-btn").forEach(i=>{i.addEventListener("click",c=>{let o=c.currentTarget.dataset.id,r=document.getElementById(`discuss-reply-form-${o}`);r&&r.classList.toggle("discuss-hidden")})});let t=i=>{let c=i.currentTarget.dataset.id,o=!1,r=document.getElementById(`discuss-collapse-target-${c}`);r&&(o=r.classList.toggle("discuss-hidden"));let n=document.getElementById(`discuss-children-${c}`);n&&(r?n.classList.toggle("discuss-hidden",o):o=n.classList.toggle("discuss-hidden"));let d=document.querySelector(`.discuss-collapse-btn[data-id="${c}"]`);if(d){let l=d.querySelector("svg");l&&(l.style.transform=o?"rotate(-90deg)":"rotate(0deg)")}};this.container.querySelectorAll(".discuss-collapse-btn, .discuss-collapse-line").forEach(i=>{i.addEventListener("click",t)}),this.container.querySelectorAll(".discuss-share-btn").forEach(i=>{i.addEventListener("click",async c=>{let o=c.currentTarget,r=o.dataset.id,n=`${window.location.origin}${window.location.pathname}#comment-${r}`;if(navigator.share){try{await navigator.share({title:document.title,url:n})}catch(d){if(d.name==="AbortError")return;await this.copyToClipboard(o,n)}return}await this.copyToClipboard(o,n)})})}async copyToClipboard(s,e){try{if(navigator.clipboard)await navigator.clipboard.writeText(e);else{window.prompt("Copy link:",e);return}s.innerHTML=`${m.share} <span>Copied!</span>`,setTimeout(()=>{s.innerHTML=`${m.share} <span>Share</span>`},2e3)}catch{window.prompt("Copy link:",e)}}getInitialsColor(s){let e=["#0d4891","#16a34a","#b45309","#1e40af","#dc2626","#6b21a8","#be185d","#0369a1"],t=0;for(let i=0;i<s.length;i++)t=s.charCodeAt(i)+((t<<5)-t);return e[Math.abs(t)%e.length]}getAvatarHtml(s){let e=s.name?s.name.charAt(0).toUpperCase():"U";return`
             <div style="width:100%;height:100%;background-color:${this.getInitialsColor(s.name||"")};display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.875rem;position:relative;overflow:hidden;border-radius:inherit;">
                 ${e}
                 <img src="${s.avatar}" alt="${s.name}" 
@@ -2961,7 +2961,7 @@
                      onload="this.style.opacity='1';this.style.visibility='visible'" 
                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;visibility:hidden;transition:opacity 0.2s;" />
             </div>
-        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,t,i){e=e||0;let a=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",o=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",r=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),n=this.getAdminBadges(s),d=this.getAdminTooltip(s),l=this.getAdminControls(s),p=t?`<a href="#comment-${i}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${t}</a>`:"",g=`
+        `}getAdminBadges(s){return""}getAdminTooltip(s){return""}getAdminControls(s){return""}renderComment(s,e,t,i){e=e||0;let c=s.is_pinned?'<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>':"",o=s.is_author?'<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>':"",r=new Date(s.created_at).toLocaleDateString(void 0,{year:"numeric",month:"short",day:"numeric"}),n=this.getAdminBadges(s),d=this.getAdminTooltip(s),l=this.getAdminControls(s),p=t?`<a href="#comment-${i}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${t}</a>`:"",g=`
             <button class="discuss-collapse-btn" data-id="${s.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--t4);display:inline-flex;align-items:center;margin-left:0.25rem;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;"><path d="m6 9 6 6 6-6"/></svg>
             </button>
@@ -2986,7 +2986,7 @@
                 <div class="discuss-comment-content" style="min-width:0">
                     <div style="display:flex;align-items:center;gap:0.375rem;flex-wrap:wrap;margin-bottom:0.375rem">
                         <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${s.name}</span>
-                        ${o}${a}${n}${d}
+                        ${o}${c}${n}${d}
                         <span style="color:var(--t5);font-size:0.75rem">\xB7</span>
                         <span style="font-size:0.8125rem;color:var(--t4)">${r}</span>
                         ${g}
@@ -3040,4 +3040,4 @@
                     </div>
                 </div>
             </form>
-        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let a={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0,...this.domainId?{domain_id:this.domainId}:{}};try{let o=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(a)});if(o.ok){if(e.reset(),parseInt(t,10)!==0){let r=document.getElementById(`discuss-reply-form-${t}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await o.json();alert(r.error||"Failed to post comment.")}}catch(o){console.error("[Discuss]",o),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=b;var y=document.getElementById("discuss-comments");y&&y.dataset.isAdmin!=="true"&&new b({container:y});})();
+        `}async handleSubmit(s){s.preventDefault();let e=s.target,t=e.dataset.parent,i=e.querySelector('[type="submit"]');i.disabled=!0,i.innerHTML='<span class="discuss-spinner discuss-spinner-sm" style="margin-right:0.5rem"></span> Posting\u2026';let c={name:e.name.value.trim(),email:e.email.value.trim(),content:e.content.value.trim(),post_url:this.postUrl,parent_id:parseInt(t,10),honeypot_field:e.honeypot_field.value,honeypot_answer_given:e.honeypot_answer_given?e.honeypot_answer_given.value:void 0,...this.domainId?{domain_id:this.domainId}:{}};try{let o=await fetch(`${this.serverUrl}/api/comments`,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify(c)});if(o.ok){if(e.reset(),parseInt(t,10)!==0){let r=document.getElementById(`discuss-reply-form-${t}`);r&&r.classList.add("discuss-hidden")}this.init()}else{let r=await o.json();alert(r.error||"Failed to post comment.")}}catch(o){console.error("[Discuss]",o),alert("Network error. Please try again.")}finally{i.disabled=!1,i.textContent="Post Comment"}}};window.DiscussWidget=b;var y=document.getElementById("discuss-comments");y&&y.dataset.isAdmin!=="true"&&new b({container:y});})();

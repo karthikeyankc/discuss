@@ -63,3 +63,16 @@ The host page is responsible for loading the font (e.g. via Google Fonts). The v
 ## Cross-origin setup
 
 If your Discuss server is on a different domain from your site (e.g. `discuss.example.com` serving comments for `myblog.com`), register `myblog.com` as a domain in the admin dashboard. The widget handles the rest — CORS is configured automatically per registered domain.
+
+## Local development
+
+By default, only requests from your registered domain are allowed. To test comments on a local dev server (e.g. `http://localhost:4321`), add it as an allowed origin:
+
+1. Go to **Admin > Domains > Settings > General**
+2. Under **Additional allowed origins**, add your local dev server — one origin per line, including protocol and port:
+   ```
+   http://localhost:4321
+   ```
+3. Save. The widget on your local server will now be able to fetch and post comments against your production domain record.
+
+Origins in this list are scoped to the domain they are configured on — an origin added to `myblog.com` cannot interact with a different domain on the same Discuss instance. Remove these entries before going to production if you want to keep your allowed origins tidy, though leaving them in has no practical effect once your site is live.

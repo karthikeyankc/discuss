@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.4.0] - 2026-07-02
+
+### Added
+- **Export comments** — download all comments for a domain as a JSON file from the new Advanced settings tab
+- **Advanced settings tab** — replaces the delete button in the domain list with a proper Export and Danger Zone section inside domain settings
+- **`allowed_origins` per domain** — one origin per line in General settings; allows local dev servers (e.g. `http://localhost:4321`) to post and load comments for a domain without registering a separate domain ([#9](https://github.com/KarthikeyanKC/discuss/issues/9))
+- **`--discuss-font-family` CSS variable** — pass a custom font family to the embed widget via the host page's CSS ([#10](https://github.com/KarthikeyanKC/discuss/issues/10))
+- **AI usage disclosure** — `AI.md` documents which AI tools were used during development ([#7](https://github.com/KarthikeyanKC/discuss/issues/7))
+
+### Fixed
+- Post URL trailing slash normalization — `/post/` and `/post` now resolve to the same thread. Existing data is migrated automatically on first server start after upgrade.
+- Admin post comments view: config now fetched via admin-authenticated endpoint, eliminating CORS 403 errors when viewing a post's comments from within the admin
+- Admin post comments view: breadcrumb domain name now shown correctly on direct page load or browser refresh
+- Admin post comments view: delete, approve, and pin actions now work correctly
+- Admin posts view: post URLs now show the full domain and path (e.g. `example.com/post`) rather than just the path
+- CORS middleware: `allowed_origins` matching now works correctly end-to-end through middleware and the comments router
+- `client.js` now served with `Access-Control-Allow-Origin: *` so it can be loaded as a cross-origin script
+- CSS `--discuss-font-family` variable now inherits correctly through chained `var()` references ([#10](https://github.com/KarthikeyanKC/discuss/issues/10))
+- `.env` file now loaded correctly via Node's native `--env-file` flag — no longer requires manual environment setup ([#8](https://github.com/KarthikeyanKC/discuss/issues/8))
+
+### Changed
+- Domain delete moved out of the domain list into Advanced → Danger Zone in domain settings — reduces accidental deletion risk
+- Node.js minimum version bumped to 20.6+ (required for `--env-file` support)
+- Test suite expanded from 144 to 163 tests; statement coverage raised from 80% to 90%
+- Pre-commit hook now runs the full test suite — any failing test blocks the commit
+- CI adds a coverage gate job that fails if coverage drops below the floor (80% statements, 75% branches)
+
+Thanks to [@krisbalintona](https://github.com/krisbalintona) for reporting issues #7, #8, #9, and #10 that drove most of the fixes and additions in this release.
+
+### Upgrading from v0.3.x
+
+No manual database changes needed. The trailing-slash migration runs automatically on first server start.
+
+**Apache users:** add `AllowEncodedSlashes NoDecode` to your VirtualHost and append `nocanon` to your `ProxyPass` directive, or admin pages will 404 on direct load or browser refresh. See [docs/deployment.md](docs/deployment.md) for the full example config.
+
 ## [0.3.2] - 2026-06-05
 
 ### Fixed

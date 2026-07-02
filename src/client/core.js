@@ -40,7 +40,7 @@ const cssContent = injectedCss + `
     #discuss-comments .discuss-flex-col { flex-direction: column; }
     #discuss-comments .discuss-flex-wrap { flex-wrap: wrap; }
     #discuss-comments .discuss-font-semibold { font-weight: 600; }
-    #discuss-comments .discuss-font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    #discuss-comments .discuss-font-sans { font-family: inherit; }
     #discuss-comments .discuss-text-sm { font-size: 0.875rem; line-height: 1.25rem; }
     #discuss-comments .discuss-text-xs { font-size: 0.75rem; line-height: 1rem; }
     #discuss-comments .discuss-text-lg { font-size: 1.125rem; line-height: 1.75rem; }
@@ -506,6 +506,7 @@ export class DiscussWidget {
             || window.location.pathname;
         this.serverUrl = options.serverUrl || defaultServerUrl;
         this.fetchUrl = options.fetchUrl || `${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`;
+        this.configUrl = options.configUrl || `${this.serverUrl}/api/comments/config`;
         this.config = {};
         this.primaryColor = options.primaryColor || null;
         this.domainId = options.domainId || null;
@@ -543,10 +544,10 @@ export class DiscussWidget {
 
     async init() {
         injectStyles();
-        this.container.innerHTML = '<div style="padding:1rem;color:#64748b;font-family:sans-serif">Loading comments…</div>';
+        this.container.innerHTML = '<div style="padding:1rem;color:#64748b;font-family:inherit">Loading comments…</div>';
 
         try {
-            const configRes = await fetch(`${this.serverUrl}/api/comments/config`);
+            const configRes = await fetch(this.configUrl);
             if (configRes.ok) {
                 this.config = await configRes.json();
                 // Authoritative colour from server overrides embed-snippet value
@@ -559,7 +560,7 @@ export class DiscussWidget {
 
             this.render(comments);
         } catch (err) {
-            this.container.innerHTML = '<div style="padding:1rem;color:#dc2626;font-family:sans-serif">Error loading comments.</div>';
+            this.container.innerHTML = '<div style="padding:1rem;color:#dc2626;font-family:inherit">Error loading comments.</div>';
             console.error('[Discuss]', err);
         }
     }
