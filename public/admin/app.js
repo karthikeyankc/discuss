@@ -1198,6 +1198,7 @@ const app = {
     async loadPosts() {
         if (!this.currentDomainId) return this.showSection('domains');
         const name = this.getDomainName(this.currentDomainId);
+        this.currentDomainName = name;
         document.getElementById('posts-breadcrumb-domain').textContent  = name;
         document.getElementById('comments-breadcrumb-domain').textContent = name;
 
@@ -1252,6 +1253,7 @@ const app = {
         new window.DiscussWidget({
             container: document.getElementById('discuss-comments'),
             fetchUrl: `/api/admin/comments?domain_id=${this.currentDomainId}&post_url=${encodeURIComponent(this.currentPostUrl)}`,
+            configUrl: `/api/admin/domains/${this.currentDomainId}/config`,
             serverUrl: window.location.origin,
             postUrl: this.currentPostUrl,
             domainId: this.currentDomainId,

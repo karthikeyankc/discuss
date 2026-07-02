@@ -164,6 +164,16 @@ router.get('/domains/:id', (req, res) => {
     }
 });
 
+router.get('/domains/:id/config', (req, res) => {
+    try {
+        const domain = db.prepare('SELECT * FROM domains WHERE id = ? AND admin_id = ?').get(req.params.id, req.adminId);
+        if (!domain) return res.status(404).json({ error: 'Domain not found or unauthorized' });
+        res.json({ honeypot_question: domain.honeypot_question || null, primary_color: domain.primary_color || null });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch config' });
+    }
+});
+
 router.patch('/domains/:id', (req, res) => {
     const {
         domain, site_name, honeypot_question, primary_color, blocked_words,

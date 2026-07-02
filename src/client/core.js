@@ -506,6 +506,7 @@ export class DiscussWidget {
             || window.location.pathname;
         this.serverUrl = options.serverUrl || defaultServerUrl;
         this.fetchUrl = options.fetchUrl || `${this.serverUrl}/api/comments?post_url=${encodeURIComponent(this.postUrl)}`;
+        this.configUrl = options.configUrl || `${this.serverUrl}/api/comments/config`;
         this.config = {};
         this.primaryColor = options.primaryColor || null;
         this.domainId = options.domainId || null;
@@ -546,7 +547,7 @@ export class DiscussWidget {
         this.container.innerHTML = '<div style="padding:1rem;color:#64748b;font-family:inherit">Loading comments…</div>';
 
         try {
-            const configRes = await fetch(`${this.serverUrl}/api/comments/config`);
+            const configRes = await fetch(this.configUrl);
             if (configRes.ok) {
                 this.config = await configRes.json();
                 // Authoritative colour from server overrides embed-snippet value
