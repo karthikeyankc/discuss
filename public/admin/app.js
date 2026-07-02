@@ -909,6 +909,10 @@ const app = {
             document.getElementById('settings-hq').value               = d.honeypot_question || '';
             document.getElementById('settings-breadcrumb-domain').textContent = d.domain;
 
+            const domainMeta = this.domains.find(x => x.id == id);
+            const count = domainMeta?.total_count ?? 0;
+            document.getElementById('export-count-note').textContent = `This domain has ${count.toLocaleString()} comment${count !== 1 ? 's' : ''}.`;
+
             const color = d.primary_color || '#2563eb';
             document.getElementById('settings-color-picker').value = color;
             document.getElementById('settings-color-hex').value    = color;
