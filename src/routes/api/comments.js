@@ -49,7 +49,7 @@ function getGravatarUrl(email) {
 }
 
 router.get('/', (req, res) => {
-    const { post_url } = req.query;
+    const post_url = (req.query.post_url || '').replace(/\/+$/, '') || null;
     if (!post_url) {
         return res.status(400).json({ error: 'post_url is required' });
     }
@@ -77,6 +77,7 @@ router.post('/', (req, res) => {
         return res.status(400).json({ error: 'Name, content, and post_url are required' });
     }
 
+    post_url = post_url.replace(/\/+$/, '');
     name = name.trim();
     email = email && email.trim() ? email.trim() : '';
 
