@@ -521,6 +521,7 @@
                             <button type="button" class="tab"        role="tab" data-stab="spam"          onclick="app.switchSettingsTab('spam')">Anti-spam</button>
                             <button type="button" class="tab"        role="tab" data-stab="notifications" onclick="app.switchSettingsTab('notifications')">Notifications</button>
                             <button type="button" class="tab"        role="tab" data-stab="embed"         onclick="app.switchSettingsTab('embed')">Embed</button>
+                            <button type="button" class="tab"        role="tab" data-stab="advanced"      onclick="app.switchSettingsTab('advanced')">Advanced</button>
                             <span class="tab-indicator" id="settings-tab-indicator"></span>
                         </div>
 
@@ -540,16 +541,6 @@
                                 <label class="label" for="settings-allowed-origins">Additional allowed origins</label>
                                 <textarea id="settings-allowed-origins" class="input" rows="3" placeholder="http://localhost:4321&#10;http://localhost:3000" style="font-family:monospace;font-size:0.8125rem;resize:vertical"></textarea>
                                 <p class="field-help-text">One origin per line, including protocol and port. Use this to allow your local dev server to post comments to this domain.</p>
-                            </div>
-                            <div style="margin-top:2rem;padding:1.25rem 1.5rem;border:1px solid #fca5a5;border-radius:8px">
-                                <p style="margin:0 0 0.75rem;font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--danger-fg)">Danger Zone</p>
-                                <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem">
-                                    <div>
-                                        <p style="margin:0;font-size:0.875rem;font-weight:500">Delete this domain</p>
-                                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--t3)">Permanently removes this domain and all its comments. This cannot be undone.</p>
-                                    </div>
-                                    <button type="button" class="btn btn-danger btn-sm" style="white-space:nowrap" onclick="app.deleteDomain(app.currentDomainId)">Delete Domain</button>
-                                </div>
                             </div>
                         </div>
 
@@ -714,6 +705,30 @@
                                         onclick="app.copyEmbedSnippet()">
                                     <i data-lucide="copy"></i> Copy
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Advanced -->
+                        <div class="settings-tab-panel hidden" id="stab-advanced">
+                            <div class="settings-section">
+                                <h3 style="margin:0 0 1rem;font-size:0.875rem;font-weight:600;color:var(--t1)">Export</h3>
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem">
+                                    <div>
+                                        <p style="margin:0;font-size:0.875rem;font-weight:500">Export comments</p>
+                                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--t3)">Download all comments for this domain as a JSON file.</p>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary btn-sm" style="white-space:nowrap" onclick="app.exportDomain()">Export JSON</button>
+                                </div>
+                            </div>
+                            <div class="settings-section">
+                                <h3 style="margin:0 0 1rem;font-size:0.875rem;font-weight:600;color:var(--danger-fg)">Danger Zone</h3>
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1rem 1.25rem;border:1px solid #fca5a5;border-radius:8px">
+                                    <div>
+                                        <p style="margin:0;font-size:0.875rem;font-weight:500">Delete this domain</p>
+                                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--t3)">Permanently removes this domain and all its comments. This cannot be undone.</p>
+                                    </div>
+                                    <button type="button" class="btn btn-danger btn-sm" style="white-space:nowrap" onclick="app.deleteDomain(app.currentDomainId)">Delete Domain</button>
+                                </div>
                             </div>
                         </div>
 

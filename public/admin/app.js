@@ -786,6 +786,23 @@ const app = {
         finally { btn.disabled = false; }
     },
 
+    async exportDomain() {
+        const id = this.currentDomainId;
+        const d = this.domains.find(d => d.id == id);
+        try {
+            const res = await fetch(`/api/admin/comments?domain_id=${id}`);
+            if (!res.ok) return this.showToast('Export failed.', 'error');
+            const comments = await res.json();
+            const blob = new Blob([JSON.stringify(comments, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${d?.domain || 'comments'}-export.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch { this.showToast('Export failed.', 'error'); }
+    },
+
     async deleteDomain(id) {
         const d = this.domains.find(d => d.id === id);
         const confirmed = await this.showConfirm({
