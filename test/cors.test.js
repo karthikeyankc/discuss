@@ -85,3 +85,74 @@ test('passes through requests with no origin header', async () => {
     const res = await req(null);
     assert.equal(res._headers['access-control-allow-origin'], undefined);
 });
+
+// --- OPTIONS preflight ---
+
+test('OPTIONS preflight returns 200', async () => {
+    const res = await new Promise((resolve) => {
+        const r = makeRes();
+        r._resolve = resolve;
+        app.handle({
+            method: 'OPTIONS',
+            url: '/test',
+            path: '/test',
+            headers: { origin: 'https://example.com' },
+            body: {},
+            query: {},
+            params: {},
+        }, r, () => resolve(r));
+    });
+    assert.equal(res.statusCode, 200);
+});
+
+// --- Always-set headers ---
+
+test('always sets Access-Control-Allow-Methods on a matched origin', async () => {
+    const res = await req('https://example.com');
+    assert.ok(res._headers['access-control-allow-methods']);
+    assert.match(res._headers['access-control-allow-methods'], /GET/);
+    assert.match(res._headers['access-control-allow-methods'], /POST/);
+});
+
+test('always sets Access-Control-Allow-Credentials on a matched origin', async () => {
+    const res = await req('https://example.com');
+    assert.equal(res._headers['access-control-allow-credentials'], 'true');
+});
+
+test('sets Allow-Methods even for unrecognised origins', async () => {
+    const res = await req('https://evil.com');
+    assert.ok(res._headers['access-control-allow-methods']);
+});
+
+test('sets Allow-Credentials even for unrecognised origins', async () => {
+    const res = await req('https://evil.com');
+    assert.equal(res._headers['access-control-allow-credentials'], 'true');
+});
+
+// --- Edge cases ---
+
+test('handles a malformed origin URL without crashing', async () => {
+    // 'not-a-url' throws in the URL constructor; middleware falls back to treating it as a raw hostname
+    const res = await req('not-a-url');
+    assert.equal(res._headers['access-control-allow-origin'], undefined);
+    assert.ok(res._headers['access-control-allow-methods']); // common headers still set
+});
+
+test('handles a DB error gracefully and still processes the request', async () => {
+    const brokenDb = { prepare: () => { throw new Error('DB failure'); } };
+    const brokenApp = express();
+    brokenApp.use(buildCorsMiddleware(brokenDb));
+    brokenApp.get('/test', (_req, res) => res.json({ ok: true }));
+
+    const res = await new Promise((resolve) => {
+        const r = makeRes();
+        r._resolve = resolve;
+        brokenApp.handle(
+            { method: 'GET', url: '/test', path: '/test', headers: { origin: 'https://example.com' }, body: {}, query: {}, params: {} },
+            r,
+            () => resolve(r),
+        );
+    });
+    // DB error is caught — request still continues, common headers still set
+    assert.ok(res._headers['access-control-allow-methods']);
+});

@@ -383,3 +383,267 @@ test('GET /domains/:id returns allowed_origins', async () => {
     assert.equal(res.statusCode, 200);
     assert.equal(res._body.allowed_origins, 'http://localhost:5173');
 });
+
+// --- Logout ---
+
+test('POST /logout returns 200 with a logout message', async () => {
+    const res = await req('POST', '/api/admin/logout');
+    assert.equal(res.statusCode, 200);
+    assert.match(res._body.message, /[Ll]ogged out/);
+});
+
+// --- Edit comment ---
+
+test('PATCH /comments/:id updates name, email, and content', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Original', 'orig@test.com', '', '<p>original</p>', 'original', now, now, '/edit-post', domainId);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { name: 'Edited', email: 'edited@test.com', content: 'updated content' },
+    });
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.content.includes('updated content'));
+    const row = db.prepare('SELECT name, email, content_raw FROM comments WHERE id = ?').get(comment.lastInsertRowid);
+    assert.equal(row.name, 'Edited');
+    assert.equal(row.email, 'edited@test.com');
+    assert.equal(row.content_raw, 'updated content');
+});
+
+test('PATCH /comments/:id returns 400 when name is missing', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Name', '', '', '<p>hi</p>', 'hi', now, now, '/edit-post', domainId);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { content: 'updated content' },
+    });
+    assert.equal(res.statusCode, 400);
+});
+
+test('PATCH /comments/:id returns 400 when content is missing', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Name', '', '', '<p>hi</p>', 'hi', now, now, '/edit-post', domainId);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { name: 'Name' },
+    });
+    assert.equal(res.statusCode, 400);
+});
+
+test('PATCH /comments/:id returns 404 for a comment from another admin domain', async () => {
+    const now = Date.now();
+    const otherDomain = db.prepare("SELECT id FROM domains WHERE domain = 'otherdomain.com'").get();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Other', '', '', '<p>other</p>', 'other', now, now, '/other-edit-post', otherDomain.id);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { name: 'Hacked', content: 'hacked' },
+    });
+    assert.equal(res.statusCode, 404);
+});
+
+test('PATCH /comments/:id updates created_at when provided', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('TS', '', '', '<p>ts</p>', 'ts', now, now, '/ts-post', domainId);
+
+    const customTs = 1700000000000;
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { name: 'TS', content: 'ts content', created_at: customTs },
+    });
+    assert.equal(res.statusCode, 200);
+    const row = db.prepare('SELECT created_at FROM comments WHERE id = ?').get(comment.lastInsertRowid);
+    assert.equal(row.created_at, customTs);
+});
+
+// --- Unapprove / unpin ---
+
+test('PATCH /comments/:id/approve unapproves a comment', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id, is_approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)'
+    ).run('Frank', '', '', '<p>approved</p>', 'approved', now, now, '/unapprove-post', domainId);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}/approve`, {
+        ...auth,
+        body: { is_approved: false },
+    });
+    assert.equal(res.statusCode, 200);
+    const row = db.prepare('SELECT is_approved FROM comments WHERE id = ?').get(comment.lastInsertRowid);
+    assert.equal(row.is_approved, 0);
+});
+
+test('PATCH /comments/:id/pin unpins a comment', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id, is_pinned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)'
+    ).run('Grace', '', '', '<p>pinned</p>', 'pinned', now, now, '/unpin-post', domainId);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}/pin`, {
+        ...auth,
+        body: { is_pinned: false },
+    });
+    assert.equal(res.statusCode, 200);
+    const row = db.prepare('SELECT is_pinned FROM comments WHERE id = ?').get(comment.lastInsertRowid);
+    assert.equal(row.is_pinned, 0);
+});
+
+// --- Domain config endpoint ---
+
+test('GET /domains/:id/config returns honeypot_question and primary_color', async () => {
+    db.prepare('UPDATE domains SET honeypot_question = ?, primary_color = ? WHERE id = ?')
+        .run('What is 2+2?', '#ff0000', domainId);
+
+    const res = await req('GET', `/api/admin/domains/${domainId}/config`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.equal(res._body.honeypot_question, 'What is 2+2?');
+    assert.equal(res._body.primary_color, '#ff0000');
+
+    db.prepare('UPDATE domains SET honeypot_question = NULL, primary_color = NULL WHERE id = ?').run(domainId);
+});
+
+test('GET /domains/:id/config returns nulls when fields are unset', async () => {
+    db.prepare('UPDATE domains SET honeypot_question = NULL, primary_color = NULL WHERE id = ?').run(domainId);
+
+    const res = await req('GET', `/api/admin/domains/${domainId}/config`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.equal(res._body.honeypot_question, null);
+    assert.equal(res._body.primary_color, null);
+});
+
+test('GET /domains/:id/config returns 401 without a token', async () => {
+    const res = await req('GET', `/api/admin/domains/${domainId}/config`);
+    assert.equal(res.statusCode, 401);
+});
+
+test('GET /domains/:id/config returns 404 for a domain owned by another admin', async () => {
+    const otherDomain = db.prepare("SELECT id FROM domains WHERE domain = 'otherdomain.com'").get();
+    const res = await req('GET', `/api/admin/domains/${otherDomain.id}/config`, auth);
+    assert.equal(res.statusCode, 404);
+});
+
+// --- Domain delete (happy path) ---
+
+test('DELETE /domains/:id deletes an owned domain', async () => {
+    const now = Date.now();
+    const d = db.prepare(
+        'INSERT INTO domains (domain, site_name, admin_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)'
+    ).run('todelete.com', 'To Delete', adminId, now, now);
+
+    const res = await req('DELETE', `/api/admin/domains/${d.lastInsertRowid}`, auth);
+    assert.equal(res.statusCode, 200);
+    const found = db.prepare('SELECT id FROM domains WHERE id = ?').get(d.lastInsertRowid);
+    assert.equal(found, undefined);
+});
+
+// --- Domain posts ---
+
+test('GET /domains/:id/posts returns post list for a domain', async () => {
+    const now = Date.now();
+    db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Poster', '', '', '<p>post</p>', 'post', now, now, '/my-article', domainId);
+
+    const res = await req('GET', `/api/admin/domains/${domainId}/posts`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(Array.isArray(res._body.posts));
+    assert.ok(res._body.posts.some(p => p.post_url === '/my-article'));
+    assert.equal(res._body.domain, 'example.com');
+});
+
+test('GET /domains/:id/posts returns 404 for another admin domain', async () => {
+    const otherDomain = db.prepare("SELECT id FROM domains WHERE domain = 'otherdomain.com'").get();
+    const res = await req('GET', `/api/admin/domains/${otherDomain.id}/posts`, auth);
+    assert.equal(res.statusCode, 404);
+});
+
+test('GET /domains/:id/posts returns 401 without a token', async () => {
+    const res = await req('GET', `/api/admin/domains/${domainId}/posts`);
+    assert.equal(res.statusCode, 401);
+});
+
+test('GET /domains/:id/posts excludes soft-deleted comments from counts', async () => {
+    const now = Date.now();
+    const c = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Ghost', '', '', '<p>del</p>', 'del', now, now, '/deleted-counts-post', domainId);
+    db.prepare('UPDATE comments SET is_deleted = 1 WHERE id = ?').run(c.lastInsertRowid);
+
+    const res = await req('GET', `/api/admin/domains/${domainId}/posts`, auth);
+    assert.equal(res.statusCode, 200);
+    const post = res._body.posts.find(p => p.post_url === '/deleted-counts-post');
+    assert.equal(post, undefined);
+});
+
+// --- Comment list filters ---
+
+test('GET /comments returns 401 without a token', async () => {
+    const res = await req('GET', `/api/admin/comments?domain_id=${domainId}`);
+    assert.equal(res.statusCode, 401);
+});
+
+test('GET /comments returns all non-deleted comments for a domain', async () => {
+    const res = await req('GET', `/api/admin/comments?domain_id=${domainId}`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(Array.isArray(res._body));
+    assert.ok(res._body.every(c => c.is_deleted === 0));
+});
+
+test('GET /comments?status=pending returns only unapproved non-deleted comments', async () => {
+    const now = Date.now();
+    db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id, is_approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)'
+    ).run('Pending2', '', '', '<p>pending</p>', 'pending', now, now, '/pending-filter-post', domainId);
+
+    const res = await req('GET', `/api/admin/comments?domain_id=${domainId}&status=pending`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.length >= 1);
+    assert.ok(res._body.every(c => c.is_approved === 0 && c.is_deleted === 0));
+});
+
+test('GET /comments?status=approved returns only approved non-deleted comments', async () => {
+    const now = Date.now();
+    db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id, is_approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)'
+    ).run('Approved2', '', '', '<p>approved</p>', 'approved', now, now, '/approved-filter-post', domainId);
+
+    const res = await req('GET', `/api/admin/comments?domain_id=${domainId}&status=approved`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.every(c => c.is_approved === 1 && c.is_deleted === 0));
+});
+
+test('GET /comments?status=deleted returns only soft-deleted comments', async () => {
+    const now = Date.now();
+    const c = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('ToDelete', '', '', '<p>del</p>', 'del', now, now, '/del-filter-post', domainId);
+    db.prepare('UPDATE comments SET is_deleted = 1 WHERE id = ?').run(c.lastInsertRowid);
+
+    const res = await req('GET', `/api/admin/comments?domain_id=${domainId}&status=deleted`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.length >= 1);
+    assert.ok(res._body.every(c => c.is_deleted === 1));
+});
+
+test('GET /comments filters by post_url', async () => {
+    const now = Date.now();
+    db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('URLFilter', '', '', '<p>specific</p>', 'specific', now, now, '/very-specific-url', domainId);
+
+    const res = await req('GET', `/api/admin/comments?domain_id=${domainId}&post_url=${encodeURIComponent('/very-specific-url')}`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.every(c => c.post_url === '/very-specific-url'));
+});

@@ -1,6 +1,15 @@
 #!/bin/sh
-# Checks that package.json version is not behind the latest git tag.
+# Runs the test suite and checks that package.json version is not behind the latest git tag.
 # Install: cp scripts/pre-commit.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+echo "Running tests..."
+npm test
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "  Tests failed. Fix all failing tests before committing."
+  echo ""
+  exit 1
+fi
 
 latest_tag=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
 

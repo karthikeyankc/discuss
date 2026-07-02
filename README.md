@@ -3,8 +3,8 @@
   <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
   <p>
     <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
-    <img src="https://img.shields.io/badge/tests-92%20passing-brightgreen" alt="Tests">
-    <img src="https://img.shields.io/badge/coverage-70%25-yellowgreen" alt="Coverage">
+    <img src="https://img.shields.io/badge/tests-163%20passing-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
     <img src="https://img.shields.io/github/v/tag/karthikeyankc/discuss?label=version" alt="Version">
   </p>
@@ -70,8 +70,8 @@ Use `npm run dev` instead of `npm start` if you're running locally — it restar
 
 ## Roadmap
 
-### v0.4.0
-- Export and import comments
+### v0.5.0
+- Import comments
 - Comment reporting
 
 ### v1.0.0

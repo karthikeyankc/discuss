@@ -57,6 +57,8 @@ src/
 │   ├── auth.js         # JWT auth middleware
 │   └── cors.js         # Dynamic CORS
 └── lib/
+    ├── encrypt.js      # AES-256-GCM encrypt/decrypt helpers
+    ├── mailer.js       # nodemailer wrappers (comment + reply notifications)
     └── render.js       # Markdown → sanitised HTML
 ```
 
@@ -131,7 +133,7 @@ This updates `package.json`, creates a commit, and creates a `vX.Y.Z` git tag in
 git push && git push --tags
 ```
 
-A pre-commit hook (installed automatically via `npm install`) will block commits where `package.json` is behind the latest tag, catching the drift early.
+A pre-commit hook is installed automatically via `npm install`. It runs the full test suite before every commit — if any test fails, the commit is blocked. It also checks that `package.json` is not behind the latest git tag. Fix both before pushing.
 
 ## Reporting Bugs
 

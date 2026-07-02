@@ -1,10 +1,34 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'crypto';
+import { encrypt } from '../src/lib/encrypt.js';
 
 process.env.ENCRYPTION_KEY = crypto.randomBytes(32).toString('hex');
 
-const { previewEmailHtml } = await import('../src/lib/mailer.js');
+const { previewEmailHtml, sendCommentNotification, sendReplyNotification, sendTestEmail, _setTransportForTest } = await import('../src/lib/mailer.js');
+
+// Shared mock transport — captures sent emails without a real SMTP connection.
+const sentEmails = [];
+const mockTransport = {
+    sendMail: async (opts) => { sentEmails.push(opts); return { messageId: 'test-id' }; },
+};
+_setTransportForTest(() => mockTransport);
+
+// Domain with all SMTP fields encrypted and valid.
+function makeDomain(overrides = {}) {
+    return {
+        domain: 'test.com',
+        site_name: 'Test Site',
+        smtp_host: encrypt('smtp.test.com'),
+        smtp_port: 587,
+        smtp_secure: 0,
+        smtp_user: encrypt('sender@test.com'),
+        smtp_pass: encrypt('s3cr3t'),
+        smtp_from: encrypt('Test Discuss'),
+        notify_email: encrypt('admin@test.com'),
+        ...overrides,
+    };
+}
 
 const fakeDomain = {
     domain: 'test.com',
@@ -91,4 +115,116 @@ test('admin notification footer uses admin-specific reason text', () => {
 test('unknown type falls back to new comment template', () => {
     const html = previewEmailHtml(fakeDomain, 'unknown-type');
     assert.match(html, /New comment/);
+});
+
+// --- sendCommentNotification ---
+
+test('sendCommentNotification sends to notify_email with correct subject', async () => {
+    sentEmails.length = 0;
+    const domain = makeDomain();
+    const comment = { name: 'Bob', content: '<p>Hello!</p>', post_url: '/my-post' };
+
+    await sendCommentNotification(domain, comment);
+
+    assert.equal(sentEmails.length, 1);
+    assert.equal(sentEmails[0].to, 'admin@test.com');
+    assert.match(sentEmails[0].subject, /New comment on Test Site/);
+    assert.match(sentEmails[0].html, /Hello!/);
+    assert.match(sentEmails[0].html, /New comment/);
+});
+
+test('sendCommentNotification uses reply subject when isReply is true', async () => {
+    sentEmails.length = 0;
+    const domain = makeDomain();
+    const comment = { name: 'Bob', content: '<p>A reply.</p>', post_url: '/my-post' };
+
+    await sendCommentNotification(domain, comment, { isReply: true });
+
+    assert.equal(sentEmails.length, 1);
+    assert.match(sentEmails[0].subject, /New reply on Test Site/);
+    assert.match(sentEmails[0].html, /New reply to your comment/);
+});
+
+test('sendCommentNotification sets From header with name and address', async () => {
+    sentEmails.length = 0;
+    await sendCommentNotification(makeDomain(), { name: 'Alice', content: 'Hi', post_url: '/p' });
+    assert.match(sentEmails[0].from, /Test Discuss/);
+    assert.match(sentEmails[0].from, /sender@test\.com/);
+});
+
+test('sendCommentNotification returns without sending when smtp_host is null', async () => {
+    sentEmails.length = 0;
+    await sendCommentNotification(makeDomain({ smtp_host: null }), { name: 'Bob', content: 'Hi', post_url: '/p' });
+    assert.equal(sentEmails.length, 0);
+});
+
+test('sendCommentNotification returns without sending when notify_email is null', async () => {
+    sentEmails.length = 0;
+    await sendCommentNotification(makeDomain({ notify_email: null }), { name: 'Bob', content: 'Hi', post_url: '/p' });
+    assert.equal(sentEmails.length, 0);
+});
+
+// --- sendReplyNotification ---
+
+test('sendReplyNotification sends to parentComment.email', async () => {
+    sentEmails.length = 0;
+    const domain = makeDomain();
+    const parent = { name: 'Jane', email: 'jane@test.com', content: '<p>Original</p>', post_url: '/post' };
+    const reply  = { name: 'Bob',  content: '<p>Reply</p>',   post_url: '/post' };
+
+    await sendReplyNotification(domain, parent, reply);
+
+    assert.equal(sentEmails.length, 1);
+    assert.equal(sentEmails[0].to, 'jane@test.com');
+    assert.match(sentEmails[0].subject, /replied to your comment/);
+    assert.match(sentEmails[0].html, /replied to your comment/);
+    assert.match(sentEmails[0].html, /Your comment/);
+});
+
+test('sendReplyNotification returns without sending when smtp_host is null', async () => {
+    sentEmails.length = 0;
+    const domain = makeDomain({ smtp_host: null });
+    const parent = { name: 'Jane', email: 'jane@test.com', content: 'Hi', post_url: '/post' };
+    const reply  = { name: 'Bob',  content: 'Reply',         post_url: '/post' };
+
+    await sendReplyNotification(domain, parent, reply);
+
+    assert.equal(sentEmails.length, 0);
+});
+
+test('sendReplyNotification returns without sending when parentComment.email is falsy', async () => {
+    sentEmails.length = 0;
+    const domain = makeDomain();
+    const parent = { name: 'Jane', email: null, content: 'Hi', post_url: '/post' };
+    const reply  = { name: 'Bob',  content: 'Reply',          post_url: '/post' };
+
+    await sendReplyNotification(domain, parent, reply);
+
+    assert.equal(sentEmails.length, 0);
+});
+
+// --- sendTestEmail ---
+
+test('sendTestEmail sends to notify_email with correct subject', async () => {
+    sentEmails.length = 0;
+    await sendTestEmail(makeDomain());
+
+    assert.equal(sentEmails.length, 1);
+    assert.equal(sentEmails[0].to, 'admin@test.com');
+    assert.match(sentEmails[0].subject, /Test email from Discuss for Test Site/);
+    assert.match(sentEmails[0].html, /set up for/);
+});
+
+test('sendTestEmail throws when smtp_host is null', async () => {
+    await assert.rejects(
+        () => sendTestEmail(makeDomain({ smtp_host: null })),
+        { message: 'SMTP not configured' },
+    );
+});
+
+test('sendTestEmail throws when notify_email is null', async () => {
+    await assert.rejects(
+        () => sendTestEmail(makeDomain({ notify_email: null })),
+        { message: 'Notification email not set' },
+    );
 });
