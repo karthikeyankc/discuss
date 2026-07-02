@@ -64,6 +64,7 @@ Use `npm run dev` instead of `npm start` if you're running locally — it restar
 | [Email Notifications](docs/smtp.md) | SMTP setup, provider recommendations, Gmail and Resend guides |
 | [Upgrading](docs/upgrading.md) | How to upgrade safely |
 | [Contributing](CONTRIBUTING.md) | Dev setup, conventions, and how to submit a pull request |
+| [AI Usage](AI.md) | How and where AI tools were used in this project |
 
 ---
 
