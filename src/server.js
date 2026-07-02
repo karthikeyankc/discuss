@@ -73,8 +73,14 @@ app.use('/admin', (req, res, next) => {
     });
 });
 
-// Static files
-app.use(express.static(path.join(__dirname, '../public')));
+// Static files — client.js is a public embeddable script, must be loadable from any origin
+app.use(express.static(path.join(__dirname, '../public'), {
+    setHeaders(res, filePath) {
+        if (filePath.endsWith('client.js')) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+        }
+    },
+}));
 
 app.listen(PORT, HOST, () => {
     console.log(`Discuss server running on http://${HOST}:${PORT}`);
