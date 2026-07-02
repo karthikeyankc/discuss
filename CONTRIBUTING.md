@@ -12,7 +12,7 @@ Thanks for your interest in contributing. Here's everything you need to know.
 
 ### Prerequisites
 
-- Node.js ≥ 18.11.0
+- Node.js ≥ 20.6.0
 - npm
 
 ### Steps
@@ -21,17 +21,24 @@ Thanks for your interest in contributing. Here's everything you need to know.
 git clone https://github.com/KarthikeyanKC/discuss.git
 cd discuss
 npm install
-npm run setup       # create your local admin account
-npm run dev         # starts the server with --watch
+cp .env.example .env  # edit .env — JWT_SECRET is required
+npm run setup         # create your local admin account
+npm run dev           # starts the server with --watch
 ```
 
 The server runs at `http://localhost:3000`. The admin dashboard is at `http://localhost:3000/admin`.
 
-Copy `.env.example` to `.env` and adjust as needed for local development:
+The dev server loads `.env` automatically via Node's `--env-file` flag (no dotenv needed).
+
+### Working on the design system
+
+If you're developing `ken-design-system` alongside Discuss, link it locally:
 
 ```bash
-cp .env.example .env
+npm install --save-dev file:../../ken-design-system
 ```
+
+Do not commit this change — the `file:` path only resolves on your machine.
 
 ## Project Structure
 
@@ -107,6 +114,24 @@ Always use fully contextual, path-based hierarchical routing (e.g. `/admin/domai
 All design tokens (colours, shadows, radii, typography) live in `src/design-system/tailwind.config.js`. Both the admin and widget Tailwind configs extend it. Change a token there and it propagates everywhere on the next build.
 
 `client.js` uses class names prefixed with `discuss-` (e.g. `discuss-btn`, `discuss-hidden`). Tailwind's scanner cannot resolve these back to utility names, so any utility toggled via JavaScript must be defined manually in the CSS block inside `client.js`.
+
+## Releasing a new version
+
+Use `npm version` to bump, commit, and tag atomically — never manually edit `package.json` and `git tag` separately, as they will drift:
+
+```bash
+npm version patch   # 0.3.5 → 0.3.6 (bug fixes)
+npm version minor   # 0.3.5 → 0.4.0 (new features)
+npm version major   # 0.3.5 → 1.0.0 (breaking changes)
+```
+
+This updates `package.json`, creates a commit, and creates a `vX.Y.Z` git tag in one step. Then push both:
+
+```bash
+git push && git push --tags
+```
+
+A pre-commit hook (installed automatically via `npm install`) will block commits where `package.json` is behind the latest tag, catching the drift early.
 
 ## Reporting Bugs
 

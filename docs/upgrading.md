@@ -20,6 +20,20 @@ If you already saved SMTP credentials without a key and then add one later, you 
 
 ---
 
+## Upgrading to v0.3.6
+
+v0.3.3 adds local dev support via per-domain allowed origins, and switches `.env` loading to Node's native `--env-file` flag. Node.js 20.6.0 or later is now required.
+
+If you were running Node 18, upgrade before pulling this version:
+
+```bash
+node --version   # must be >= 20.6.0
+```
+
+No database changes require manual intervention — the `allowed_origins` column is added automatically on startup.
+
+---
+
 ## Before you upgrade
 
 Always back up your database first:

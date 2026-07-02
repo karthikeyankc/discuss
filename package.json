@@ -1,23 +1,24 @@
 {
   "name": "discuss",
-  "version": "0.3.2",
+  "version": "0.3.6",
   "description": "A self-hosted, lightweight SQLite comment system for static sites.",
   "main": "src/server.js",
   "type": "module",
   "engines": {
-    "node": ">=18.11.0"
+    "node": ">=20.6.0"
   },
   "scripts": {
-    "start": "NODE_ENV=production node src/server.js",
-    "dev": "NODE_ENV=development node --watch src/server.js",
+    "start": "NODE_ENV=production node --env-file=.env src/server.js",
+    "dev": "NODE_ENV=development node --env-file=.env --watch src/server.js",
     "setup": "node src/setup.js",
     "build:css": "tailwindcss -i ./src/design-system/admin.css -o ./public/admin/admin.css --minify",
     "build:client:css": "node scripts/build-client-css.cjs",
     "build:client:inject": "node scripts/build-client.js",
     "build:client": "npm run build:client:css && npm run build:client:inject",
     "build": "npm run build:css && npm run build:client",
-    "test": "node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js test/encrypt.test.js test/mailer.test.js",
-    "test:coverage": "c8 --reporter=text --reporter=lcov node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js test/encrypt.test.js test/mailer.test.js"
+    "prepare": "cp scripts/pre-commit.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit || true",
+    "test": "node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js test/encrypt.test.js test/mailer.test.js test/cors.test.js",
+    "test:coverage": "c8 --reporter=text --reporter=lcov node --test test/render.test.js test/auth.test.js test/comments.test.js test/admin.test.js test/encrypt.test.js test/mailer.test.js test/cors.test.js"
   },
   "repository": {
     "type": "git",

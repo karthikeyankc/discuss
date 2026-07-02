@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node.js >= 18.11.0
+- Node.js >= 20.6.0
 - A Linux server
 - A reverse proxy (Nginx recommended)
 
