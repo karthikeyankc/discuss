@@ -888,10 +888,11 @@ const app = {
             if (!res.ok) return this.showSection('domains');
             const d = await res.json();
 
-            document.getElementById('settings-domain-id').value  = d.id;
-            document.getElementById('settings-domain').value     = d.domain;
-            document.getElementById('settings-site-name').value  = d.site_name;
-            document.getElementById('settings-hq').value         = d.honeypot_question || '';
+            document.getElementById('settings-domain-id').value       = d.id;
+            document.getElementById('settings-domain').value           = d.domain;
+            document.getElementById('settings-site-name').value        = d.site_name;
+            document.getElementById('settings-allowed-origins').value  = d.allowed_origins || '';
+            document.getElementById('settings-hq').value               = d.honeypot_question || '';
             document.getElementById('settings-breadcrumb-domain').textContent = d.domain;
 
             const color = d.primary_color || '#2563eb';
@@ -1045,6 +1046,7 @@ const app = {
                 body: JSON.stringify({
                     domain:              document.getElementById('settings-domain').value.trim(),
                     site_name:           document.getElementById('settings-site-name').value.trim(),
+                    allowed_origins:     document.getElementById('settings-allowed-origins').value,
                     honeypot_question:   document.getElementById('settings-hq').value.trim(),
                     primary_color:       /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : null,
                     blocked_words:       this.blockedWords,

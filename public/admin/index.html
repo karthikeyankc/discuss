@@ -536,6 +536,11 @@
                                 <input type="text" id="settings-site-name" class="input" placeholder="My Blog" required>
                                 <p class="field-help-text">How this site is identified in your dashboard and email notifications.</p>
                             </div>
+                            <div class="field-group">
+                                <label class="label" for="settings-allowed-origins">Additional allowed origins</label>
+                                <textarea id="settings-allowed-origins" class="input" rows="3" placeholder="http://localhost:4321&#10;http://localhost:3000" style="font-family:monospace;font-size:0.8125rem;resize:vertical"></textarea>
+                                <p class="field-help-text">One origin per line, including protocol and port. Use this to allow your local dev server to post comments to this domain.</p>
+                            </div>
                         </div>
 
                         <!-- Appearance -->

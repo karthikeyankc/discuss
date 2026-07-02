@@ -167,6 +167,7 @@ router.get('/domains/:id', (req, res) => {
 router.patch('/domains/:id', (req, res) => {
     const {
         domain, site_name, honeypot_question, primary_color, blocked_words,
+        allowed_origins,
         smtp_host, smtp_port, smtp_secure, smtp_user, smtp_pass, smtp_from,
         notify_email, notify_on_comment, notify_on_reply,
     } = req.body;
@@ -190,15 +191,21 @@ router.patch('/domains/:id', (req, res) => {
             passVal = existing ? existing.smtp_pass : null;
         }
 
+        const originsVal = allowed_origins
+            ? allowed_origins.split('\n').map(s => s.trim()).filter(Boolean).join('\n') || null
+            : null;
+
         const info = db.prepare(`
             UPDATE domains
             SET domain = ?, site_name = ?, honeypot_question = ?, primary_color = ?, blocked_words = ?,
+                allowed_origins = ?,
                 smtp_host = ?, smtp_port = ?, smtp_secure = ?, smtp_user = ?, smtp_pass = ?,
                 smtp_from = ?, notify_email = ?, notify_on_comment = ?, notify_on_reply = ?,
                 updated_at = ?
             WHERE id = ? AND admin_id = ?
         `).run(
             domain.trim(), site_name.trim(), honeypot_question || null, primary_color || null, blockedJson,
+            originsVal,
             encrypt(smtp_host || null), smtp_port ? parseInt(smtp_port, 10) : 587, smtp_secure ? 1 : 0,
             encrypt(smtp_user || null), passVal,
             encrypt(smtp_from || null), encrypt(notify_email || null),

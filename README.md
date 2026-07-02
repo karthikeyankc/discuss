@@ -21,6 +21,7 @@
 - **Markdown comments** — rendered server-side, sanitized with `sanitize-html`
 - **Nested replies** — up to 3 levels deep
 - **Spam protection** — honeypot field and blocked words list, configurable per domain
+- **Local dev support** — add allowed origins per domain to test comments on localhost without a separate domain registration
 - **Email notifications** — SMTP alerts for new comments and replies; admin and commenter notifications are separate. Credentials stored encrypted at rest (AES-256-GCM)
 - **Admin dashboard** — approve, pin, edit, delete, search, and configure comments at `/admin`
 - **Per-domain settings** — brand colour with WCAG/APCA indicators, spam controls, SMTP setup, and embed code in a tabbed settings page
@@ -36,10 +37,13 @@ git clone https://github.com/KarthikeyanKC/discuss.git
 cd discuss
 npm install --production
 npm run setup
-cp .env.example .env  # set JWT_SECRET
+cp .env.example .env  # edit .env and set JWT_SECRET
+npm start
 ```
 
 Then visit `/admin` to log in, add your domain, and copy your embed snippet.
+
+> For production, run Discuss as a systemd service behind a reverse proxy. See the [Deployment guide](docs/deployment.md).
 
 ```html
 <div id="discuss-comments"></div>

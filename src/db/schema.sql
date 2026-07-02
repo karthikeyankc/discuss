@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS domains (
     notify_email TEXT,
     notify_on_comment INTEGER DEFAULT 0,
     notify_on_reply INTEGER DEFAULT 0,
+    allowed_origins TEXT,
     admin_id INTEGER NOT NULL,
     created_at INTEGER NOT NULL,
     updated_at INTEGER NOT NULL,

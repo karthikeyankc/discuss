@@ -351,3 +351,35 @@ test('GET /domains/:id/email-preview returns 401 without a token', async () => {
     const res = await req('GET', `/api/admin/domains/${domainId}/email-preview?type=comment`);
     assert.equal(res.statusCode, 401);
 });
+
+// --- allowed_origins ---
+
+test('PATCH /domains/:id saves allowed_origins', async () => {
+    const res = await req('PATCH', `/api/admin/domains/${domainId}`, {
+        ...auth,
+        body: { domain: 'example.com', site_name: 'Test Site', allowed_origins: 'http://localhost:4321\nhttp://localhost:3000' },
+    });
+    assert.equal(res.statusCode, 200);
+
+    const saved = db.prepare('SELECT allowed_origins FROM domains WHERE id = ?').get(domainId).allowed_origins;
+    assert.equal(saved, 'http://localhost:4321\nhttp://localhost:3000');
+});
+
+test('PATCH /domains/:id clears allowed_origins when empty', async () => {
+    await req('PATCH', `/api/admin/domains/${domainId}`, {
+        ...auth,
+        body: { domain: 'example.com', site_name: 'Test Site', allowed_origins: '' },
+    });
+
+    const saved = db.prepare('SELECT allowed_origins FROM domains WHERE id = ?').get(domainId).allowed_origins;
+    assert.equal(saved, null);
+});
+
+test('GET /domains/:id returns allowed_origins', async () => {
+    db.prepare('UPDATE domains SET allowed_origins = ? WHERE id = ?')
+        .run('http://localhost:5173', domainId);
+
+    const res = await req('GET', `/api/admin/domains/${domainId}`, auth);
+    assert.equal(res.statusCode, 200);
+    assert.equal(res._body.allowed_origins, 'http://localhost:5173');
+});

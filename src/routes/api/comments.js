@@ -28,7 +28,18 @@ function getDomainOrError(req, res) {
     }
 
     const domain = db.prepare('SELECT * FROM domains WHERE domain = ?').get(domainToMatch);
-    return domain || null;
+    if (domain) return domain;
+
+    // Check allowed_origins — origin must match a specific domain's list (scoped, not server-wide)
+    if (origin) {
+        const candidates = db.prepare('SELECT * FROM domains WHERE allowed_origins IS NOT NULL').all();
+        for (const candidate of candidates) {
+            const list = candidate.allowed_origins.split('\n').map(s => s.trim()).filter(Boolean);
+            if (list.includes(origin)) return candidate;
+        }
+    }
+
+    return null;
 }
 
 // Generate Gravatar URL (returns 404 if no image exists to allow client-side fallback)

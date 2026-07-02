@@ -163,3 +163,47 @@ test('POST increments reply_count on parent when parent_id is set', async () => 
     const row = db.prepare('SELECT reply_count FROM comments WHERE id = ?').get(parentId);
     assert.equal(row.reply_count, 1);
 });
+
+// --- allowed_origins ---
+
+test('POST allows comment from an origin in allowed_origins', async () => {
+    db.prepare('UPDATE domains SET allowed_origins = ? WHERE id = ?')
+        .run('http://localhost:4321', domainId);
+
+    const res = await req('POST', '/api/comments', {
+        origin: 'http://localhost:4321',
+        body: { name: 'Dev', content: 'from localhost', post_url: '/dev-post' },
+    });
+    assert.equal(res.statusCode, 201);
+
+    db.prepare('UPDATE domains SET allowed_origins = NULL WHERE id = ?').run(domainId);
+});
+
+test('POST rejects comment from origin not in allowed_origins', async () => {
+    db.prepare('UPDATE domains SET allowed_origins = ? WHERE id = ?')
+        .run('http://localhost:4321', domainId);
+
+    const res = await req('POST', '/api/comments', {
+        origin: 'http://localhost:9999',
+        body: { name: 'Eve', content: 'sneaky', post_url: '/dev-post' },
+    });
+    assert.equal(res.statusCode, 403);
+
+    db.prepare('UPDATE domains SET allowed_origins = NULL WHERE id = ?').run(domainId);
+});
+
+test('POST scopes comment to the correct domain when posted from allowed_origins', async () => {
+    db.prepare('UPDATE domains SET allowed_origins = ? WHERE id = ?')
+        .run('http://localhost:4321', domainId);
+
+    const res = await req('POST', '/api/comments', {
+        origin: 'http://localhost:4321',
+        body: { name: 'Dev', content: 'scoped comment', post_url: '/scoped-post' },
+    });
+    assert.equal(res.statusCode, 201);
+
+    const comment = db.prepare('SELECT domain_id FROM comments WHERE id = ?').get(res._body.id);
+    assert.equal(comment.domain_id, domainId);
+
+    db.prepare('UPDATE domains SET allowed_origins = NULL WHERE id = ?').run(domainId);
+});

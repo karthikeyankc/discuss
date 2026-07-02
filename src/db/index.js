@@ -32,6 +32,7 @@ try { db.exec('ALTER TABLE domains ADD COLUMN smtp_from TEXT'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN notify_email TEXT'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN notify_on_comment INTEGER DEFAULT 0'); } catch {}
 try { db.exec('ALTER TABLE domains ADD COLUMN notify_on_reply INTEGER DEFAULT 0'); } catch {}
+try { db.exec('ALTER TABLE domains ADD COLUMN allowed_origins TEXT'); } catch {}
 try { db.exec('ALTER TABLE comments ADD COLUMN content_raw TEXT'); } catch {}
 // Backfill: existing rows get content (rendered HTML) as their raw value — not ideal
 // but recoverable; any admin edit will replace it with true markdown going forward.
