@@ -4,9 +4,6 @@ export function buildCorsMiddleware(db) {
     return function dynamicCors(req, res, next) {
         const origin = req.headers.origin;
 
-        // TEMP DEBUG — remove after diagnosing
-        console.log('[CORS DEBUG]', JSON.stringify({ origin, host: req.headers.host, ip: req.ip }));
-
         if (!origin) {
             return next();
         }
