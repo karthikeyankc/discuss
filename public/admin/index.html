@@ -541,6 +541,16 @@
                                 <textarea id="settings-allowed-origins" class="input" rows="3" placeholder="http://localhost:4321&#10;http://localhost:3000" style="font-family:monospace;font-size:0.8125rem;resize:vertical"></textarea>
                                 <p class="field-help-text">One origin per line, including protocol and port. Use this to allow your local dev server to post comments to this domain.</p>
                             </div>
+                            <div style="margin-top:2rem;padding:1.25rem 1.5rem;border:1px solid #fca5a5;border-radius:8px">
+                                <p style="margin:0 0 0.75rem;font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--danger-fg)">Danger Zone</p>
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem">
+                                    <div>
+                                        <p style="margin:0;font-size:0.875rem;font-weight:500">Delete this domain</p>
+                                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--t3)">Permanently removes this domain and all its comments. This cannot be undone.</p>
+                                    </div>
+                                    <button type="button" class="btn btn-danger btn-sm" style="white-space:nowrap" onclick="app.deleteDomain(app.currentDomainId)">Delete Domain</button>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Appearance -->
@@ -713,16 +723,6 @@
                         </div>
                     </form>
 
-                    <div style="margin-top:1.5rem;padding:1.25rem 1.5rem;border:1px solid #fca5a5;border-radius:8px;max-width:42rem">
-                        <p style="margin:0 0 0.75rem;font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--danger-fg)">Danger Zone</p>
-                        <div style="display:flex;align-items:center;justify-content:space-between;gap:1.5rem">
-                            <div>
-                                <p style="margin:0;font-size:0.875rem;font-weight:500">Delete this domain</p>
-                                <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--t3)">Permanently removes this domain and all its comments. This cannot be undone.</p>
-                            </div>
-                            <button type="button" class="btn btn-danger btn-sm" style="white-space:nowrap" onclick="app.deleteDomain(app.currentDomainId)">Delete Domain</button>
-                        </div>
-                    </div>
                 </div>
 
             </main>
