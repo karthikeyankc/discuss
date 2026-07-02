@@ -1247,6 +1247,9 @@ const app = {
 
     async loadComments() {
         if (!this.currentDomainId || !this.currentPostUrl) return this.showSection('domains');
+        const domainName = this.getDomainName(this.currentDomainId);
+        this.currentDomainName = domainName;
+        document.getElementById('comments-breadcrumb-domain').textContent = domainName;
         document.getElementById('comments-subtitle').textContent = `Post: ${this.currentPostUrl}`;
         const list = document.getElementById('comments-list');
         list.innerHTML = '<div id="discuss-comments"></div>';
