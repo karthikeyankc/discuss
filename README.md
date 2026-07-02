@@ -36,12 +36,14 @@
 git clone https://github.com/KarthikeyanKC/discuss.git
 cd discuss
 npm install --production
-npm run setup
-cp .env.example .env  # edit .env and set JWT_SECRET
-npm start
+cp .env.example .env  # edit .env — set JWT_SECRET at minimum
+npm run setup         # create your admin account
+npm start             # production server on port 3000
 ```
 
 Then visit `/admin` to log in, add your domain, and copy your embed snippet.
+
+Use `npm run dev` instead of `npm start` if you're running locally — it restarts the server automatically when files change.
 
 > For production, run Discuss as a systemd service behind a reverse proxy. See the [Deployment guide](docs/deployment.md).
 
