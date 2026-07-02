@@ -729,9 +729,6 @@ const app = {
                         <button onclick="app.openSettings(${d.id})" class="btn btn-ghost btn-sm">
                             <i data-lucide="settings"></i> Settings
                         </button>
-                        <button onclick="app.deleteDomain(${d.id})" class="btn btn-ghost btn-sm text-danger-600 hover:text-danger-700 hover:bg-danger-50">
-                            <i data-lucide="trash-2"></i> Delete
-                        </button>
                     </td>`;
                 tbody.appendChild(tr);
             });
