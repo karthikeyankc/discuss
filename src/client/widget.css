@@ -361,6 +361,9 @@
     color: var(--t4);
     pointer-events: none;
 }
+#discuss-comments .discuss-input-no-icon .discuss-form-input {
+    padding-left: 0.75rem;
+}
 #discuss-comments .discuss-form-input {
     width: 100%;
     border: 1px solid var(--bd-control);

@@ -81,11 +81,11 @@
                     
                     <div class="discuss-form-bottom">
                         <div class="discuss-form-inputs">
-                            <div class="discuss-form-input-wrapper">
+                            <div class="discuss-form-input-wrapper${this.icons.name===""?" discuss-input-no-icon":""}">
                                 ${this.icons.name}
                                 <input type="text" name="name" class="discuss-form-input" placeholder="Name" required>
                             </div>
-                            <div class="discuss-form-input-wrapper">
+                            <div class="discuss-form-input-wrapper${this.icons.email===""?" discuss-input-no-icon":""}">
                                 ${this.icons.email}
                                 <input type="email" name="email" class="discuss-form-input" placeholder="Email (optional)">
                             </div>

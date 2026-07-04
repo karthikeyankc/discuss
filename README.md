@@ -22,11 +22,11 @@
   - [Unstyled embed](#unstyled-embed)
   - [Stable thread keys](#stable-thread-keys)
   - [Programmatic options](#programmatic-options)
-  - [Custom font](#custom-font)
   - [Cross-origin setup](#cross-origin-setup)
   - [Local development](#local-development)
 - [Customisation](#customisation)
   - [CSS custom properties](#css-custom-properties)
+  - [Colours, title, and icons](#colours-title-and-icons)
   - [Widget HTML structure](#widget-html-structure)
   - [Example stylesheet](#example-stylesheet)
 - [Configuration](#configuration)
@@ -50,20 +50,16 @@
 
 | Feature | Description |
 |---|---|
-| **Lightweight embed** | Two lines: a `<link>` for styles and a `<script>`. No npm, no bundler. `client.js` is 4.7 KB gzip, `client.css` is 12.9 KB. |
-| **Unstyled mode** | Skip the `<link>` tag and the widget loads with no styles. Build your own using the widget's class names. |
-| **CSS custom properties** | All colours, surfaces, and borders are CSS variables on `#discuss-comments`. Change a token and the whole widget picks it up. |
-| **Icon & title slots** | Swap the name, email, and submit button icons with any SVG, or hide them entirely. Override the "Leave a comment" heading text. |
-| **Your data, your server** | Everything goes into a single SQLite file on your machine. No third-party services, no subscriptions. |
-| **Gravatar avatars** | Automatic Gravatar lookup with a letter-initial fallback when no Gravatar is set. |
-| **Markdown support** | Comments are rendered server-side and sanitized with `sanitize-html`. |
-| **Nested replies** | Threaded replies up to 3 levels deep. |
-| **Spam protection** | Honeypot field and a blocked words list, both configurable per domain. |
-| **Local dev support** | Add extra allowed origins to any domain so you can test on localhost without a separate entry. |
-| **Email notifications** | SMTP alerts for new comments and replies. Credentials stored encrypted (AES-256-GCM). Admin and commenter notifications configured independently. |
-| **Full admin dashboard** | Approve, pin, edit, delete, and search comments. Manage per-domain settings at `/admin`. |
-| **Per-domain settings** | Brand colour with WCAG/APCA indicators, spam controls, SMTP setup, and embed snippet in one tabbed page. |
-| **Email preview** | See exactly how each notification template looks before a real comment fires it. |
+| **Lightweight embed** | A `<link>` and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 4.7 KB gzip; `client.css` is 12.9 KB. |
+| **SQLite — no database server** | Everything lives in a single file on your machine. Nothing to provision, nothing to pay for, trivial to back up. |
+| **Markdown** | Bold, italic, code blocks, lists, blockquotes — rendered server-side and sanitised. Commenters get a live preview of what they're writing. |
+| **Nested replies** | Threaded conversations up to three levels deep, with collapsible thread lines. |
+| **Spam protection** | Honeypot field catches bots silently. Blocked word list queues matching comments for manual review. Both are configurable per domain. |
+| **Email notifications** | Get notified when a new comment arrives or when someone replies. Visitors get notified when someone replies to them too. SMTP credentials are stored encrypted (AES-256-GCM). |
+| **Admin dashboard** | Approve, reject, pin, edit, and delete comments. Search across all threads. Manage per-domain settings — all at `/admin`. |
+| **Full customisation** | Every colour, border, and surface is a CSS variable. Swap the widget's icons with your own SVGs, or hide them. Override the form title. Skip `client.css` entirely and write your own styles from scratch. |
+| **Gravatar with initials fallback** | Shows a commenter's Gravatar if they have one. Falls back to a clean initial avatar if they don't. |
+| **Stable thread keys** | Widget reads `<link rel="canonical">` automatically, so threads survive URL changes on Ghost, Hugo, Jekyll, and WordPress with no config. Override manually with `data-url` when needed. |
 | **MIT licensed** | Free to use, self-host, and modify. |
 
 ---
@@ -76,12 +72,14 @@ cd discuss
 npm install --production
 cp .env.example .env  # set JWT_SECRET at minimum
 npm run setup         # create your admin account
-npm start             # production server on port 3000
+npm start             # server starts on port 3000
 ```
 
-Then visit `/admin` to log in, add your domain, and copy your embed snippet.
+Visit `/admin` to log in, register your first domain, and grab your embed snippet.
 
-Use `npm run dev` instead of `npm start` for local development. It restarts the server automatically when files change.
+For local development use `npm run dev` instead — it restarts on file changes.
+
+When you're ready to run this in production, head to the [Deployment](#deployment) section. It covers running the server as a systemd service with automatic restarts, and configuring Nginx or Apache as a reverse proxy with SSL.
 
 ---
 
@@ -114,21 +112,21 @@ The widget loads with no styles at all. Every element has a named class, so you 
 
 ### Stable thread keys
 
-By default the widget uses `window.location.pathname` as the thread key. If you ever rename a URL, the comments under the old path become unreachable from the widget (they are still in the database).
+By default the widget uses `window.location.pathname` as the thread's identifier. If you ever rename a URL, the comments under the old path become unreachable from the widget (they're still in the database, just disconnected).
 
-To avoid this, pin a thread to a permanent key using `data-url`:
+The widget checks `<link rel="canonical">` automatically, so if your site already outputs canonical tags — Ghost, Hugo, Jekyll, and WordPress all do — threads are anchored to the canonical URL and survive slug changes with no extra config.
+
+If you need to set the key manually, use the `data-url` attribute:
 
 ```html
 <div id="discuss-comments" data-url="/posts/my-stable-slug"></div>
 ```
 
-Use a value that will never change: a post ID, a UUID, or a slug you commit to permanently. The `data-url` attribute takes priority over `window.location.pathname` when present.
-
-The widget also checks `<link rel="canonical">` automatically, so sites using canonical tags (Ghost, Hugo, Jekyll, WordPress) get stable thread keys across slug changes at zero config.
+Pick a value that will never change: a post ID, a UUID, or a slug you're permanently committed to. `data-url` takes priority over both the canonical tag and `window.location.pathname`.
 
 ### Programmatic options
 
-The snippet from your admin dashboard is all you need for most sites. Use `new DiscussWidget({...})` when you need to pin a thread, override the colour, or customise the form:
+The snippet from your admin dashboard handles everything automatically for most sites. Use `new DiscussWidget({...})` when you need to override the thread key, the brand colour, or the form's appearance:
 
 ```html
 <link rel="stylesheet" href="https://discuss.example.com/client.css">
@@ -154,43 +152,7 @@ The snippet from your admin dashboard is all you need for most sites. Use `new D
 | `icons.email` | built-in envelope icon | Icon inside the email input. Pass any SVG string, or `''` to hide it |
 | `icons.submit` | built-in send icon | Icon inside the submit button. Pass any SVG string, or `''` to hide it |
 
-**Customising the title:**
-
-```html
-<script>
-  new DiscussWidget({ title: 'Join the conversation' });
-</script>
-```
-
-**Replacing icons:**
-
-Pass any SVG string. To remove an icon entirely, pass an empty string.
-
-```html
-<script>
-  new DiscussWidget({
-    icons: {
-      name:   '<svg>...</svg>',  // your own person icon
-      email:  '<svg>...</svg>',  // your own email icon
-      submit: '',                // no icon on the submit button
-    }
-  });
-</script>
-```
-
-The SVG is injected directly into the DOM, so standard SVG attributes apply. Size the icon with `width` and `height` attributes or CSS.
-
-### Custom font
-
-The widget uses the system font stack by default. To use a custom font, set the `--discuss-font-family` CSS variable:
-
-```css
-#discuss-comments {
-    --discuss-font-family: 'Inter', sans-serif;
-}
-```
-
-Your page still needs to load the font file. The variable just tells the widget which family to apply.
+See [Colours, title, and icons](#colours-title-and-icons) for examples of customising the form's appearance.
 
 ### Cross-origin setup
 
@@ -284,6 +246,56 @@ You can override individual tokens for dark mode the same way:
 }
 ```
 
+### Colours, title, and icons
+
+**Brand colour**
+
+The brand colour controls buttons, links, and focus rings. The easiest way to set it is through the admin dashboard under **Domains > Settings > Appearance** — it applies to all visitors automatically. If you want to override it per-page, pass `primaryColor` to `new DiscussWidget`:
+
+```html
+<script>
+  new DiscussWidget({ primaryColor: '#7c3aed' });
+</script>
+```
+
+**Form title**
+
+The heading above the comment form defaults to "Leave a comment". Change it with the `title` option:
+
+```html
+<script>
+  new DiscussWidget({ title: 'Join the discussion' });
+</script>
+```
+
+**Icons**
+
+The name, email, and submit button each have a built-in SVG icon. Replace any of them with your own SVG string, or pass an empty string to hide the icon entirely:
+
+```html
+<script>
+  new DiscussWidget({
+    icons: {
+      name:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M3 21a9 9 0 0 1 18 0"/></svg>',
+      email:  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+      submit: '',  // hide the icon on the submit button
+    }
+  });
+</script>
+```
+
+The SVG is injected directly into the DOM. Size it with `width` and `height` attributes on the SVG element, or target `.discuss-form-input-wrapper svg` in your stylesheet. When an icon is hidden, the input adjusts its padding automatically.
+
+**Custom font**
+
+The widget uses the system font stack by default. Point it at any font your page has already loaded:
+
+```css
+#discuss-comments {
+    --discuss-font-family: 'Inter', sans-serif;
+}
+```
+
 ### Widget HTML structure
 
 ```
@@ -301,29 +313,46 @@ You can override individual tokens for dark mode the same way:
     ├── .discuss-form-textarea
     └── .discuss-form-bottom
         ├── .discuss-form-inputs
-        │   └── .discuss-form-input
+        │   ├── .discuss-form-input-wrapper
+        │   │   └── .discuss-form-input   (name)
+        │   └── .discuss-form-input-wrapper
+        │       └── .discuss-form-input   (email)
         └── .discuss-form-actions
             └── .discuss-btn .discuss-btn-primary
 ```
 
 | Class | Notes |
 |---|---|
-| `.discuss-comment-row` | Wraps avatar and content |
-| `.discuss-avatar` | Circular avatar |
-| `.discuss-comment-body` | Prose area; inherits `color: var(--t2)` |
-| `.discuss-badge` | Author / Moderator badge |
+| `.discuss-comment-row` | Wraps avatar and comment content |
+| `.discuss-avatar` | Circular avatar — Gravatar or initials |
+| `.discuss-comment-body` | Rendered markdown prose |
+| `.discuss-badge` | Author / Moderator / Pinned label |
+| `.discuss-badge-info` | Blue badge variant (Pinned) |
+| `.discuss-badge-success` | Green badge variant (Author) |
+| `.discuss-badge-warning` | Amber badge variant (Moderator) |
 | `.discuss-reply-tag` | Inline @-mention link to parent comment |
-| `.discuss-action-btn` | Reply / Share buttons |
+| `.discuss-action-btn` | Reply / Share buttons below a comment |
 | `.discuss-thread-line` | Vertical clickable thread collapse line |
-| `.discuss-form-container` | New-comment form wrapper |
+| `.discuss-form-container` | Outer wrapper for the comment form |
 | `.discuss-form-textarea` | Main comment textarea |
-| `.discuss-form-input` | Name / email fields |
+| `.discuss-form-input-wrapper` | Wraps icon + input field |
+| `.discuss-input-no-icon` | Added to `.discuss-form-input-wrapper` when the icon is hidden — resets left padding |
+| `.discuss-form-input` | Name / email text inputs |
+| `.discuss-form-actions` | Wraps the submit button |
 | `.discuss-btn-primary` | Submit button |
-| `.discuss-hidden` | Utility: `display: none !important` |
+| `.discuss-hidden` | Utility: `display: none !important` — used by JS to show/hide elements |
 
 ### Example stylesheet
 
-If you embed without `client.css`, here is a minimal starting point. Copy it, extend it, or replace it entirely. Don't remove the utility classes like `.discuss-hidden` — the widget's JavaScript uses them to show and hide things.
+If you embed without `client.css`, here is a minimal starting point. Copy it, extend it, or replace it entirely.
+
+> [!IMPORTANT]
+> Don't remove or rename the utility classes like `.discuss-hidden` — the widget's JavaScript uses them to show and hide elements at runtime.
+
+<details>
+<summary>Show example stylesheet</summary>
+
+
 
 ```css
 #discuss-comments {
@@ -548,6 +577,8 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
 }
 ```
 
+</details>
+
 ---
 
 ## Configuration
@@ -710,6 +741,7 @@ server {
 }
 ```
 
+> [!TIP]
 > **Setting up SSL with Certbot?** Configure the port 80 block only, then run `certbot --nginx -d discuss.example.com`. Certbot will get the certificate and rewrite your config automatically.
 
 ### Apache
@@ -740,7 +772,8 @@ Then add a VirtualHost. Replace `discuss.example.com` with your domain and fill 
 </VirtualHost>
 ```
 
-Both `AllowEncodedSlashes NoDecode` and `nocanon` are required. Without them, Apache decodes percent-encoded slashes before proxying and breaks admin deep links on hard reload.
+> [!WARNING]
+> Both `AllowEncodedSlashes NoDecode` and `nocanon` are required. Without them, Apache decodes percent-encoded slashes before proxying and breaks admin deep links on hard reload.
 
 ---
 
@@ -783,7 +816,8 @@ If you intentionally leave out the `<link>` tag the widget still loads — it ju
 
 **Migration:** The normalisation migration runs automatically on first server start. It unifies `/post/` and `/post` into a single thread — no data is lost, and no manual steps are needed.
 
-**Apache users:** This release requires two new directives in your VirtualHost. Without them, hard-reloading admin deep links like `/admin/comments` returns a 404:
+> [!WARNING]
+> **Apache users:** This release requires two new directives in your VirtualHost. Without them, hard-reloading admin deep links like `/admin/comments` returns a 404:
 
 ```apache
 AllowEncodedSlashes NoDecode
@@ -794,7 +828,8 @@ ProxyPass / http://127.0.0.1:3000/ nocanon
 
 **New:** Email notifications for new comments and replies, with per-domain SMTP configuration and encrypted credential storage.
 
-**Action required:** Set `ENCRYPTION_KEY` in your `.env` before entering any SMTP credentials. Without it, credentials are stored as plaintext.
+> [!IMPORTANT]
+> Set `ENCRYPTION_KEY` in your `.env` before entering any SMTP credentials. Without it, credentials are stored as plaintext.
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
