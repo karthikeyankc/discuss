@@ -75,6 +75,12 @@ export class DiscussWidget {
         this.config = {};
         this.primaryColor = options.primaryColor || null;
         this.domainId = options.domainId || null;
+        this.title = options.title ?? 'Leave a comment';
+        this.icons = {
+            name:   options.icons?.name   !== undefined ? options.icons.name   : ICONS.user,
+            email:  options.icons?.email  !== undefined ? options.icons.email  : ICONS.mail,
+            submit: options.icons?.submit !== undefined ? options.icons.submit : ICONS.send,
+        };
 
         this.init = this.init.bind(this);
         this.render = this.render.bind(this);
@@ -149,7 +155,7 @@ export class DiscussWidget {
         this.container.innerHTML = `
             <div class="discuss-font-sans" style="color:var(--t1)">
                 <div class="discuss-mb-10">
-                    <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">Leave a comment</h3>
+                    <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">${this.title}</h3>
                     ${this.renderForm(0)}
                 </div>
                 ${roots.length > 0 ? `
@@ -401,18 +407,18 @@ export class DiscussWidget {
                     <div class="discuss-form-bottom">
                         <div class="discuss-form-inputs">
                             <div class="discuss-form-input-wrapper">
-                                ${ICONS.user}
+                                ${this.icons.name}
                                 <input type="text" name="name" class="discuss-form-input" placeholder="Name" required>
                             </div>
                             <div class="discuss-form-input-wrapper">
-                                ${ICONS.mail}
+                                ${this.icons.email}
                                 <input type="email" name="email" class="discuss-form-input" placeholder="Email (optional)">
                             </div>
                         </div>
-                        
+
                         <div class="discuss-form-actions">
                             <button type="submit" class="discuss-btn discuss-btn-primary">
-                                ${ICONS.send} Post
+                                ${this.icons.submit} Post
                             </button>
                         </div>
                     </div>

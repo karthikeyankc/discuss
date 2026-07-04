@@ -13,6 +13,39 @@
 
 ---
 
+## Table of Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Embedding](#embedding)
+  - [Basic embed](#basic-embed)
+  - [Unstyled embed](#unstyled-embed)
+  - [Stable thread keys](#stable-thread-keys)
+  - [Programmatic options](#programmatic-options)
+  - [Custom font](#custom-font)
+  - [Cross-origin setup](#cross-origin-setup)
+  - [Local development](#local-development)
+- [Customisation](#customisation)
+  - [CSS custom properties](#css-custom-properties)
+  - [Widget HTML structure](#widget-html-structure)
+  - [Example stylesheet](#example-stylesheet)
+- [Configuration](#configuration)
+- [Email Notifications](#email-notifications)
+  - [Choosing a provider](#choosing-a-provider)
+  - [Gmail setup](#gmail-setup)
+  - [Resend setup](#resend-setup)
+  - [Postmark setup](#postmark-setup)
+- [Deployment](#deployment)
+  - [systemd](#systemd)
+  - [Nginx](#nginx)
+  - [Apache](#apache)
+- [Upgrading](#upgrading)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
 ## Features
 
 - **Lightweight embed.** Two lines: a `<link>` for styles and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 4.7 KB gzip, `client.css` is 12.9 KB.
@@ -111,6 +144,36 @@ Use `new DiscussWidget({...})` only if you need to override defaults:
 | `postUrl` | `window.location.pathname` | Thread key for this page |
 | `primaryColor` | fetched from server | Brand colour for buttons and links |
 | `domainId` | *(none)* | Required when posting from a cross-origin admin context |
+| `title` | `'Leave a comment'` | Heading above the comment form |
+| `icons.name` | person SVG | Icon inside the name input. Pass an SVG string or `''` to hide it |
+| `icons.email` | envelope SVG | Icon inside the email input. Pass an SVG string or `''` to hide it |
+| `icons.submit` | send SVG | Icon inside the submit button. Pass an SVG string or `''` to hide it |
+
+**Customising the title:**
+
+```html
+<script>
+  new DiscussWidget({ title: 'Join the conversation' });
+</script>
+```
+
+**Replacing icons:**
+
+Pass any SVG string. To remove an icon entirely, pass an empty string.
+
+```html
+<script>
+  new DiscussWidget({
+    icons: {
+      name:   '<svg>...</svg>',  // your own person icon
+      email:  '<svg>...</svg>',  // your own email icon
+      submit: '',                // no icon on the submit button
+    }
+  });
+</script>
+```
+
+The SVG is injected directly into the DOM, so standard SVG attributes apply. Size the icon with `width` and `height` attributes or CSS.
 
 ### Custom font
 
