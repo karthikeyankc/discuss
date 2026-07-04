@@ -8,17 +8,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 - **Separate `client.css`**: widget styles are now a standalone file served with `Access-Control-Allow-Origin: *`. Browsers can cache the stylesheet independently of the script. The embed snippet now includes a `<link rel="stylesheet">` tag.
-- **Unstyled embed mode**: omit the `<link>` tag to load the widget with no default styles. Useful for teams writing their own CSS from scratch.
-- **`docs/customization.md`**: complete reference for all CSS custom properties, the widget HTML structure and class names, and a full example stylesheet for unstyled-mode users.
-- **`src/client/widget.css`**: widget component styles are now a proper source file instead of an inline template literal embedded inside the JavaScript bundle.
+- **Unstyled embed mode**: omit the `<link>` tag to load the widget with no default styles.
+- **Icon slots**: pass any SVG string to `icons.name`, `icons.email`, or `icons.submit` in `new DiscussWidget({...})` to replace the built-in icons. Pass `''` to hide an icon entirely. The input adjusts its padding automatically when an icon is removed.
+- **Title option**: pass `title` to `new DiscussWidget({...})` to override the "Leave a comment" heading with any text.
+- **Help menu in the admin sidebar**: replaces the plain version badge with a popover that links to documentation, GitHub, and the changelog. Shows an update notification when a newer release is available on GitHub, checked once per session.
+- **Gravatar fix on admin edit**: editing a commenter's email in the admin now updates their avatar immediately without a page reload.
+- **Documentation consolidated into README**: all docs are now in a single README with a table of contents. Separate doc files have been removed.
 
 ### Changed
-- Admin-shell CSS (navbar, sidebar, stat card, breadcrumb, page container classes) stripped from the widget bundle. `client.css` now contains only widget component styles.
-- `client.js` reduced from 112 KB to 15 KB (4.7 KB gzip) after moving CSS to its own file. `client.css` is 91 KB (12.9 KB gzip). Total transfer for a styled embed is approximately 17.6 KB gzip.
+- Admin-shell CSS stripped from the widget bundle. `client.css` now contains only widget component styles.
+- `client.js` reduced from 112 KB to 15 KB (4.7 KB gzip). `client.css` is 91 KB (12.9 KB gzip). Total transfer for a styled embed is around 17.6 KB gzip.
+- Update notification in the admin now uses a proper semver comparison, so running a pre-release version no longer triggers a false "update available" alert.
+- Pre-commit hook extended with a docs drift check: CHANGELOG and README must reference the current version before a commit is allowed.
 
 ### Upgrading from v0.4.x
 
-The embed snippet must be updated. Previously, CSS was bundled inside `client.js`. It is now a separate file. Add the stylesheet link:
+The embed snippet needs updating. CSS was previously bundled inside `client.js` and is now a separate file. Add the stylesheet link:
 
 ```html
 <link rel="stylesheet" href="https://discuss.example.com/client.css">
@@ -26,9 +31,7 @@ The embed snippet must be updated. Previously, CSS was bundled inside `client.js
 <script src="https://discuss.example.com/client.js"></script>
 ```
 
-The snippet in your admin dashboard has been updated automatically. If you hard-coded the old snippet, add the `<link>` tag or the widget will render with no styles.
-
-See [Upgrading to v0.5.0](docs/upgrading.md#upgrading-to-v050).
+The snippet in your admin dashboard has already been updated. If you hard-coded the old snippet, add the `<link>` tag or the widget will load with no styles. No database changes.
 
 ---
 
