@@ -48,20 +48,23 @@
 
 ## Features
 
-- **Lightweight embed.** Two lines: a `<link>` for styles and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 4.7 KB gzip, `client.css` is 12.9 KB.
-- **Unstyled mode.** Don't want the default look? Skip the `<link>` tag and the widget loads with no styles. Build your own using the widget's class names and CSS custom properties.
-- **CSS custom properties.** All colours, surfaces, and borders are CSS variables on `#discuss-comments`. Change a token and the whole widget picks it up, no need to hunt down every selector.
-- **Your data, your server.** Everything goes into a single SQLite file on your machine. No third-party services, no subscriptions.
-- **Gravatar avatars** with a letter-initial fallback.
-- **Markdown support.** Comments are rendered server-side and sanitized with `sanitize-html`.
-- **Nested replies** up to 3 levels deep.
-- **Spam protection.** Honeypot field and a blocked words list, both configurable per domain.
-- **Local dev support.** Add extra allowed origins to any domain so you can test comments on localhost without registering a separate entry.
-- **Email notifications.** SMTP alerts for new comments and replies. Credentials are stored encrypted (AES-256-GCM). Admin and commenter notifications are set up independently.
-- **Full admin dashboard** at `/admin`. Approve, pin, edit, delete, search comments, and manage per-domain settings.
-- **Per-domain settings.** Brand colour with WCAG/APCA indicators, spam controls, SMTP setup, and your embed snippet in one tabbed settings page.
-- **Email preview.** Check how each notification template looks before a real comment ever fires it.
-- **MIT licensed.**
+| Feature | Description |
+|---|---|
+| **Lightweight embed** | Two lines: a `<link>` for styles and a `<script>`. No npm, no bundler. `client.js` is 4.7 KB gzip, `client.css` is 12.9 KB. |
+| **Unstyled mode** | Skip the `<link>` tag and the widget loads with no styles. Build your own using the widget's class names. |
+| **CSS custom properties** | All colours, surfaces, and borders are CSS variables on `#discuss-comments`. Change a token and the whole widget picks it up. |
+| **Icon & title slots** | Swap the name, email, and submit button icons with any SVG, or hide them entirely. Override the "Leave a comment" heading text. |
+| **Your data, your server** | Everything goes into a single SQLite file on your machine. No third-party services, no subscriptions. |
+| **Gravatar avatars** | Automatic Gravatar lookup with a letter-initial fallback when no Gravatar is set. |
+| **Markdown support** | Comments are rendered server-side and sanitized with `sanitize-html`. |
+| **Nested replies** | Threaded replies up to 3 levels deep. |
+| **Spam protection** | Honeypot field and a blocked words list, both configurable per domain. |
+| **Local dev support** | Add extra allowed origins to any domain so you can test on localhost without a separate entry. |
+| **Email notifications** | SMTP alerts for new comments and replies. Credentials stored encrypted (AES-256-GCM). Admin and commenter notifications configured independently. |
+| **Full admin dashboard** | Approve, pin, edit, delete, and search comments. Manage per-domain settings at `/admin`. |
+| **Per-domain settings** | Brand colour with WCAG/APCA indicators, spam controls, SMTP setup, and embed snippet in one tabbed page. |
+| **Email preview** | See exactly how each notification template looks before a real comment fires it. |
+| **MIT licensed** | Free to use, self-host, and modify. |
 
 ---
 
@@ -84,6 +87,8 @@ Use `npm run dev` instead of `npm start` for local development. It restarts the 
 
 ## Embedding
 
+There are three ways to embed the widget, depending on how much control you want. Most people start with the basic embed and never need anything else.
+
 ### Basic embed
 
 Go to **Admin > Domains > Settings > Embed** and copy the snippet for your domain. Paste it into any page where you want comments to appear:
@@ -98,7 +103,7 @@ The script figures out the server URL from its own `src`, then pulls the domain'
 
 ### Unstyled embed
 
-To embed without any default styles, omit the `<link>` tag:
+If you want full control over the look, skip the `<link>` tag entirely:
 
 ```html
 <div id="discuss-comments"></div>
@@ -123,7 +128,7 @@ The widget also checks `<link rel="canonical">` automatically, so sites using ca
 
 ### Programmatic options
 
-Use `new DiscussWidget({...})` only if you need to override defaults:
+The snippet from your admin dashboard is all you need for most sites. Use `new DiscussWidget({...})` when you need to pin a thread, override the colour, or customise the form:
 
 ```html
 <link rel="stylesheet" href="https://discuss.example.com/client.css">
@@ -145,9 +150,9 @@ Use `new DiscussWidget({...})` only if you need to override defaults:
 | `primaryColor` | fetched from server | Brand colour for buttons and links |
 | `domainId` | *(none)* | Required when posting from a cross-origin admin context |
 | `title` | `'Leave a comment'` | Heading above the comment form |
-| `icons.name` | person SVG | Icon inside the name input. Pass an SVG string or `''` to hide it |
-| `icons.email` | envelope SVG | Icon inside the email input. Pass an SVG string or `''` to hide it |
-| `icons.submit` | send SVG | Icon inside the submit button. Pass an SVG string or `''` to hide it |
+| `icons.name` | built-in person icon | Icon inside the name input. Pass any SVG string, or `''` to hide it |
+| `icons.email` | built-in envelope icon | Icon inside the email input. Pass any SVG string, or `''` to hide it |
+| `icons.submit` | built-in send icon | Icon inside the submit button. Pass any SVG string, or `''` to hide it |
 
 **Customising the title:**
 
@@ -655,7 +660,7 @@ Edit `.env` and set `JWT_SECRET` at minimum.
 
 ### systemd
 
-Create `/etc/systemd/system/discuss.service`:
+systemd keeps the server running after reboots and restarts it if it crashes. Create `/etc/systemd/system/discuss.service`, replacing `/var/www/discuss` with wherever you cloned the repo and `www-data` with the user you want it to run as:
 
 ```ini
 [Unit]
@@ -675,13 +680,19 @@ Environment=NODE_ENV=production PORT=3000
 WantedBy=multi-user.target
 ```
 
+Then enable and start it:
+
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable discuss
 sudo systemctl start discuss
 ```
 
+Check that it's running with `sudo systemctl status discuss`.
+
 ### Nginx
+
+This config proxies requests from your public domain to the Node server on port 3000. Replace `discuss.example.com` with your domain:
 
 ```nginx
 server {
@@ -699,19 +710,25 @@ server {
 }
 ```
 
-> **New subdomain with Certbot?** Configure the port 80 block only, then run `certbot --nginx -d discuss.example.com`. Certbot will obtain the certificate and rewrite your config automatically.
+> **Setting up SSL with Certbot?** Configure the port 80 block only, then run `certbot --nginx -d discuss.example.com`. Certbot will get the certificate and rewrite your config automatically.
 
 ### Apache
 
-Enable the required modules first: `sudo a2enmod proxy proxy_http headers`
+First enable the modules you need:
+
+```bash
+sudo a2enmod proxy proxy_http headers
+```
+
+Then add a VirtualHost. Replace `discuss.example.com` with your domain and fill in your SSL cert paths:
 
 ```apache
 <VirtualHost *:443>
     ServerName discuss.example.com
 
     SSLEngine on
-    # SSLCertificateFile /path/to/cert.pem
-    # SSLCertificateKeyFile /path/to/privkey.pem
+    SSLCertificateFile /path/to/cert.pem
+    SSLCertificateKeyFile /path/to/privkey.pem
 
     AllowEncodedSlashes NoDecode
 
@@ -723,7 +740,7 @@ Enable the required modules first: `sudo a2enmod proxy proxy_http headers`
 </VirtualHost>
 ```
 
-Both `AllowEncodedSlashes NoDecode` and `nocanon` are required. Without them, Apache decodes percent-encoded slashes before proxying and breaks deep admin URLs on hard reload.
+Both `AllowEncodedSlashes NoDecode` and `nocanon` are required. Without them, Apache decodes percent-encoded slashes before proxying and breaks admin deep links on hard reload.
 
 ---
 
@@ -748,7 +765,9 @@ sudo systemctl status discuss
 
 ### v0.5.0
 
-CSS is no longer bundled inside `client.js`. It's now a separate `client.css` file. Update your embed snippet to include the stylesheet:
+**New:** Icon and title slots in the widget. Swap the name, email, and submit button icons with your own SVG, or pass `''` to hide them. Override the "Leave a comment" heading with any text you like. Help menu in the admin sidebar shows the current version and links to docs, GitHub, changelog, and update notifications.
+
+**Breaking:** CSS is no longer bundled inside `client.js`. It's now a separate `client.css` file that you need to include yourself. Update your embed snippet:
 
 ```html
 <link rel="stylesheet" href="https://discuss.example.com/client.css">
@@ -756,13 +775,15 @@ CSS is no longer bundled inside `client.js`. It's now a separate `client.css` fi
 <script src="https://discuss.example.com/client.js"></script>
 ```
 
-If you leave out the `<link>` tag the widget loads with no styles, which is fine if you're writing your own. The snippet in your admin dashboard is already updated. No database changes needed.
+If you intentionally leave out the `<link>` tag the widget still loads — it just has no styles, which is fine if you're writing your own. The snippet in your admin dashboard is already updated. No database changes.
 
 ### v0.4.0
 
-Adds trailing-slash URL normalisation. The migration runs automatically on first server start and unifies `/post/` and `/post` into a single thread. No manual steps needed.
+**New:** Trailing-slash URL normalisation, comment export, and admin deep-link support.
 
-**Apache users:** this release introduced admin deep-link support. Add the following to your VirtualHost if you haven't already:
+**Migration:** The normalisation migration runs automatically on first server start. It unifies `/post/` and `/post` into a single thread — no data is lost, and no manual steps are needed.
+
+**Apache users:** This release requires two new directives in your VirtualHost. Without them, hard-reloading admin deep links like `/admin/comments` returns a 404:
 
 ```apache
 AllowEncodedSlashes NoDecode
@@ -771,13 +792,15 @@ ProxyPass / http://127.0.0.1:3000/ nocanon
 
 ### v0.3.0
 
-Adds email notifications. Before entering any SMTP credentials, set `ENCRYPTION_KEY` in your `.env`. If you skip that, credentials are stored as plaintext.
+**New:** Email notifications for new comments and replies, with per-domain SMTP configuration and encrypted credential storage.
+
+**Action required:** Set `ENCRYPTION_KEY` in your `.env` before entering any SMTP credentials. Without it, credentials are stored as plaintext.
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-If you already saved SMTP credentials without a key and then add one later, you'll need to re-enter them. The previously stored plaintext values won't decrypt correctly under the new key.
+If you already saved credentials without a key and add one later, you'll need to re-enter them. The stored plaintext won't decrypt correctly under the new key.
 
 ### Renaming a post URL
 
@@ -793,23 +816,49 @@ To avoid this situation, pin threads to a stable key using `data-url`. See [Stab
 
 ## Roadmap
 
-### v0.6.0
-- Import comments
-- Comment reporting
+| Version | Feature | Status |
+|---|---|---|
+| v0.6.0 | Import comments | Planned |
+| v0.6.0 | Comment reporting | Planned |
+| v1.0.0 | Comment favouriting | Planned |
+| v1.0.0 | Comment sorting (newest, oldest, most liked) | Planned |
+| v1.0.0 | Rate limiting per domain and IP address | Planned |
+| v1.1.0 | Comment mentions | Planned |
 
-### v1.0.0
-- Comment favouriting
-- Comment sorting (newest, oldest, most liked)
-- Rate limiting per domain and IP address
-
-### v1.1.0
-- Comment mentions
+Have a feature request? [Open an issue](https://github.com/karthikeyankc/discuss/issues) and let's talk about it.
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for dev setup, conventions, and how to submit a pull request.
+Contributions are welcome. Here's how to get started:
+
+```bash
+git clone https://github.com/KarthikeyanKC/discuss.git
+cd discuss
+npm install
+npm run dev       # starts the dev server with auto-restart
+npm test          # run the full test suite
+```
+
+**Pre-commit hook**
+
+The repo includes a pre-commit hook that runs the test suite, checks that `CHANGELOG.md` has an entry for the current version, and for minor releases checks that the docs are up to date. Install it once after cloning:
+
+```bash
+cp scripts/pre-commit.sh .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
+
+If the hook rejects your commit, read the output — it'll tell you exactly what's missing.
+
+**Pull requests**
+
+- Keep PRs focused. One thing per PR makes it much easier to review.
+- Add a test for any new behaviour. The test suite is in `test/` using Node's built-in test runner.
+- Add a `CHANGELOG.md` entry under `## [Unreleased]`.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more detail on conventions and the review process.
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
 
