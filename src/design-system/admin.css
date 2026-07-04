@@ -97,3 +97,25 @@
     flex-shrink: 0;
   }
 }
+
+/* Help menu popover items */
+@layer components {
+  .help-popover-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.4375rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--t2);
+    text-decoration: none;
+    transition: background 120ms;
+  }
+  .help-popover-item:hover { background: var(--s3); }
+  .help-popover-item svg,
+  .help-popover-item i[data-lucide] {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    color: var(--t4);
+  }
+}

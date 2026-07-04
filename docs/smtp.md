@@ -4,10 +4,10 @@ Discuss can send email notifications when new comments are posted or when someon
 
 ## How it works
 
-- **Admin notifications** — you receive an email when a new comment is posted on your site, or when someone replies to one of your comments.
-- **Commenter notifications** — when a visitor leaves their email address and someone replies to their comment, they receive a notification automatically. No opt-in flow required.
+- **Admin notifications** tell you when a new comment arrives on your site, or when someone replies to one of your own comments.
+- **Commenter notifications** go out automatically when someone replies to a visitor's comment. They don't need to opt in anywhere.
 
-Credentials are encrypted at rest using AES-256-GCM. Set `ENCRYPTION_KEY` in your `.env` before configuring SMTP — see [Configuration](configuration.md).
+Credentials are stored encrypted (AES-256-GCM), but only if you've already set `ENCRYPTION_KEY` in your `.env`. Do that before entering any SMTP credentials in the dashboard. See [Configuration](configuration.md).
 
 ## Choosing a provider
 
@@ -25,7 +25,7 @@ For most self-hosters, Gmail or Resend is the right starting point.
 
 ## Gmail setup
 
-Gmail requires an **App Password** — your regular Google account password will not work.
+Gmail requires an **App Password**. Your regular Google account password will not work.
 
 1. Enable 2-Step Verification on your Google account.
 2. Go to **Google Account > Security > App passwords**.
@@ -68,7 +68,7 @@ Gmail requires an **App Password** — your regular Google account password will
 
 ## Sender name
 
-Set **Sender Name** to a display name like `Discuss` or your site name. The actual sending address is always your SMTP username — this just controls what recipients see in their inbox.
+Set **Sender Name** to whatever you want people to see in their inbox, like `Discuss` or your site name. The actual sending address is always your SMTP username regardless of what you put here.
 
 ## Testing
 

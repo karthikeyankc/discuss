@@ -6,6 +6,7 @@
     <title>Discuss Admin</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/admin/admin.css">
+    <link rel="stylesheet" href="/client.css">
     <script src="/client-admin.js"></script>
     <script src="/admin/lucide.min.js"></script>
     <style>
@@ -286,6 +287,33 @@
                     Domains
                 </a>
                 <div style="flex:1"></div>
+                <div id="help-menu-wrap" style="position:relative;">
+                    <div id="help-popover" style="display:none;position:absolute;bottom:calc(100% + 6px);left:0;right:0;background:var(--s1);border:1px solid var(--bd);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.1);overflow:hidden;z-index:200;">
+                        <a href="https://github.com/KarthikeyanKC/discuss/tree/main/docs" target="_blank" rel="noopener" class="help-popover-item">
+                            <i data-lucide="book-open"></i> Documentation
+                        </a>
+                        <a href="https://github.com/karthikeyankc/discuss/issues/new?template=bug_report.yml" target="_blank" rel="noopener" class="help-popover-item">
+                            <i data-lucide="bug"></i> Report a bug
+                        </a>
+                        <a href="https://github.com/KarthikeyanKC/discuss" target="_blank" rel="noopener" class="help-popover-item">
+                            <i data-lucide="github"></i> GitHub
+                        </a>
+                        <div style="border-top:1px solid var(--bds);margin:0.25rem 0;"></div>
+                        <a href="https://github.com/KarthikeyanKC/discuss/releases" target="_blank" rel="noopener" class="help-popover-item">
+                            <i data-lucide="scroll-text"></i> Changelog
+                        </a>
+                        <a id="update-link" href="https://github.com/KarthikeyanKC/discuss/releases/latest" target="_blank" rel="noopener" class="help-popover-item" style="display:none;color:#d97706;">
+                            <i data-lucide="arrow-up-circle" style="color:#d97706;"></i>
+                            <span id="update-text">Update available</span>
+                        </a>
+                        <div style="border-top:1px solid var(--bds);margin:0.25rem 0;"></div>
+                        <div id="sidebar-version" style="padding:0.4375rem 0.875rem 0.625rem;font-size:0.75rem;font-family:monospace;color:var(--t4);"></div>
+                    </div>
+                    <a class="sidebar-item" href="#" onclick="app.toggleHelpMenu(event); return false;">
+                        <i data-lucide="circle-help"></i>
+                        Help
+                    </a>
+                </div>
             </nav>
 
             <main class="app-content">

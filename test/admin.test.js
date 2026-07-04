@@ -152,6 +152,52 @@ test('DELETE /domains returns 404 for a domain owned by another admin', async ()
 
 // --- Comment moderation ---
 
+test('PATCH /comments/:id updates name, email, and content', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Old Name', 'old@test.com', '', '<p>old</p>', 'old', now, now, 'https://example.com/p', domainId);
+    const id = comment.lastInsertRowid;
+
+    const res = await req('PATCH', `/api/admin/comments/${id}`, {
+        ...auth,
+        body: { name: 'New Name', email: 'new@test.com', content: 'updated content' },
+    });
+    assert.equal(res.statusCode, 200);
+
+    const row = db.prepare('SELECT name, email, content_raw FROM comments WHERE id = ?').get(id);
+    assert.equal(row.name, 'New Name');
+    assert.equal(row.email, 'new@test.com');
+    assert.equal(row.content_raw, 'updated content');
+});
+
+test('PATCH /comments/:id returns 400 when name is missing', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Name', 'e@test.com', '', '<p>x</p>', 'x', now, now, 'https://example.com/p', domainId);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { email: 'e@test.com', content: 'updated' },
+    });
+    assert.equal(res.statusCode, 400);
+});
+
+test('PATCH /comments/:id returns 404 for a comment from another admin domain', async () => {
+    const now = Date.now();
+    const otherDomain = db.prepare("SELECT id FROM domains WHERE domain = 'otherdomain.com'").get();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Other', 'other@test.com', '', '<p>x</p>', 'x', now, now, 'https://otherdomain.com/p', otherDomain.id);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { name: 'Hacker', email: 'h@test.com', content: 'pwned' },
+    });
+    assert.equal(res.statusCode, 404);
+});
+
 test('PATCH /comments/:id/approve approves a comment', async () => {
     const now = Date.now();
     const comment = db.prepare(
@@ -450,6 +496,24 @@ test('PATCH /comments/:id returns 404 for a comment from another admin domain', 
         body: { name: 'Hacked', content: 'hacked' },
     });
     assert.equal(res.statusCode, 404);
+});
+
+test('PATCH /comments/:id updates avatar when email changes', async () => {
+    const now = Date.now();
+    const comment = db.prepare(
+        'INSERT INTO comments (name, email, avatar, content, content_raw, created_at, updated_at, post_url, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run('Avatar Test', 'before@test.com', 'https://old.gravatar.url', '<p>hi</p>', 'hi', now, now, '/avatar-post', domainId);
+
+    const res = await req('PATCH', `/api/admin/comments/${comment.lastInsertRowid}`, {
+        ...auth,
+        body: { name: 'Avatar Test', email: 'after@test.com', content: 'hi' },
+    });
+    assert.equal(res.statusCode, 200);
+    assert.ok(res._body.avatar, 'response includes avatar URL');
+    assert.match(res._body.avatar, /gravatar\.com\/avatar\//);
+    const row = db.prepare('SELECT avatar FROM comments WHERE id = ?').get(comment.lastInsertRowid);
+    assert.ok(row.avatar.includes('gravatar.com'));
+    assert.notEqual(row.avatar, 'https://old.gravatar.url');
 });
 
 test('PATCH /comments/:id updates created_at when provided', async () => {

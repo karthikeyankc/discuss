@@ -2,8 +2,12 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 import { dynamicCors } from './middleware/cors.js';
 import { PORT, HOST } from './config.js';
+
+const require = createRequire(import.meta.url);
+const { version: APP_VERSION } = require('../package.json');
 
 // Route imports
 import commentsRoutes from './routes/api/comments.js';
@@ -25,7 +29,7 @@ app.use((req, res, next) => {
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Referrer-Policy', 'no-referrer');
     res.setHeader('Content-Security-Policy',
-        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.gravatar.com data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.gravatar.com data:; font-src 'self'; connect-src 'self' https://api.github.com; frame-ancestors 'none'"
     );
     res.removeHeader('X-Powered-By');
     next();
@@ -54,6 +58,7 @@ app.use((req, res, next) => {
 });
 
 // API Routes
+app.get('/api/version', (req, res) => res.json({ version: APP_VERSION }));
 app.use('/api/comments', commentsRoutes);
 app.use('/api/admin', adminRoutes);
 
@@ -73,10 +78,10 @@ app.use('/admin', (req, res, next) => {
     });
 });
 
-// Static files — client.js is a public embeddable script, must be loadable from any origin
+// Static files — client.js and client.css are public embeddable assets, must be loadable from any origin
 app.use(express.static(path.join(__dirname, '../public'), {
     setHeaders(res, filePath) {
-        if (filePath.endsWith('client.js')) {
+        if (filePath.endsWith('client.js') || filePath.endsWith('client.css')) {
             res.setHeader('Access-Control-Allow-Origin', '*');
         }
     },
