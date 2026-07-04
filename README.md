@@ -51,12 +51,12 @@
 | Feature | Description |
 |---|---|
 | **Lightweight embed** | A `<link>` and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 4.7 KB gzip; `client.css` is 12.9 KB. |
-| **SQLite — no database server** | Everything lives in a single file on your machine. Nothing to provision, nothing to pay for, trivial to back up. |
-| **Markdown** | Bold, italic, code blocks, lists, blockquotes — rendered server-side and sanitised. Commenters get a live preview of what they're writing. |
+| **SQLite, no database server** | Everything lives in a single file on your machine. Nothing to provision, nothing to pay for, trivial to back up. |
+| **Markdown** | Bold, italic, code blocks, lists, and blockquotes. Rendered server-side and sanitised. Commenters get a live preview as they type. |
 | **Nested replies** | Threaded conversations up to three levels deep, with collapsible thread lines. |
 | **Spam protection** | Honeypot field catches bots silently. Blocked word list queues matching comments for manual review. Both are configurable per domain. |
 | **Email notifications** | Get notified when a new comment arrives or when someone replies. Visitors get notified when someone replies to them too. SMTP credentials are stored encrypted (AES-256-GCM). |
-| **Admin dashboard** | Approve, reject, pin, edit, and delete comments. Search across all threads. Manage per-domain settings — all at `/admin`. |
+| **Admin dashboard** | Approve, reject, pin, edit, and delete comments. Search across all threads. Everything is at `/admin`. |
 | **Full customisation** | Every colour, border, and surface is a CSS variable. Swap the widget's icons with your own SVGs, or hide them. Override the form title. Skip `client.css` entirely and write your own styles from scratch. |
 | **Gravatar with initials fallback** | Shows a commenter's Gravatar if they have one. Falls back to a clean initial avatar if they don't. |
 | **Stable thread keys** | Widget reads `<link rel="canonical">` automatically, so threads survive URL changes on Ghost, Hugo, Jekyll, and WordPress with no config. Override manually with `data-url` when needed. |
@@ -77,7 +77,7 @@ npm start             # server starts on port 3000
 
 Visit `/admin` to log in, register your first domain, and grab your embed snippet.
 
-For local development use `npm run dev` instead — it restarts on file changes.
+For local development use `npm run dev` instead. It restarts on file changes.
 
 When you're ready to run this in production, head to the [Deployment](#deployment) section. It covers running the server as a systemd service with automatic restarts, and configuring Nginx or Apache as a reverse proxy with SSL.
 
@@ -114,7 +114,7 @@ The widget loads with no styles at all. Every element has a named class, so you 
 
 By default the widget uses `window.location.pathname` as the thread's identifier. If you ever rename a URL, the comments under the old path become unreachable from the widget (they're still in the database, just disconnected).
 
-The widget checks `<link rel="canonical">` automatically, so if your site already outputs canonical tags — Ghost, Hugo, Jekyll, and WordPress all do — threads are anchored to the canonical URL and survive slug changes with no extra config.
+The widget checks `<link rel="canonical">` automatically, so if your site already outputs canonical tags (Ghost, Hugo, Jekyll, and WordPress all do), threads survive slug changes with no extra config.
 
 If you need to set the key manually, use the `data-url` attribute:
 
@@ -250,7 +250,7 @@ You can override individual tokens for dark mode the same way:
 
 **Brand colour**
 
-The brand colour controls buttons, links, and focus rings. The easiest way to set it is through the admin dashboard under **Domains > Settings > Appearance** — it applies to all visitors automatically. If you want to override it per-page, pass `primaryColor` to `new DiscussWidget`:
+The brand colour controls buttons, links, and focus rings. The easiest way to set it is through the admin dashboard under **Domains > Settings > Appearance**. It applies to all visitors automatically. If you want to override it per-page, pass `primaryColor` to `new DiscussWidget`:
 
 ```html
 <script>
@@ -324,7 +324,7 @@ The widget uses the system font stack by default. Point it at any font your page
 | Class | Notes |
 |---|---|
 | `.discuss-comment-row` | Wraps avatar and comment content |
-| `.discuss-avatar` | Circular avatar — Gravatar or initials |
+| `.discuss-avatar` | Circular avatar, Gravatar if available or initials otherwise |
 | `.discuss-comment-body` | Rendered markdown prose |
 | `.discuss-badge` | Author / Moderator / Pinned label |
 | `.discuss-badge-info` | Blue badge variant (Pinned) |
@@ -336,18 +336,18 @@ The widget uses the system font stack by default. Point it at any font your page
 | `.discuss-form-container` | Outer wrapper for the comment form |
 | `.discuss-form-textarea` | Main comment textarea |
 | `.discuss-form-input-wrapper` | Wraps icon + input field |
-| `.discuss-input-no-icon` | Added to `.discuss-form-input-wrapper` when the icon is hidden — resets left padding |
+| `.discuss-input-no-icon` | Added to `.discuss-form-input-wrapper` when the icon slot is empty; resets left padding |
 | `.discuss-form-input` | Name / email text inputs |
 | `.discuss-form-actions` | Wraps the submit button |
 | `.discuss-btn-primary` | Submit button |
-| `.discuss-hidden` | Utility: `display: none !important` — used by JS to show/hide elements |
+| `.discuss-hidden` | Utility: `display: none !important`. Used by JS to show and hide elements |
 
 ### Example stylesheet
 
 If you embed without `client.css`, here is a minimal starting point. Copy it, extend it, or replace it entirely.
 
 > [!IMPORTANT]
-> Don't remove or rename the utility classes like `.discuss-hidden` — the widget's JavaScript uses them to show and hide elements at runtime.
+> Don't remove or rename utility classes like `.discuss-hidden`. The widget's JavaScript uses them to show and hide elements at runtime.
 
 <details>
 <summary>Show example stylesheet</summary>
@@ -611,7 +611,7 @@ Set `ENCRYPTION_KEY` in `.env` before entering any SMTP credentials. If you skip
 
 ### Choosing a provider
 
-Running your own mail server is not recommended — VPS IP ranges are commonly blocklisted and maintaining deliverability is ongoing work. Use a dedicated provider instead.
+Running your own mail server is not recommended. VPS IP ranges are commonly blocklisted and maintaining deliverability is ongoing work. Use a dedicated provider instead.
 
 | Provider | Free tier | Best for |
 |---|---|---|
@@ -808,13 +808,13 @@ sudo systemctl status discuss
 <script src="https://discuss.example.com/client.js"></script>
 ```
 
-If you intentionally leave out the `<link>` tag the widget still loads — it just has no styles, which is fine if you're writing your own. The snippet in your admin dashboard is already updated. No database changes.
+If you intentionally leave out the `<link>` tag the widget still loads, just with no styles. That's fine if you're writing your own. The snippet in your admin dashboard is already updated. No database changes.
 
 ### v0.4.0
 
 **New:** Trailing-slash URL normalisation, comment export, and admin deep-link support.
 
-**Migration:** The normalisation migration runs automatically on first server start. It unifies `/post/` and `/post` into a single thread — no data is lost, and no manual steps are needed.
+**Migration:** The normalisation migration runs automatically on first server start. It unifies `/post/` and `/post` into a single thread. No data is lost and no manual steps are needed.
 
 > [!WARNING]
 > **Apache users:** This release requires two new directives in your VirtualHost. Without them, hard-reloading admin deep links like `/admin/comments` returns a 404:
@@ -885,7 +885,7 @@ cp scripts/pre-commit.sh .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 ```
 
-If the hook rejects your commit, read the output — it'll tell you exactly what's missing.
+If the hook rejects your commit, read the output. It'll tell you exactly what's missing.
 
 **Pull requests**
 

@@ -60,8 +60,13 @@ const app = {
             if (!el || !v?.version) return;
             el.textContent = `v${v.version}`;
 
+            const newerThan = (a, b) => {
+                const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
+                for (let i = 0; i < 3; i++) { if ((pa[i]||0) !== (pb[i]||0)) return (pa[i]||0) > (pb[i]||0); }
+                return false;
+            };
             const checkUpdate = (latest) => {
-                if (!latest || latest === v.version) return;
+                if (!latest || !newerThan(latest, v.version)) return;
                 const link = document.getElementById('update-link');
                 const text = document.getElementById('update-text');
                 if (link) link.style.display = 'flex';
