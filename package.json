@@ -1,6 +1,6 @@
 {
   "name": "discuss",
-  "version": "0.3.6",
+  "version": "0.5.0",
   "description": "A self-hosted, lightweight SQLite comment system for static sites.",
   "main": "src/server.js",
   "type": "module",
@@ -38,6 +38,7 @@
   },
   "homepage": "https://github.com/KarthikeyanKC/discuss#readme",
   "dependencies": {
+    "@karthikeyankc/ken-design-system": "file:../../ken-design-system",
     "argon2": "^0.44.0",
     "better-sqlite3": "^12.9.0",
     "cookie-parser": "^1.4.7",

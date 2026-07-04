@@ -147,10 +147,6 @@ discuss.db
 *.db-shm
 *.db-wal
 
-# Intermediate build artifacts — client.css is injected into client.js at build
-# time and does not need to be version-controlled separately.
-public/client.css
-
 # OS noise
 .DS_Store
 Thumbs.db

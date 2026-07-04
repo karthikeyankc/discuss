@@ -17,4 +17,4 @@ The server refuses to start in production if `JWT_SECRET` is not set.
 
 ## Per-domain settings
 
-Settings that vary per site — brand colour, spam controls, SMTP credentials — are configured through the admin dashboard under **Domains > Settings**, not via environment variables. This allows you to run multiple sites from a single Discuss instance with independent configurations.
+Settings that vary per site (brand colour, spam controls, SMTP credentials) are configured through the admin dashboard under **Domains > Settings**, not via environment variables. This allows you to run multiple sites from a single Discuss instance with independent configurations.

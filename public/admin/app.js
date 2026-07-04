@@ -32,6 +32,11 @@ const app = {
                 dropdown.style.transition = 'opacity 150ms ease-in,transform 150ms ease-in,visibility 0ms 150ms';
                 document.getElementById('user-menu-btn')?.setAttribute('aria-expanded', 'false');
             }
+            const helpWrap = document.getElementById('help-menu-wrap');
+            const helpPopover = document.getElementById('help-popover');
+            if (helpWrap && !helpWrap.contains(e.target) && helpPopover?.style.display !== 'none') {
+                helpPopover.style.display = 'none';
+            }
         });
 
         const menuBtn = document.getElementById('menuBtn');
@@ -48,6 +53,39 @@ const app = {
         window.addEventListener('popstate', () => {
             const section = this._pathSection();
             if (section) this.showSection(section, false);
+        });
+
+        fetch('/api/version').then(r => r.ok ? r.json() : null).then(v => {
+            const el = document.getElementById('sidebar-version');
+            if (!el || !v?.version) return;
+            el.textContent = `v${v.version}`;
+
+            const newerThan = (a, b) => {
+                const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
+                for (let i = 0; i < 3; i++) { if ((pa[i]||0) !== (pb[i]||0)) return (pa[i]||0) > (pb[i]||0); }
+                return false;
+            };
+            const checkUpdate = (latest) => {
+                if (!latest || !newerThan(latest, v.version)) return;
+                const link = document.getElementById('update-link');
+                const text = document.getElementById('update-text');
+                if (link) link.style.display = 'flex';
+                if (text) text.textContent = `v${latest} available`;
+            };
+
+            const cached = sessionStorage.getItem('discuss-latest-version');
+            if (cached) {
+                checkUpdate(cached);
+            } else {
+                fetch('https://api.github.com/repos/KarthikeyanKC/discuss/releases/latest')
+                    .then(r => r.ok ? r.json() : null)
+                    .then(data => {
+                        const latest = data?.tag_name?.replace(/^v/, '');
+                        if (latest) sessionStorage.setItem('discuss-latest-version', latest);
+                        checkUpdate(latest);
+                    })
+                    .catch(() => {});
+            }
         });
 
         try {
@@ -120,6 +158,12 @@ const app = {
         if (parts.includes('inbox'))   return 'inbox';
         if (parts.includes('overview')) return 'overview';
         return null;
+    },
+
+    toggleHelpMenu(e) {
+        e.stopPropagation();
+        const popover = document.getElementById('help-popover');
+        if (popover) popover.style.display = popover.style.display === 'none' ? 'block' : 'none';
     },
 
     showSection(sectionId, pushHistory = true) {
@@ -1018,6 +1062,7 @@ const app = {
     _updateEmbedSnippet(domain, hex) {
         const origin = window.location.origin;
         const snippet = `<!-- Discuss comment widget -->
+<link rel="stylesheet" href="${origin}/client.css">
 <div id="discuss-comments"></div>
 <script src="${origin}/client.js"><\/script>
 <script>

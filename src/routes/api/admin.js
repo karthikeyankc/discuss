@@ -1,11 +1,17 @@
 import express from 'express';
 import argon2 from 'argon2';
+import crypto from 'crypto';
 import { rateLimit } from 'express-rate-limit';
 import { renderMarkdown } from '../../lib/render.js';
 import { encrypt, decrypt } from '../../lib/encrypt.js';
 import { sendTestEmail, previewEmailHtml } from '../../lib/mailer.js';
 import defaultDb from '../../db/index.js';
 import { authenticateAdmin, generateToken } from '../../middleware/auth.js';
+
+function getGravatarUrl(email) {
+    const hash = crypto.createHash('md5').update((email || '').trim().toLowerCase()).digest('hex');
+    return `https://www.gravatar.com/avatar/${hash}?d=404`;
+}
 
 const SMTP_ENCRYPTED_FIELDS = ['smtp_host', 'smtp_user', 'smtp_pass', 'smtp_from', 'notify_email'];
 
@@ -335,23 +341,25 @@ router.patch('/comments/:id', (req, res) => {
         const nameVal  = name.trim();
         const emailVal = email ? email.trim() : '';
 
+        const avatarUrl = emailVal ? getGravatarUrl(emailVal) : getGravatarUrl('');
+
         let info;
         if (ts) {
             info = db.prepare(`
                 UPDATE comments
-                SET name = ?, email = ?, content = ?, content_raw = ?, created_at = ?, updated_at = ?
+                SET name = ?, email = ?, avatar = ?, content = ?, content_raw = ?, created_at = ?, updated_at = ?
                 WHERE id = ? AND domain_id IN (SELECT id FROM domains WHERE admin_id = ?)
-            `).run(nameVal, emailVal, cleanHtml, content, ts, now, req.params.id, req.adminId);
+            `).run(nameVal, emailVal, avatarUrl, cleanHtml, content, ts, now, req.params.id, req.adminId);
         } else {
             info = db.prepare(`
                 UPDATE comments
-                SET name = ?, email = ?, content = ?, content_raw = ?, updated_at = ?
+                SET name = ?, email = ?, avatar = ?, content = ?, content_raw = ?, updated_at = ?
                 WHERE id = ? AND domain_id IN (SELECT id FROM domains WHERE admin_id = ?)
-            `).run(nameVal, emailVal, cleanHtml, content, now, req.params.id, req.adminId);
+            `).run(nameVal, emailVal, avatarUrl, cleanHtml, content, now, req.params.id, req.adminId);
         }
 
         if (info.changes === 0) return res.status(404).json({ error: 'Comment not found or unauthorized' });
-        res.json({ message: 'Comment updated', content: cleanHtml });
+        res.json({ message: 'Comment updated', content: cleanHtml, avatar: avatarUrl });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to update comment' });

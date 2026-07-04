@@ -119,7 +119,7 @@ export class DiscussAdminWidget extends DiscussWidget {
                 window.app?.showToast(d.error || 'Failed to save.', 'error');
                 return;
             }
-            const { content: rendered } = await res.json();
+            const { content: rendered, avatar } = await res.json();
 
             // Update rendered body in-place
             const body = document.querySelector(`#comment-${id} .discuss-comment-body`);
@@ -128,6 +128,18 @@ export class DiscussAdminWidget extends DiscussWidget {
             // Update displayed name
             const nameEl = document.querySelector(`#comment-${id} span[style*="font-weight:600"]`);
             if (nameEl) nameEl.textContent = name;
+
+            // Update email tooltip
+            const emailTip = document.querySelector(`#comment-${id} .em-tip`);
+            if (emailTip) emailTip.textContent = email;
+
+            // Update avatar image so Gravatar reloads with the new email hash
+            const avatarImg = document.querySelector(`#comment-${id} .discuss-avatar img`);
+            if (avatarImg && avatar) {
+                avatarImg.style.opacity = '0';
+                avatarImg.style.visibility = 'hidden';
+                avatarImg.src = avatar;
+            }
 
             // Update displayed date
             if (dateVal) {
