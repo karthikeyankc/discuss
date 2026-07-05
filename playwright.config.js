@@ -2,9 +2,11 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
     testDir: './test/browser',
+    reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
     use: {
         baseURL: 'http://127.0.0.1:9876',
-        screenshot: 'only-on-failure',
+        screenshot: 'on',
+        trace: 'retain-on-failure',
     },
     webServer: {
         command: 'node test/browser-server.js',
