@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.5] - 2026-07-05
+
+### Added
+- **Playwright browser test suite**: 28 automated browser tests covering primary colour resolution (hex, hsl, oklch, rgb, CSS variable), dark mode token injection, semantic token hierarchy, widget rendering, form validation, and user interactions.
+- **`placeholder` option**: pass `placeholder` to `new DiscussWidget({...})` to override the default comment textarea placeholder text.
+
+### Changed
+- **Semantic CSS tokens**: all internal shorthand tokens have been renamed to explicit semantic names. The rename is applied at build time in the CSS pipeline — no runtime aliases, no size overhead.
+  - Text: `--text-primary`, `--text-secondary`, `--text-tertiary`, `--text-muted`, `--text-subtle`
+  - Surface: `--surface-base`, `--surface-inset`, `--surface-overlay`
+  - Border: `--border-default`, `--border-subtle`, `--border-control`, `--border-button`, `--border-strong`
+  - Brand scale: `--brand-50` through `--brand-900`
+- **Comment body colour**: comment body text now uses `--text-secondary` for visual separation from the commenter name, which stays at full `--text-primary` contrast.
+
+### Fixed
+- **Dark mode code block bug**: `<pre>` blocks rendered with a near-white background when `darkSelector` was active. Dark mode now correctly overrides the pre background to `--surface-base`.
+- **Share highlight dark detection**: the flash highlight on a shared comment now correctly detects dark mode using `this.darkSelector` instead of a hardcoded `.dark` class check.
+
+---
+
 ## [0.5.2] - 2026-07-05
 
 ### Fixed
