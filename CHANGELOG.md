@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.1] - 2026-07-05
+
+### Added
+- **`darkSelector` option**: pass any CSS selector to `new DiscussWidget({ darkSelector: '...' })` and the widget will apply its dark colour scheme when that selector is present on an ancestor element. No default — the widget stays light unless you opt in. Works with any class-based or attribute-based dark mode toggle.
+
+---
+
 ## [0.5.0] - 2026-07-04
 
 ### Added

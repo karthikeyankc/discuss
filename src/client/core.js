@@ -76,6 +76,7 @@ export class DiscussWidget {
         this.primaryColor = options.primaryColor || null;
         this.domainId = options.domainId || null;
         this.title = options.title ?? 'Leave a comment';
+        this.darkSelector = options.darkSelector || null;
         this.icons = {
             name:   options.icons?.name   !== undefined ? options.icons.name   : ICONS.user,
             email:  options.icons?.email  !== undefined ? options.icons.email  : ICONS.mail,
@@ -113,7 +114,25 @@ export class DiscussWidget {
         el.style.setProperty('--focus-ring',      scale[700]);
     }
 
+    injectDarkStyles() {
+        if (!this.darkSelector) return;
+        const id = 'discuss-dark-style';
+        if (document.getElementById(id)) return;
+        const style = document.createElement('style');
+        style.id = id;
+        style.textContent = `${this.darkSelector} #discuss-comments {
+            --t1: #f8fafc; --t2: #e2e8f0; --t3: #cbd5e1; --t4: #94a3b8; --t5: #64748b;
+            --s1: #111827; --s2: #0a1120; --s3: #1e293b;
+            --bd: #475569; --bds: #334155; --bd-control: #475569; --bd-button: #334155; --bd-strong: #94a3b8;
+            --accent-fg: #93c5fd;
+            --accent-surface: color-mix(in srgb, #1e40af 32%, #111827);
+            --focus-ring: #93c5fd;
+        }`;
+        document.head.appendChild(style);
+    }
+
     async init() {
+        this.injectDarkStyles();
         this.container.innerHTML = '<div style="padding:1rem;color:#64748b;font-family:inherit">Loading comments…</div>';
 
         try {
