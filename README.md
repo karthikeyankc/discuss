@@ -233,12 +233,18 @@ When you pass `primaryColor` to `DiscussWidget`, the widget generates a 10-stop 
 
 **Dark mode**
 
-The widget has no dark mode by default. Pass `darkSelector` to tell it which CSS selector your site uses to activate dark mode:
+The widget has no dark mode by default. If you use the script tag without a manual `new DiscussWidget()` call, set the selector as a data attribute on the container:
+
+```html
+<div id="discuss-comments" data-dark-selector=".dark"></div>
+```
+
+If you initialise manually, pass it as an option:
 
 ```js
-new DiscussWidget({ darkSelector: '[data-theme="dark"]' });
-// or
 new DiscussWidget({ darkSelector: '.dark' });
+// or
+new DiscussWidget({ darkSelector: '[data-theme="dark"]' });
 ```
 
 When that selector matches an ancestor of the widget, the full set of dark colour tokens kicks in automatically. The widget injects a scoped `<style>` tag at runtime, so it works with any selector your site uses — class, attribute, or otherwise.
@@ -801,6 +807,14 @@ If running under systemd:
 ```bash
 sudo systemctl restart discuss
 sudo systemctl status discuss
+```
+
+### v0.5.2
+
+**Fix:** `darkSelector` was silently ignored when using the default auto-init (dropping in the script tag with no manual `new DiscussWidget()` call). Set the selector via `data-dark-selector` on the container instead:
+
+```html
+<div id="discuss-comments" data-dark-selector=".dark"></div>
 ```
 
 ### v0.5.1

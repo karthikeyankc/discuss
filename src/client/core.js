@@ -499,5 +499,8 @@ window.DiscussWidget = DiscussWidget;
 // Auto-init for public facing sites
 const autoContainer = document.getElementById('discuss-comments');
 if (autoContainer && autoContainer.dataset.isAdmin !== 'true') {
-    new DiscussWidget({ container: autoContainer });
+    new DiscussWidget({
+        container: autoContainer,
+        darkSelector: autoContainer.dataset.darkSelector || null,
+    });
 }

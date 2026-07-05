@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.2] - 2026-07-05
+
+### Fixed
+- **`darkSelector` auto-init bug**: the widget's auto-initialiser (which runs when `client.js` is dropped in without a manual `new DiscussWidget()` call) was not passing `darkSelector` through. Dark mode had no effect unless the embedder also called `new DiscussWidget({ container, darkSelector })` manually. Fixed by reading `data-dark-selector` from the container element: `<div id="discuss-comments" data-dark-selector=".dark"></div>`.
+
+---
+
 ## [0.5.1] - 2026-07-05
 
 ### Added
