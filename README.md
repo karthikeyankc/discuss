@@ -17,6 +17,7 @@
 ## Table of Contents
 
 - [Features](#features)
+- [Bundle size](#bundle-size)
 - [Quick Start](#quick-start)
 - [Embedding](#embedding)
   - [Basic embed](#basic-embed)
@@ -51,7 +52,7 @@
 
 | Feature | Description |
 |---|---|
-| **Lightweight embed** | A `<link>` and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 4.7 KB gzip; `client.css` is 12.9 KB. |
+| **Lightweight embed** | A `<link>` and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 5.8 KB gzip; `client.css` is 12.7 KB gzip. Total: ~18.5 KB. |
 | **SQLite, no database server** | Everything lives in a single file on your machine. Nothing to provision, nothing to pay for, trivial to back up. |
 | **Markdown** | Bold, italic, code blocks, lists, and blockquotes. Rendered server-side and sanitised. Commenters get a live preview as they type. |
 | **Nested replies** | Threaded conversations up to three levels deep, with collapsible thread lines. |
@@ -62,6 +63,18 @@
 | **Gravatar with initials fallback** | Shows a commenter's Gravatar if they have one. Falls back to a clean initial avatar if they don't. |
 | **Stable thread keys** | Widget reads `<link rel="canonical">` automatically, so threads survive URL changes on Ghost, Hugo, Jekyll, and WordPress with no config. Override manually with `data-url` when needed. |
 | **MIT licensed** | Free to use, self-host, and modify. |
+
+---
+
+## Bundle size
+
+| File | Raw | Gzip |
+|---|---|---|
+| `client.js` | 18.05 KB | 5.83 KB |
+| `client.css` | 92.36 KB | 12.65 KB |
+| **Total** | **110.41 KB** | **18.49 KB** |
+
+Run `npm run bundle-size` locally to check current sizes after a build.
 
 ---
 
