@@ -16,7 +16,7 @@ export class DiscussAdminWidget extends DiscussWidget {
     getAdminTooltip(c) {
         if (!c.email) return '';
         return `
-            <span style="position:relative;display:inline-flex;align-items:center;color:var(--t5);cursor:help;padding:0.125rem;line-height:0;margin-left:0.25rem"
+            <span style="position:relative;display:inline-flex;align-items:center;color:var(--text-subtle);cursor:help;padding:0.125rem;line-height:0;margin-left:0.25rem"
                   onmouseenter="this.querySelector('.em-tip').style.opacity='1';this.querySelector('.em-tip').style.visibility='visible'"
                   onmouseleave="this.querySelector('.em-tip').style.opacity='0';this.querySelector('.em-tip').style.visibility='hidden'">
                 <span style="width:0.875rem;height:0.875rem;pointer-events:none;display:inline-flex">${ICONS.mail}</span>
@@ -30,7 +30,7 @@ export class DiscussAdminWidget extends DiscussWidget {
         const isoDate = new Date(c.created_at).toISOString().slice(0, 16);
 
         return `
-            <div style="width:1px;height:12px;background:var(--bds);margin:0 0.25rem"></div>
+            <div style="width:1px;height:12px;background:var(--border-subtle);margin:0 0.25rem"></div>
             <button class="discuss-action-btn" ${!c.is_approved ? 'style="color:#16a34a"' : ''}
                     onclick="window.DiscussWidgetInstance.toggleApprove(${c.id}, ${c.is_approved})">
                 ${c.is_approved
@@ -54,34 +54,34 @@ export class DiscussAdminWidget extends DiscussWidget {
 
             <!-- Inline edit form -->
             <div id="discuss-edit-form-${c.id}"
-                 style="display:none;width:100%;margin-top:0.75rem;padding:1rem;border:1px solid var(--bds);border-radius:8px;background:var(--s2)">
+                 style="display:none;width:100%;margin-top:0.75rem;padding:1rem;border:1px solid var(--border-subtle);border-radius:8px;background:var(--surface-inset)">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
                     <div>
-                        <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--t2);margin-bottom:0.25rem">Name</label>
+                        <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem">Name</label>
                         <input type="text" id="discuss-edit-name-${c.id}"
-                               style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;font-size:0.875rem;color:var(--t1);background:var(--s1)"
+                               style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--border-control);border-radius:6px;font-size:0.875rem;color:var(--text-primary);background:var(--surface-base)"
                                value="${(c.name || '').replace(/"/g, '&quot;')}">
                     </div>
                     <div>
-                        <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--t2);margin-bottom:0.25rem">Email</label>
+                        <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem">Email</label>
                         <input type="email" id="discuss-edit-email-${c.id}"
-                               style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;font-size:0.875rem;color:var(--t1);background:var(--s1)"
+                               style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--border-control);border-radius:6px;font-size:0.875rem;color:var(--text-primary);background:var(--surface-base)"
                                value="${(c.email || '').replace(/"/g, '&quot;')}">
                     </div>
                 </div>
                 <div style="margin-bottom:0.75rem">
-                    <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--t2);margin-bottom:0.25rem">Published date</label>
+                    <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem">Published date</label>
                     <input type="datetime-local" id="discuss-edit-date-${c.id}"
-                           style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;font-size:0.875rem;color:var(--t1);background:var(--s1)"
+                           style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--border-control);border-radius:6px;font-size:0.875rem;color:var(--text-primary);background:var(--surface-base)"
                            value="${isoDate}">
                 </div>
                 <div style="margin-bottom:0.75rem">
-                    <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--t2);margin-bottom:0.25rem">Content (Markdown)</label>
+                    <label style="display:block;font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem">Content (Markdown)</label>
                     <textarea id="discuss-edit-content-${c.id}" rows="5"
-                              style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--bd-control);border-radius:6px;font-size:0.875rem;font-family:monospace;color:var(--t1);background:var(--s1);resize:vertical">${rawForEdit}</textarea>
+                              style="width:100%;padding:0.5rem 0.625rem;border:1px solid var(--border-control);border-radius:6px;font-size:0.875rem;font-family:monospace;color:var(--text-primary);background:var(--surface-base);resize:vertical">${rawForEdit}</textarea>
                 </div>
                 <div style="display:flex;gap:0.5rem">
-                    <button class="discuss-action-btn" style="background:var(--b600);color:#fff;padding:0.375rem 0.75rem;border-radius:6px"
+                    <button class="discuss-action-btn" style="background:var(--brand-600);color:#fff;padding:0.375rem 0.75rem;border-radius:6px"
                             onclick="window.DiscussWidgetInstance.saveEdit(${c.id})">Save</button>
                     <button class="discuss-action-btn"
                             onclick="window.DiscussWidgetInstance.toggleEditForm(${c.id})">Cancel</button>
@@ -143,7 +143,7 @@ export class DiscussAdminWidget extends DiscussWidget {
 
             // Update displayed date
             if (dateVal) {
-                const dateEl = document.querySelector(`#comment-${id} span[style*="color:var(--t4)"]`);
+                const dateEl = document.querySelector(`#comment-${id} span[style*="color:var(--text-muted)"]`);
                 if (dateEl) dateEl.textContent = new Date(dateVal).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
             }
 

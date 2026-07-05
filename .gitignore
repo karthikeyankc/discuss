@@ -153,3 +153,7 @@ Thumbs.db
 
 # Internal planning docs
 project-context.md
+
+# Playwright
+test-results/
+playwright-report/

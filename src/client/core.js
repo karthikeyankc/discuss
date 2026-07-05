@@ -47,6 +47,67 @@ function hslToRgb(h, s, l) {
     return [hue2rgb(p, q, h + 1/3), hue2rgb(p, q, h), hue2rgb(p, q, h - 1/3)].map(v => Math.round(v * 255));
 }
 
+// Resolve any CSS color value to #rrggbb, or null if unrecognised.
+// Accepts: #rrggbb, #rgb, rgb(), hsl(), oklch(), var(--foo), --foo
+function resolveColor(value, el) {
+    if (!value) return null;
+    value = value.trim();
+
+    // CSS variable: var(--foo) or bare --foo
+    if (value.startsWith('var(') || value.startsWith('--')) {
+        const prop = value.startsWith('var(')
+            ? value.slice(4, -1).split(',')[0].trim()
+            : value;
+        const resolved = getComputedStyle(el).getPropertyValue(prop).trim();
+        return resolved ? resolveColor(resolved, el) : null;
+    }
+
+    // #rrggbb
+    if (/^#[0-9a-fA-F]{6}$/.test(value)) return value;
+
+    // #rgb shorthand → expand
+    if (/^#[0-9a-fA-F]{3}$/.test(value)) {
+        const [, r, g, b] = value.match(/^#(.)(.)(.)$/);
+        return `#${r}${r}${g}${g}${b}${b}`;
+    }
+
+    // rgb(r, g, b) or rgb(r g b)
+    const rgbM = value.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
+    if (rgbM) return rgbToHex(+rgbM[1], +rgbM[2], +rgbM[3]);
+
+    // hsl(h, s%, l%) or hsl(h s% l%)
+    const hslM = value.match(/^hsla?\(\s*([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%/i);
+    if (hslM) {
+        const [r, g, b] = hslToRgb(+hslM[1], +hslM[2] / 100, +hslM[3] / 100);
+        return rgbToHex(r, g, b);
+    }
+
+    // oklch(L C H) — L is 0–1 or percentage, H is degrees
+    const oklchM = value.match(/^oklch\(\s*([\d.]+%?)[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
+    if (oklchM) {
+        let L = parseFloat(oklchM[1]);
+        if (oklchM[1].includes('%')) L /= 100;
+        const C = parseFloat(oklchM[2]);
+        const H = parseFloat(oklchM[3]) * Math.PI / 180;
+        const a = C * Math.cos(H), b_ = C * Math.sin(H);
+        const l_ = L + 0.3963377774 * a + 0.2158037573 * b_;
+        const m_ = L - 0.1055613458 * a - 0.0638541728 * b_;
+        const s_ = L - 0.0894841775 * a - 1.2914855480 * b_;
+        const l3 = l_ ** 3, m3 = m_ ** 3, s3 = s_ ** 3;
+        const rL =  4.0767416621 * l3 - 3.3077115913 * m3 + 0.2309699292 * s3;
+        const gL = -1.2684380046 * l3 + 2.6097574011 * m3 - 0.3413193965 * s3;
+        const bL = -0.0041960863 * l3 - 0.7034186147 * m3 + 1.7076147010 * s3;
+        const gamma = c => c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+        return rgbToHex(
+            Math.round(Math.max(0, Math.min(1, gamma(rL))) * 255),
+            Math.round(Math.max(0, Math.min(1, gamma(gL))) * 255),
+            Math.round(Math.max(0, Math.min(1, gamma(bL))) * 255)
+        );
+    }
+
+    return null;
+}
+
 // Derive a 9-stop scale (50→900) from a single brand hex
 function deriveColorScale(hex) {
     const [r, g, b] = hexToRgb(hex);
@@ -76,6 +137,7 @@ export class DiscussWidget {
         this.primaryColor = options.primaryColor || null;
         this.domainId = options.domainId || null;
         this.title = options.title ?? 'Leave a comment';
+        this.placeholder = options.placeholder ?? 'Share your thoughts... (*markdown* supported)';
         this.darkSelector = options.darkSelector || null;
         this.icons = {
             name:   options.icons?.name   !== undefined ? options.icons.name   : ICONS.user,
@@ -92,26 +154,40 @@ export class DiscussWidget {
         // Apply embed-snippet colour immediately so there's no flash
         if (this.primaryColor) this.applyTheme(this.primaryColor);
 
+        this.watchPrimaryColor();
         this.init();
     }
 
-    applyTheme(hex) {
-        if (!hex || !/^#[0-9a-fA-F]{6}$/.test(hex)) return;
+    applyTheme(value) {
+        const hex = resolveColor(value, this.container);
+        if (!hex) return;
         const scale = deriveColorScale(hex);
         const el = this.container;
-        el.style.setProperty('--b50',  scale[50]);
-        el.style.setProperty('--b100', scale[100]);
-        el.style.setProperty('--b200', scale[200]);
-        el.style.setProperty('--b300', scale[300]);
-        el.style.setProperty('--b400', scale[400]);
-        el.style.setProperty('--b500', scale[500]);
-        el.style.setProperty('--b600', scale[600]);
-        el.style.setProperty('--b700', scale[700]);
-        el.style.setProperty('--b800', scale[800]);
-        el.style.setProperty('--b900', scale[900]);
+        el.style.setProperty('--brand-50',  scale[50]);
+        el.style.setProperty('--brand-100', scale[100]);
+        el.style.setProperty('--brand-200', scale[200]);
+        el.style.setProperty('--brand-300', scale[300]);
+        el.style.setProperty('--brand-400', scale[400]);
+        el.style.setProperty('--brand-500', scale[500]);
+        el.style.setProperty('--brand-600', scale[600]);
+        el.style.setProperty('--brand-700', scale[700]);
+        el.style.setProperty('--brand-800', scale[800]);
+        el.style.setProperty('--brand-900', scale[900]);
         el.style.setProperty('--accent-fg',      scale[700]);
         el.style.setProperty('--accent-surface',  scale[50]);
         el.style.setProperty('--focus-ring',      scale[700]);
+    }
+
+    watchPrimaryColor() {
+        if (!this.primaryColor || !this.darkSelector) return;
+        const val = this.primaryColor.trim();
+        if (!val.startsWith('var(') && !val.startsWith('--')) return;
+        const reapply = () => this.applyTheme(this.primaryColor);
+        const observe = (el) => {
+            if (el) new MutationObserver(reapply).observe(el, { attributes: true, attributeFilter: ['class'] });
+        };
+        observe(document.documentElement);
+        observe(document.body);
     }
 
     injectDarkStyles() {
@@ -121,12 +197,16 @@ export class DiscussWidget {
         const style = document.createElement('style');
         style.id = id;
         style.textContent = `${this.darkSelector} #discuss-comments {
-            --t1: #f8fafc; --t2: #e2e8f0; --t3: #cbd5e1; --t4: #94a3b8; --t5: #64748b;
-            --s1: #111827; --s2: #0a1120; --s3: #1e293b;
-            --bd: #475569; --bds: #334155; --bd-control: #475569; --bd-button: #334155; --bd-strong: #94a3b8;
+            --text-primary: #f8fafc; --text-secondary: #e2e8f0; --text-tertiary: #cbd5e1; --text-muted: #94a3b8; --text-subtle: #64748b;
+            --surface-base: #111827; --surface-inset: #0a1120; --surface-overlay: #1e293b;
+            --border-default: #475569; --border-subtle: #334155; --border-control: #475569; --border-button: #334155; --border-strong: #94a3b8;
             --accent-fg: #93c5fd;
             --accent-surface: color-mix(in srgb, #1e40af 32%, #111827);
             --focus-ring: #93c5fd;
+        }
+        ${this.darkSelector} #discuss-comments .discuss-comment-body pre {
+            background: var(--surface-base);
+            color: var(--text-secondary);
         }`;
         document.head.appendChild(style);
     }
@@ -139,8 +219,8 @@ export class DiscussWidget {
             const configRes = await fetch(this.configUrl);
             if (configRes.ok) {
                 this.config = await configRes.json();
-                // Authoritative colour from server overrides embed-snippet value
-                if (this.config.primary_color) this.applyTheme(this.config.primary_color);
+                // Server colour is the fallback; per-widget primaryColor takes priority
+                if (this.config.primary_color && !this.primaryColor) this.applyTheme(this.config.primary_color);
             }
 
             const commentsRes = await fetch(this.fetchUrl);
@@ -172,14 +252,14 @@ export class DiscussWidget {
         const roots = this.buildTree(comments);
 
         this.container.innerHTML = `
-            <div class="discuss-font-sans" style="color:var(--t1)">
+            <div class="discuss-font-sans" style="color:var(--text-primary)">
                 <div class="discuss-mb-10">
-                    <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--t1)">${this.title}</h3>
+                    <h3 class="discuss-text-lg discuss-font-semibold" style="margin:0 0 1.25rem;color:var(--text-primary)">${this.title}</h3>
                     ${this.renderForm(0)}
                 </div>
                 ${roots.length > 0 ? `
                 <div>
-                    <h4 class="discuss-text-sm discuss-font-semibold discuss-uppercase discuss-tracking-wide" style="margin:0 0 1.25rem;color:var(--t4)">${roots.length} Comment${roots.length !== 1 ? 's' : ''}</h4>
+                    <h4 class="discuss-text-sm discuss-font-semibold discuss-uppercase discuss-tracking-wide" style="margin:0 0 1.25rem;color:var(--text-tertiary)">${roots.length} Comment${roots.length !== 1 ? 's' : ''}</h4>
                     <div class="discuss-flex discuss-flex-col discuss-gap-6">
                         ${roots.map(c => this.renderComment(c)).join('')}
                     </div>
@@ -201,8 +281,8 @@ export class DiscussWidget {
                 if (targetEl) {
                     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     const originalBg = targetEl.style.backgroundColor;
-                    const isDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
-                    targetEl.style.backgroundColor = isDark ? '#1e293b' : 'var(--b50)';
+                    const isDark = this.darkSelector ? !!document.querySelector(this.darkSelector) : false;
+                    targetEl.style.backgroundColor = isDark ? 'var(--accent-surface)' : 'var(--brand-50)';
                     targetEl.style.borderRadius = '8px';
                     setTimeout(() => {
                         targetEl.style.transition = 'background-color 500ms ease';
@@ -332,7 +412,7 @@ export class DiscussWidget {
         const replyTag = replyToName ? `<a href="#comment-${replyToId}" class="discuss-reply-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>${replyToName}</a>` : '';
 
         const chevron = `
-            <button class="discuss-collapse-btn" data-id="${c.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--t4);display:inline-flex;align-items:center;margin-left:0.25rem;">
+            <button class="discuss-collapse-btn" data-id="${c.id}" aria-label="Collapse" style="background:transparent;border:none;padding:0;cursor:pointer;color:var(--text-muted);display:inline-flex;align-items:center;margin-left:0.25rem;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;"><path d="m6 9 6 6 6-6"/></svg>
             </button>
         `;
@@ -378,10 +458,10 @@ export class DiscussWidget {
                 </span>
                 <div class="discuss-comment-content" style="min-width:0">
                     <div style="display:flex;align-items:center;gap:0.375rem;flex-wrap:wrap;margin-bottom:0.375rem">
-                        <span style="font-weight:600;font-size:0.875rem;color:var(--t1)">${c.name}</span>
+                        <span style="font-weight:600;font-size:0.875rem;color:var(--text-primary)">${c.name}</span>
                         ${authorBadge}${pinBadge}${adminBadges}${adminTooltip}
-                        <span style="color:var(--t5);font-size:0.75rem">·</span>
-                        <span style="font-size:0.8125rem;color:var(--t4)">${dateStr}</span>
+                        <span style="color:var(--text-subtle);font-size:0.75rem">·</span>
+                        <span style="font-size:0.8125rem;color:var(--text-muted)">${dateStr}</span>
                         ${chevron}
                     </div>
                     
@@ -418,7 +498,7 @@ export class DiscussWidget {
         return `
             <form data-parent="${parentId}" style="width:100%">
                 <div class="discuss-form-container">
-                    <textarea name="content" class="discuss-form-textarea" placeholder="Share your thoughts... (*markdown* supported)" required></textarea>
+                    <textarea name="content" class="discuss-form-textarea" placeholder="${this.placeholder}" required></textarea>
                     
                     <input type="text" name="honeypot_field" style="display:none" tabindex="-1" autocomplete="off">
                     ${hpInput}

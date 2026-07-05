@@ -4,7 +4,6 @@
  * This file is appended to the compiled design-system CSS by scripts/build-client-css.cjs.
  */
 
-
 /* ── Widget base reset ── */
 #discuss-comments {
     text-align: left;
@@ -24,7 +23,7 @@
 #discuss-comments button { border: none; padding: 0; background: transparent; cursor: pointer; }
 #discuss-comments input:focus, #discuss-comments textarea:focus, #discuss-comments select:focus,
 #discuss-comments button:focus { outline: none; }
-#discuss-comments input::placeholder, #discuss-comments textarea::placeholder { color: var(--t5); opacity: 1; }
+#discuss-comments input::placeholder, #discuss-comments textarea::placeholder { color: var(--text-subtle); opacity: 1; }
 
 /* ── Tooltip arrow ── */
 #discuss-comments .em-tip::after {
@@ -93,19 +92,19 @@
 #discuss-comments .discuss-btn svg { width: 1em; height: 1em; flex-shrink: 0; }
 
 #discuss-comments .discuss-btn-primary {
-    background-color: var(--b600);
+    background-color: var(--brand-600);
     color: var(--on-primary);
-    border-color: var(--b600);
+    border-color: var(--brand-600);
 }
-#discuss-comments .discuss-btn-primary:hover { background-color: var(--b700); border-color: var(--b700); }
-#discuss-comments .discuss-btn-primary:active:not(:disabled) { background-color: var(--b800); border-color: var(--b800); }
+#discuss-comments .discuss-btn-primary:hover { background-color: var(--brand-700); border-color: var(--brand-700); }
+#discuss-comments .discuss-btn-primary:active:not(:disabled) { background-color: var(--brand-800); border-color: var(--brand-800); }
 
 #discuss-comments .discuss-btn-secondary {
-    background-color: var(--s1);
-    color: var(--t2);
-    border-color: var(--bd-button);
+    background-color: var(--surface-base);
+    color: var(--text-secondary);
+    border-color: var(--border-button);
 }
-#discuss-comments .discuss-btn-secondary:hover { background-color: var(--s3); }
+#discuss-comments .discuss-btn-secondary:hover { background-color: var(--surface-overlay); }
 
 /* ── Responsive avatar & thread spacing ── */
 #discuss-comments .discuss-comment-row {
@@ -145,7 +144,7 @@
 #discuss-comments .discuss-comment-body {
     font-size: 0.9375rem;
     line-height: 1.65;
-    color: var(--t2);
+    color: var(--text-secondary);
     margin: 0 0 0.75rem;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -153,10 +152,10 @@
 #discuss-comments .discuss-comment-body p { margin: 0 0 0.5em; }
 #discuss-comments .discuss-comment-body p:last-child { margin-bottom: 0; }
 #discuss-comments .discuss-comment-body blockquote {
-    border-left: 3px solid var(--bds);
+    border-left: 3px solid var(--border-subtle);
     padding-left: 1rem;
     margin: 0.5rem 0;
-    color: var(--t4);
+    color: var(--text-muted);
     font-style: italic;
 }
 #discuss-comments .discuss-comment-body kbd {
@@ -165,12 +164,12 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.8125em;
     line-height: 1.4;
-    color: var(--t2);
-    background: var(--s2);
-    border: 1px solid var(--bd);
-    border-bottom: 2px solid var(--bd-strong);
+    color: var(--text-secondary);
+    background: var(--surface-inset);
+    border: 1px solid var(--border-default);
+    border-bottom: 2px solid var(--border-strong);
     border-radius: 4px;
-    box-shadow: inset 0 -1px 0 var(--bd-strong), inset 0 1px 0 #fff;
+    box-shadow: inset 0 -1px 0 var(--border-strong), inset 0 1px 0 #fff;
     white-space: nowrap;
     vertical-align: baseline;
 }
@@ -188,15 +187,15 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.875em;
     padding: 0.15em 0.4em;
-    background: var(--s3);
-    color: var(--t2);
+    background: var(--surface-overlay);
+    color: var(--text-secondary);
     border-radius: 4px;
 }
 #discuss-comments .discuss-comment-body pre {
     margin: 0.875em 0;
     padding: 1rem 1.25rem;
-    background: var(--t1);
-    color: var(--s2);
+    background: var(--text-primary);
+    color: var(--surface-inset);
     border-radius: 8px;
     overflow-x: auto;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -218,7 +217,7 @@
 #discuss-comments .discuss-comment-body ul { list-style-type: disc; }
 #discuss-comments .discuss-comment-body ol { list-style-type: decimal; }
 #discuss-comments .discuss-comment-body li { margin: 0.3em 0; }
-#discuss-comments .discuss-comment-body del { color: var(--t4); text-decoration: line-through; }
+#discuss-comments .discuss-comment-body del { color: var(--text-muted); text-decoration: line-through; }
 #discuss-comments .discuss-comment-body ins {
     text-decoration: none;
     background: #dcfce7;
@@ -226,7 +225,7 @@
     padding: 0.1em 0.2em;
     border-radius: 3px;
 }
-#discuss-comments .discuss-comment-body cite { font-style: italic; color: var(--t3); }
+#discuss-comments .discuss-comment-body cite { font-style: italic; color: var(--text-tertiary); }
 #discuss-comments .discuss-comment-body sup,
 #discuss-comments .discuss-comment-body sub { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
 #discuss-comments .discuss-comment-body sup { top: -0.5em; }
@@ -273,9 +272,9 @@
 
 /* ── New comment form ── */
 #discuss-comments .discuss-form-container {
-    border: 1px solid var(--bd-control);
+    border: 1px solid var(--border-control);
     border-radius: 0.5rem;
-    background-color: var(--s1);
+    background-color: var(--surface-base);
     overflow: hidden;
     transition: border-color 150ms, box-shadow 150ms;
 }
@@ -293,18 +292,18 @@
     resize: vertical;
     font-size: 0.9375rem;
     line-height: 1.5;
-    color: var(--t1);
+    color: var(--text-primary);
     outline: none;
     box-shadow: none;
 }
-#discuss-comments .discuss-form-textarea::placeholder { color: var(--t5); }
+#discuss-comments .discuss-form-textarea::placeholder { color: var(--text-subtle); }
 #discuss-comments .discuss-form-bottom {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     padding: 1rem;
-    background-color: var(--s2);
-    border-top: 1px solid var(--bds);
+    background-color: var(--surface-inset);
+    border-top: 1px solid var(--border-subtle);
 }
 #discuss-comments .discuss-form-inputs {
     display: flex;
@@ -349,7 +348,7 @@
     left: 0.75rem;
     width: 1rem;
     height: 1rem;
-    color: var(--t4);
+    color: var(--text-muted);
     pointer-events: none;
 }
 #discuss-comments .discuss-input-no-icon .discuss-form-input {
@@ -357,13 +356,13 @@
 }
 #discuss-comments .discuss-form-input {
     width: 100%;
-    border: 1px solid var(--bd-control);
+    border: 1px solid var(--border-control);
     border-radius: 6px;
     padding: 0.75rem 0.75rem 0.75rem 2.25rem;
     font-size: 1rem;
     line-height: 1rem;
-    background-color: var(--s1);
-    color: var(--t1);
+    background-color: var(--surface-base);
+    color: var(--text-primary);
     outline: none;
     transition: border-color 120ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 120ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -372,7 +371,7 @@
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
     outline: none;
 }
-#discuss-comments .discuss-form-input::placeholder { color: var(--t5); }
+#discuss-comments .discuss-form-input::placeholder { color: var(--text-subtle); }
 
 /* ── Nested comment indent ── */
 #discuss-comments .discuss-nested {
@@ -393,12 +392,12 @@
     z-index: 10;
 }
 #discuss-comments .discuss-collapse-line:hover .discuss-thread-line {
-    background-color: var(--b400);
+    background-color: var(--brand-400);
 }
 #discuss-comments .discuss-thread-line {
     width: 2px;
     height: 100%;
-    background-color: var(--bds);
+    background-color: var(--border-subtle);
     transition: background-color 150ms;
 }
 
@@ -412,9 +411,9 @@
     font-weight: 500;
     line-height: 1.25rem;
     border-radius: 0.375rem;
-    border: 1px solid var(--bd-button);
+    border: 1px solid var(--border-button);
     background: transparent;
-    color: var(--t4);
+    color: var(--text-muted);
     cursor: pointer;
     transition: background-color 120ms, color 120ms, border-color 120ms, box-shadow 120ms;
     white-space: nowrap;
@@ -422,9 +421,9 @@
     outline: none;
 }
 #discuss-comments .discuss-action-btn:hover {
-    background-color: var(--s3);
-    color: var(--t1);
-    border-color: var(--bd-control);
+    background-color: var(--surface-overlay);
+    color: var(--text-primary);
+    border-color: var(--border-control);
 }
 #discuss-comments .discuss-action-btn:focus-visible {
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
