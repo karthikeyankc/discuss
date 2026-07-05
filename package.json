@@ -1,6 +1,6 @@
 {
   "name": "discuss",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A self-hosted, lightweight SQLite comment system for static sites.",
   "main": "src/server.js",
   "type": "module",

@@ -803,6 +803,10 @@ sudo systemctl restart discuss
 sudo systemctl status discuss
 ```
 
+### v0.5.1
+
+**New:** `darkSelector` option. Pass any CSS selector to `new DiscussWidget({ darkSelector: '...' })` and the widget switches to its dark colour scheme when that selector matches an ancestor element. No default — the widget is always light unless you opt in. Works with any class-based or attribute-based dark mode toggle on your site.
+
 ### v0.5.0
 
 **New:** Icon and title slots in the widget. Swap the name, email, and submit button icons with your own SVG, or pass `''` to hide them. Override the "Leave a comment" heading with any text you like. Help menu in the admin sidebar shows the current version and links to docs, GitHub, changelog, and update notifications.
