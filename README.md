@@ -147,6 +147,7 @@ The snippet from your admin dashboard handles everything automatically for most 
 | `postUrl` | `window.location.pathname` | Thread key for this page |
 | `primaryColor` | fetched from server | Brand colour for buttons and links |
 | `domainId` | *(none)* | Required when posting from a cross-origin admin context |
+| `darkSelector` | *(none)* | CSS selector that activates dark mode. When this selector matches an ancestor of the widget, the dark colour tokens are applied. Example: `'[data-theme="dark"]'` or `'.dark'` |
 | `title` | `'Leave a comment'` | Heading above the comment form |
 | `icons.name` | built-in person icon | Icon inside the name input. Pass any SVG string, or `''` to hide it |
 | `icons.email` | built-in envelope icon | Icon inside the email input. Pass any SVG string, or `''` to hide it |
@@ -232,16 +233,20 @@ When you pass `primaryColor` to `DiscussWidget`, the widget generates a 10-stop 
 
 **Dark mode**
 
-The widget detects dark mode by looking for a `dark` class on an ancestor element:
+The widget has no dark mode by default. Pass `darkSelector` to tell it which CSS selector your site uses to activate dark mode:
 
-```html
-<html class="dark">
+```js
+new DiscussWidget({ darkSelector: '[data-theme="dark"]' });
+// or
+new DiscussWidget({ darkSelector: '.dark' });
 ```
 
-You can override individual tokens for dark mode the same way:
+When that selector matches an ancestor of the widget, the full set of dark colour tokens kicks in automatically. The widget injects a scoped `<style>` tag at runtime, so it works with any selector your site uses — class, attribute, or otherwise.
+
+To override individual dark mode tokens on top of the defaults, target the same selector yourself in your stylesheet:
 
 ```css
-.dark #discuss-comments {
+[data-theme="dark"] #discuss-comments {
     --s1: #0d1117;
 }
 ```
@@ -568,7 +573,9 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
 .discuss-tracking-wide { letter-spacing: 0.025em; }
 .discuss-mb-10 { margin-bottom: 2.5rem; }
 
-.dark #discuss-comments {
+/* Dark mode: use whatever selector your site uses,
+   or pass darkSelector to new DiscussWidget({...}) to have this injected automatically */
+[data-theme="dark"] #discuss-comments {
     --t1: #f8fafc; --t2: #e2e8f0; --t3: #cbd5e1; --t4: #94a3b8; --t5: #64748b;
     --s1: #111827; --s2: #0a1120; --s3: #1e293b;
     --bd: #475569; --bds: #334155; --bd-control: #475569; --bd-button: #334155;
