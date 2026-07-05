@@ -25,6 +25,40 @@ const outputPath       = path.join(ROOT, 'public/client.css');
 // Lets us re-run the script idempotently without double-appending.
 const WIDGET_SENTINEL = '/* ── Widget component styles (src/client/widget.css) ── */';
 
+// Rename the design-system's internal shorthand tokens to explicit semantic names.
+// Longest patterns first so shorter ones don't partially match longer ones (e.g. --bd before --bds).
+const TOKEN_RENAMES = [
+    ['--bd-control', '--border-control'],
+    ['--bd-button',  '--border-button'],
+    ['--bd-strong',  '--border-strong'],
+    ['--bds',        '--border-subtle'],
+    ['--bd',         '--border-default'],
+    ['--t1',  '--text-primary'],
+    ['--t2',  '--text-secondary'],
+    ['--t3',  '--text-tertiary'],
+    ['--t4',  '--text-muted'],
+    ['--t5',  '--text-subtle'],
+    ['--s1',  '--surface-base'],
+    ['--s2',  '--surface-inset'],
+    ['--s3',  '--surface-overlay'],
+    ['--b900', '--brand-900'],
+    ['--b800', '--brand-800'],
+    ['--b700', '--brand-700'],
+    ['--b600', '--brand-600'],
+    ['--b500', '--brand-500'],
+    ['--b400', '--brand-400'],
+    ['--b300', '--brand-300'],
+    ['--b200', '--brand-200'],
+    ['--b100', '--brand-100'],
+    ['--b50',  '--brand-50'],
+];
+
+function renameDesignTokens(css) {
+    let result = css;
+    for (const [from, to] of TOKEN_RENAMES) result = result.replaceAll(from, to);
+    return result;
+}
+
 // Admin-shell class FAMILIES — any selector that contains one of these strings
 // as a class name is admin-only and should be stripped from the widget bundle.
 const ADMIN_FAMILIES = [
@@ -66,7 +100,7 @@ function stripAdminShell(css) {
 
 function buildOutput(designSystemCss) {
     const widget   = fs.readFileSync(widgetPath, 'utf8');
-    const stripped = stripAdminShell(designSystemCss);
+    const stripped = renameDesignTokens(stripAdminShell(designSystemCss));
     return stripped + '\n\n' + WIDGET_SENTINEL + '\n' + widget;
 }
 
@@ -110,7 +144,7 @@ if (process.env.FULL_BUILD === '1') {
         .process(input, { from: designSystemPath, to: outputPath })
         .then(result => {
             const widget   = fs.readFileSync(widgetPath, 'utf8');
-            const combined = result.css + '\n\n' + WIDGET_SENTINEL + '\n' + widget;
+            const combined = renameDesignTokens(result.css) + '\n\n' + WIDGET_SENTINEL + '\n' + widget;
             fs.writeFileSync(outputPath, combined);
             const kb = (combined.length / 1024).toFixed(1);
             console.log(`✓ client.css rebuilt from source — ${kb} KB`);

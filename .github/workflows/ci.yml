@@ -46,3 +46,93 @@ jobs:
       - run: npm run test:coverage
         env:
           NODE_ENV: test
+
+  browser:
+    name: Browser tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+  bundle-size:
+    name: Bundle size
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Measure current sizes
+        id: current
+        run: |
+          echo "js=$(wc -c < public/client.js)" >> $GITHUB_OUTPUT
+          echo "css=$(wc -c < public/client.css)" >> $GITHUB_OUTPUT
+          echo "js_gz=$(gzip -c public/client.js | wc -c)" >> $GITHUB_OUTPUT
+          echo "css_gz=$(gzip -c public/client.css | wc -c)" >> $GITHUB_OUTPUT
+      - name: Measure base branch sizes
+        id: base
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          echo "js=$(git show origin/${{ github.base_ref }}:public/client.js | wc -c)" >> $GITHUB_OUTPUT
+          echo "css=$(git show origin/${{ github.base_ref }}:public/client.css | wc -c)" >> $GITHUB_OUTPUT
+          echo "js_gz=$(git show origin/${{ github.base_ref }}:public/client.js | gzip -c | wc -c)" >> $GITHUB_OUTPUT
+          echo "css_gz=$(git show origin/${{ github.base_ref }}:public/client.css | gzip -c | wc -c)" >> $GITHUB_OUTPUT
+      - name: Post bundle size comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const toKB = n => (Number(n) / 1024).toFixed(2)
+            const delta = (curr, base) => {
+              const d = Number(curr) - Number(base)
+              if (Math.abs(d) < 50) return '—'
+              return d > 0 ? `▲ +${(Math.abs(d)/1024).toFixed(2)} KB` : `▼ ${(Math.abs(d)/1024).toFixed(2)} KB`
+            }
+            const c = ${{ toJSON(steps.current.outputs) }}
+            const b = ${{ toJSON(steps.base.outputs) }}
+            const totalGz = n => Number(c[`${n}_gz`]) + Number(c[`${n === 'js' ? 'css' : 'js'}_gz`])
+            const body = [
+              '## Bundle size',
+              '',
+              '| File | Size | Gzip | Δ Gzip |',
+              '|---|---|---|---|',
+              `| \`client.js\`  | ${toKB(c.js)} KB  | ${toKB(c.js_gz)} KB  | ${delta(c.js_gz, b.js_gz)} |`,
+              `| \`client.css\` | ${toKB(c.css)} KB | ${toKB(c.css_gz)} KB | ${delta(c.css_gz, b.css_gz)} |`,
+              `| **Total** | **${toKB(Number(c.js)+Number(c.css))} KB** | **${toKB(Number(c.js_gz)+Number(c.css_gz))} KB** | ${delta(Number(c.js_gz)+Number(c.css_gz), Number(b.js_gz)+Number(b.css_gz))} |`,
+            ].join('\n')
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const existing = comments.find(c => c.body.startsWith('## Bundle size'))
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                comment_id: existing.id, body,
+              })
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: context.issue.number, body,
+              })
+            }

@@ -135,6 +135,45 @@ git push && git push --tags
 
 A pre-commit hook is installed automatically via `npm install`. It runs the full test suite before every commit — if any test fails, the commit is blocked. It also checks that `package.json` is not behind the latest git tag. Fix both before pushing.
 
+## Testing
+
+### Unit tests (server-side)
+
+```bash
+npm test
+```
+
+Uses Node's built-in test runner. Tests live in `test/*.test.js`. When adding server-side behaviour, add a test here. Aim to keep statement coverage above 80%.
+
+### Browser tests (widget)
+
+```bash
+npx playwright install chromium  # one-time setup
+npm run test:browser
+npm run test:browser:ui          # opens the Playwright UI for debugging
+```
+
+Uses Playwright with Chromium. Tests live in `test/browser/` and are organised into `test.describe` blocks:
+
+- `theme.spec.js` — colour resolution, dark mode, semantic token hierarchy
+- `widget.spec.js` — rendering, form validation, interactions
+
+Shared helpers (mock API, widget init, fixture data, wait utilities) live in `test/browser/helpers.js`. Import from there — do not copy helpers into spec files.
+
+**Adding a browser test:** prefer `getByRole`, `getByPlaceholder`, and `getByText` over CSS selectors. Avoid `waitForTimeout` — use `waitForFunction` or `waitForSelector` so tests wait for the actual condition rather than a fixed delay.
+
+### Admin E2E tests (planned)
+
+Admin dashboard tests are tracked at [issue #TODO](#). They require a different infrastructure from the widget tests:
+
+1. A `globalSetup` file that starts the Express server in test mode, pointing at a temporary SQLite database.
+2. A seeded admin account (`npm run setup` non-interactively, or SQL insert).
+3. Test teardown that deletes the temp database.
+
+Planned scenarios: login, comment approval/rejection, domain add/delete, primary colour change, SMTP settings, export.
+
+If you want to contribute admin tests, open a PR against that issue and discuss the approach first — the infrastructure needs to be shared across all admin specs before individual scenarios are added.
+
 ## Reporting Bugs
 
 Open an issue with:

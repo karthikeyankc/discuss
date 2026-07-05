@@ -3,7 +3,8 @@
   <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
   <p>
     <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
-    <img src="https://img.shields.io/badge/tests-167%20passing-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/unit_tests-167%20passing-brightgreen" alt="Unit Tests">
+    <img src="https://img.shields.io/badge/browser_tests-28%20passing-brightgreen" alt="Browser Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
     <img src="https://img.shields.io/github/v/tag/karthikeyankc/discuss?label=version" alt="Version">
@@ -16,6 +17,7 @@
 ## Table of Contents
 
 - [Features](#features)
+- [Bundle size](#bundle-size)
 - [Quick Start](#quick-start)
 - [Embedding](#embedding)
   - [Basic embed](#basic-embed)
@@ -50,7 +52,7 @@
 
 | Feature | Description |
 |---|---|
-| **Lightweight embed** | A `<link>` and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 4.7 KB gzip; `client.css` is 12.9 KB. |
+| **Lightweight embed** | A `<link>` and a `<script>`. No npm, no bundler, nothing to install on the host page. `client.js` is 5.8 KB gzip; `client.css` is 12.7 KB gzip. Total: ~18.5 KB. |
 | **SQLite, no database server** | Everything lives in a single file on your machine. Nothing to provision, nothing to pay for, trivial to back up. |
 | **Markdown** | Bold, italic, code blocks, lists, and blockquotes. Rendered server-side and sanitised. Commenters get a live preview as they type. |
 | **Nested replies** | Threaded conversations up to three levels deep, with collapsible thread lines. |
@@ -61,6 +63,18 @@
 | **Gravatar with initials fallback** | Shows a commenter's Gravatar if they have one. Falls back to a clean initial avatar if they don't. |
 | **Stable thread keys** | Widget reads `<link rel="canonical">` automatically, so threads survive URL changes on Ghost, Hugo, Jekyll, and WordPress with no config. Override manually with `data-url` when needed. |
 | **MIT licensed** | Free to use, self-host, and modify. |
+
+---
+
+## Bundle size
+
+| File | Raw | Gzip |
+|---|---|---|
+| `client.js` | 18.05 KB | 5.83 KB |
+| `client.css` | 92.36 KB | 12.65 KB |
+| **Total** | **110.41 KB** | **18.49 KB** |
+
+Run `npm run bundle-size` locally to check current sizes after a build.
 
 ---
 
@@ -149,6 +163,7 @@ The snippet from your admin dashboard handles everything automatically for most 
 | `domainId` | *(none)* | Required when posting from a cross-origin admin context |
 | `darkSelector` | *(none)* | CSS selector that activates dark mode. When this selector matches an ancestor of the widget, the dark colour tokens are applied. Example: `'[data-theme="dark"]'` or `'.dark'` |
 | `title` | `'Leave a comment'` | Heading above the comment form |
+| `placeholder` | `'Share your thoughts... (*markdown* supported)'` | Placeholder text for the comment textarea |
 | `icons.name` | built-in person icon | Icon inside the name input. Pass any SVG string, or `''` to hide it |
 | `icons.email` | built-in envelope icon | Icon inside the email input. Pass any SVG string, or `''` to hide it |
 | `icons.submit` | built-in send icon | Icon inside the submit button. Pass any SVG string, or `''` to hide it |
@@ -186,29 +201,29 @@ All colours, borders, and surfaces are CSS custom properties set on `#discuss-co
 
 | Token | Default (light) | Role |
 |---|---|---|
-| `--t1` | `oklch(18.5% 0.008 250)` | Primary text |
-| `--t2` | `oklch(37.5% 0.016 250)` | Body text |
-| `--t3` | `oklch(48.0% 0.020 250)` | Secondary / muted text |
-| `--t4` | `oklch(58.5% 0.022 250)` | Placeholder, icon colour |
-| `--t5` | `oklch(71.0% 0.020 250)` | Disabled / placeholder |
+| `--text-primary` | `oklch(18.5% 0.008 250)` | Primary text |
+| `--text-secondary` | `oklch(37.5% 0.016 250)` | Body text |
+| `--text-tertiary` | `oklch(48.0% 0.020 250)` | Secondary / muted text |
+| `--text-muted` | `oklch(58.5% 0.022 250)` | Placeholder, icon colour |
+| `--text-subtle` | `oklch(71.0% 0.020 250)` | Disabled / placeholder |
 
 **Surface colours**
 
 | Token | Default (light) | Role |
 |---|---|---|
-| `--s1` | `#ffffff` | Primary surface (cards, inputs) |
-| `--s2` | `oklch(98.2% 0.004 250)` | Secondary surface (form footer) |
-| `--s3` | `oklch(95.8% 0.008 250)` | Tertiary surface (hover states) |
+| `--surface-base` | `#ffffff` | Primary surface (cards, inputs) |
+| `--surface-inset` | `oklch(98.2% 0.004 250)` | Secondary surface (form footer) |
+| `--surface-overlay` | `oklch(95.8% 0.008 250)` | Tertiary surface (hover states) |
 
 **Border colours**
 
 | Token | Default (light) | Role |
 |---|---|---|
-| `--bd` | `oklch(84.5% 0.016 250)` | Default border |
-| `--bds` | `oklch(91.2% 0.012 250)` | Subtle border (thread lines, dividers) |
-| `--bd-control` | same as `--bd` | Input / form element borders |
-| `--bd-button` | same as `--bds` | Button borders |
-| `--bd-strong` | `oklch(71.0% 0.020 250)` | Elevated border (kbd shadow) |
+| `--border-default` | `oklch(84.5% 0.016 250)` | Default border |
+| `--border-subtle` | `oklch(91.2% 0.012 250)` | Subtle border (thread lines, dividers) |
+| `--border-control` | same as `--border-default` | Input / form element borders |
+| `--border-button` | same as `--border-subtle` | Button borders |
+| `--border-strong` | `oklch(71.0% 0.020 250)` | Elevated border (kbd shadow) |
 
 **Accent colours**
 
@@ -221,12 +236,12 @@ All colours, borders, and surfaces are CSS custom properties set on `#discuss-co
 
 **Primary scale**
 
-When you pass `primaryColor` to `DiscussWidget`, the widget generates a 10-stop scale and sets `--b50` through `--b900` on the container. You can also set the scale yourself:
+When you pass `primaryColor` to `DiscussWidget`, the widget generates a 10-stop scale and sets `--brand-50` through `--brand-900` on the container. You can also set the scale yourself:
 
 ```css
 #discuss-comments {
-    --b600: #7c3aed;
-    --b700: #6d28d9;
+    --brand-600: #7c3aed;
+    --brand-700: #6d28d9;
     --on-primary: #fff;
 }
 ```
@@ -253,7 +268,7 @@ To override individual dark mode tokens on top of the defaults, target the same 
 
 ```css
 [data-theme="dark"] #discuss-comments {
-    --s1: #0d1117;
+    --surface-base: #0d1117;
 }
 ```
 
@@ -372,28 +387,28 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
     line-height: 1.6;
     color: #1a1a1a;
 
-    --t1: #1a1a1a;
-    --t2: #333;
-    --t3: #555;
-    --t4: #777;
-    --t5: #999;
-    --s1: #fff;
-    --s2: #f5f5f5;
-    --s3: #ececec;
-    --bd: #ccc;
-    --bds: #e0e0e0;
-    --bd-control: #ccc;
-    --bd-button: #ddd;
-    --bd-strong: #aaa;
+    --text-primary:   #1a1a1a;
+    --text-secondary: #333;
+    --text-tertiary:  #555;
+    --text-muted:     #777;
+    --text-subtle:    #999;
+    --surface-base:    #fff;
+    --surface-inset:   #f5f5f5;
+    --surface-overlay: #ececec;
+    --border-default: #ccc;
+    --border-subtle:  #e0e0e0;
+    --border-control: #ccc;
+    --border-button:  #ddd;
+    --border-strong:  #aaa;
     --accent-fg: #0055cc;
     --accent-surface: #e8f0fe;
     --focus-ring: #0055cc;
     --on-primary: #fff;
-    --b50:  #e8f0fe;
-    --b400: #4d88ff;
-    --b600: #0055cc;
-    --b700: #0047b3;
-    --b800: #003a99;
+    --brand-50:  #e8f0fe;
+    --brand-400: #4d88ff;
+    --brand-600: #0055cc;
+    --brand-700: #0047b3;
+    --brand-800: #003a99;
 }
 
 .discuss-comment-row {
@@ -417,7 +432,7 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
 .discuss-comment-body {
     font-size: 0.9375rem;
     line-height: 1.65;
-    color: var(--t2);
+    color: var(--text-primary);
     margin: 0.25rem 0 0.5rem;
 }
 
@@ -425,13 +440,13 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
 .discuss-comment-body p:last-child { margin-bottom: 0; }
 .discuss-comment-body code {
     font-family: monospace;
-    background: var(--s3);
+    background: var(--surface-overlay);
     padding: 0.1em 0.3em;
     border-radius: 3px;
 }
 .discuss-comment-body pre {
-    background: var(--t1);
-    color: var(--s1);
+    background: var(--text-primary);
+    color: var(--surface-base);
     padding: 1rem;
     border-radius: 6px;
     overflow-x: auto;
@@ -446,14 +461,14 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
     gap: 0.3rem;
     padding: 0.2rem 0.5rem;
     font-size: 0.8125rem;
-    color: var(--t4);
-    border: 1px solid var(--bd-button);
+    color: var(--text-muted);
+    border: 1px solid var(--border-button);
     border-radius: 4px;
     background: transparent;
     cursor: pointer;
     text-decoration: none;
 }
-.discuss-action-btn:hover { color: var(--t1); background: var(--s3); }
+.discuss-action-btn:hover { color: var(--text-primary); background: var(--surface-overlay); }
 
 .discuss-badge {
     display: inline-flex;
@@ -480,7 +495,7 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
 }
 
 .discuss-form-container {
-    border: 1px solid var(--bd-control);
+    border: 1px solid var(--border-control);
     border-radius: 6px;
     overflow: hidden;
     margin-top: 2rem;
@@ -497,18 +512,18 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
     font: inherit;
     font-size: 0.9375rem;
     outline: none;
-    background: var(--s1);
-    color: var(--t1);
+    background: var(--surface-base);
+    color: var(--text-primary);
 }
-.discuss-form-textarea::placeholder { color: var(--t5); }
+.discuss-form-textarea::placeholder { color: var(--text-subtle); }
 
 .discuss-form-bottom {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     padding: 0.75rem;
-    background: var(--s2);
-    border-top: 1px solid var(--bds);
+    background: var(--surface-inset);
+    border-top: 1px solid var(--border-subtle);
 }
 
 .discuss-form-input-wrapper {
@@ -523,21 +538,21 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
     left: 0.6rem;
     width: 1rem;
     height: 1rem;
-    color: var(--t4);
+    color: var(--text-muted);
     pointer-events: none;
 }
 .discuss-form-input {
     width: 100%;
     padding: 0.5rem 0.5rem 0.5rem 2rem;
-    border: 1px solid var(--bd-control);
+    border: 1px solid var(--border-control);
     border-radius: 4px;
     font: inherit;
-    background: var(--s1);
-    color: var(--t1);
+    background: var(--surface-base);
+    color: var(--text-primary);
     outline: none;
 }
 .discuss-form-input:focus { border-color: var(--focus-ring); }
-.discuss-form-input::placeholder { color: var(--t5); }
+.discuss-form-input::placeholder { color: var(--text-subtle); }
 
 .discuss-btn {
     display: inline-flex;
@@ -553,10 +568,10 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
     white-space: nowrap;
     text-decoration: none;
 }
-.discuss-btn-primary { background: var(--b600); color: var(--on-primary); border-color: var(--b600); }
-.discuss-btn-primary:hover { background: var(--b700); border-color: var(--b700); }
-.discuss-btn-secondary { background: var(--s1); color: var(--t2); border-color: var(--bd-button); }
-.discuss-btn-secondary:hover { background: var(--s3); }
+.discuss-btn-primary { background: var(--brand-600); color: var(--on-primary); border-color: var(--brand-600); }
+.discuss-btn-primary:hover { background: var(--brand-700); border-color: var(--brand-700); }
+.discuss-btn-secondary { background: var(--surface-base); color: var(--text-secondary); border-color: var(--border-button); }
+.discuss-btn-secondary:hover { background: var(--surface-overlay); }
 
 .discuss-spinner { display: inline-block; }
 
@@ -582,9 +597,9 @@ If you embed without `client.css`, here is a minimal starting point. Copy it, ex
 /* Dark mode: use whatever selector your site uses,
    or pass darkSelector to new DiscussWidget({...}) to have this injected automatically */
 [data-theme="dark"] #discuss-comments {
-    --t1: #f8fafc; --t2: #e2e8f0; --t3: #cbd5e1; --t4: #94a3b8; --t5: #64748b;
-    --s1: #111827; --s2: #0a1120; --s3: #1e293b;
-    --bd: #475569; --bds: #334155; --bd-control: #475569; --bd-button: #334155;
+    --text-primary: #f8fafc; --text-secondary: #e2e8f0; --text-tertiary: #cbd5e1; --text-muted: #94a3b8; --text-subtle: #64748b;
+    --surface-base: #111827; --surface-inset: #0a1120; --surface-overlay: #1e293b;
+    --border-default: #475569; --border-subtle: #334155; --border-control: #475569; --border-button: #334155;
     --accent-fg: #93c5fd; --accent-surface: #1e3a5f;
     --focus-ring: #93c5fd;
 }
@@ -898,7 +913,8 @@ git clone https://github.com/KarthikeyanKC/discuss.git
 cd discuss
 npm install
 npm run dev       # starts the dev server with auto-restart
-npm test          # run the full test suite
+npm test              # run the full unit test suite (Node built-in runner)
+npm run test:browser  # run browser tests with Playwright (requires `npx playwright install chromium` once)
 ```
 
 **Pre-commit hook**
@@ -915,7 +931,7 @@ If the hook rejects your commit, read the output. It'll tell you exactly what's 
 **Pull requests**
 
 - Keep PRs focused. One thing per PR makes it much easier to review.
-- Add a test for any new behaviour. The test suite is in `test/` using Node's built-in test runner.
+- Add a test for any new behaviour. Server-side logic goes in `test/` using Node's built-in runner; client-side widget behaviour goes in `test/browser/` using Playwright.
 - Add a `CHANGELOG.md` entry under `## [Unreleased]`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more detail on conventions and the review process.

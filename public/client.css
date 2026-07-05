@@ -528,29 +528,29 @@
   }
   @layer base {
     #discuss-comments {
-      --b50: var(--color-primary-50);
-      --b100: var(--color-primary-100);
-      --b200: var(--color-primary-200);
-      --b300: var(--color-primary-300);
-      --b400: var(--color-primary-400);
-      --b500: var(--color-primary-500);
-      --b600: var(--color-primary-600);
-      --b700: var(--color-primary-700);
-      --b800: var(--color-primary-800);
-      --b900: var(--color-primary-900);
-      --t1: var(--color-neutral-900);
-      --t2: var(--color-neutral-700);
-      --t3: var(--color-neutral-600);
-      --t4: var(--color-neutral-500);
-      --t5: var(--color-neutral-400);
-      --s1: #ffffff;
-      --s2: var(--color-neutral-50);
-      --s3: var(--color-neutral-100);
-      --bd: var(--color-neutral-300);
-      --bds: var(--color-neutral-200);
-      --bd-control: var(--color-neutral-300);
-      --bd-button: var(--color-neutral-200);
-      --bd-strong: var(--color-neutral-400);
+      --brand-50: var(--color-primary-50);
+      --brand-100: var(--color-primary-100);
+      --brand-200: var(--color-primary-200);
+      --brand-300: var(--color-primary-300);
+      --brand-400: var(--color-primary-400);
+      --brand-500: var(--color-primary-500);
+      --brand-600: var(--color-primary-600);
+      --brand-700: var(--color-primary-700);
+      --brand-800: var(--color-primary-800);
+      --brand-900: var(--color-primary-900);
+      --text-primary: var(--color-neutral-900);
+      --text-secondary: var(--color-neutral-700);
+      --text-tertiary: var(--color-neutral-600);
+      --text-muted: var(--color-neutral-500);
+      --text-subtle: var(--color-neutral-400);
+      --surface-base: #ffffff;
+      --surface-inset: var(--color-neutral-50);
+      --surface-overlay: var(--color-neutral-100);
+      --border-default: var(--color-neutral-300);
+      --border-subtle: var(--color-neutral-200);
+      --border-control: var(--color-neutral-300);
+      --border-button: var(--color-neutral-200);
+      --border-strong: var(--color-neutral-400);
       --shell-divider: var(--color-neutral-200);
       --accent-fg: var(--color-primary-800);
       --accent-surface: var(--color-primary-50);
@@ -572,19 +572,19 @@
       --modal-backdrop: rgba(0, 0, 0, 0.45);
     }
     #discuss-comments .discuss-dark {
-      --t1: var(--color-neutral-50);
-      --t2: var(--color-neutral-200);
-      --t3: var(--color-neutral-300);
-      --t4: var(--color-neutral-400);
-      --t5: var(--color-neutral-500);
-      --s1: oklch(3% 0 0);
-      --s2: oklch(0% 0 0);
-      --s3: oklch(8% 0.004 250);
-      --bd: var(--color-neutral-600);
-      --bds: var(--color-neutral-700);
-      --bd-control: var(--color-neutral-600);
-      --bd-button: var(--color-neutral-700);
-      --bd-strong: var(--color-neutral-400);
+      --text-primary: var(--color-neutral-50);
+      --text-secondary: var(--color-neutral-200);
+      --text-tertiary: var(--color-neutral-300);
+      --text-muted: var(--color-neutral-400);
+      --text-subtle: var(--color-neutral-500);
+      --surface-base: oklch(3% 0 0);
+      --surface-inset: oklch(0% 0 0);
+      --surface-overlay: oklch(8% 0.004 250);
+      --border-default: var(--color-neutral-600);
+      --border-subtle: var(--color-neutral-700);
+      --border-control: var(--color-neutral-600);
+      --border-button: var(--color-neutral-700);
+      --border-strong: var(--color-neutral-400);
       --shell-divider: var(--color-neutral-700);
       --accent-fg: var(--color-primary-300);
       --accent-surface: color-mix(in srgb, oklch(34.8% 0.148 250) 32%, oklch(18.5% 0.008 250));
@@ -599,27 +599,27 @@
       --surface-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 0 0 1px rgba(255,255,255,0.10);
       --surface-shadow-md: inset 0 1px 0 rgba(255,255,255,0.11), 0 0 0 1px rgba(255,255,255,0.12);
       --surface-shadow-lg: inset 0 1px 0 rgba(255,255,255,0.13), 0 0 0 1px rgba(255,255,255,0.14);
-      --tooltip-bg: var(--t1);
-      --tooltip-fg: var(--s2);
-      --toast-bg: var(--t1);
-      --toast-fg: var(--s2);
+      --tooltip-bg: var(--text-primary);
+      --tooltip-fg: var(--surface-inset);
+      --toast-bg: var(--text-primary);
+      --toast-fg: var(--surface-inset);
       --modal-backdrop: rgba(0, 0, 0, 0.72);
     }
     #discuss-comments .discuss-theme-light {
       color-scheme: light;
-      --t1: var(--color-neutral-900);
-      --t2: var(--color-neutral-700);
-      --t3: var(--color-neutral-600);
-      --t4: var(--color-neutral-500);
-      --t5: var(--color-neutral-400);
-      --s1: #ffffff;
-      --s2: var(--color-neutral-50);
-      --s3: var(--color-neutral-100);
-      --bd: var(--color-neutral-300);
-      --bds: var(--color-neutral-200);
-      --bd-control: var(--color-neutral-300);
-      --bd-button: var(--color-neutral-200);
-      --bd-strong: var(--color-neutral-400);
+      --text-primary: var(--color-neutral-900);
+      --text-secondary: var(--color-neutral-700);
+      --text-tertiary: var(--color-neutral-600);
+      --text-muted: var(--color-neutral-500);
+      --text-subtle: var(--color-neutral-400);
+      --surface-base: #ffffff;
+      --surface-inset: var(--color-neutral-50);
+      --surface-overlay: var(--color-neutral-100);
+      --border-default: var(--color-neutral-300);
+      --border-subtle: var(--color-neutral-200);
+      --border-control: var(--color-neutral-300);
+      --border-button: var(--color-neutral-200);
+      --border-strong: var(--color-neutral-400);
       --shell-divider: var(--color-neutral-200);
       --accent-fg: var(--color-primary-800);
       --accent-surface: var(--color-primary-50);
@@ -635,19 +635,19 @@
     }
     #discuss-comments .discuss-theme-dark {
       color-scheme: dark;
-      --t1: var(--color-neutral-50);
-      --t2: var(--color-neutral-200);
-      --t3: var(--color-neutral-300);
-      --t4: var(--color-neutral-400);
-      --t5: var(--color-neutral-500);
-      --s1: oklch(3% 0 0);
-      --s2: oklch(0% 0 0);
-      --s3: oklch(8% 0.004 250);
-      --bd: var(--color-neutral-600);
-      --bds: var(--color-neutral-700);
-      --bd-control: var(--color-neutral-600);
-      --bd-button: var(--color-neutral-700);
-      --bd-strong: var(--color-neutral-400);
+      --text-primary: var(--color-neutral-50);
+      --text-secondary: var(--color-neutral-200);
+      --text-tertiary: var(--color-neutral-300);
+      --text-muted: var(--color-neutral-400);
+      --text-subtle: var(--color-neutral-500);
+      --surface-base: oklch(3% 0 0);
+      --surface-inset: oklch(0% 0 0);
+      --surface-overlay: oklch(8% 0.004 250);
+      --border-default: var(--color-neutral-600);
+      --border-subtle: var(--color-neutral-700);
+      --border-control: var(--color-neutral-600);
+      --border-button: var(--color-neutral-700);
+      --border-strong: var(--color-neutral-400);
       --shell-divider: var(--color-neutral-700);
       --accent-fg: var(--color-primary-300);
       --accent-surface: color-mix(in srgb, oklch(34.8% 0.148 250) 32%, oklch(18.5% 0.008 250));
@@ -673,8 +673,8 @@
       line-height: var(--tw-leading, var(--text-base--line-height));
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      color: var(--t1);
-      background-color: var(--s2);
+      color: var(--text-primary);
+      background-color: var(--surface-inset);
       letter-spacing: 0em;
     }
     #discuss-comments h1 {
@@ -682,7 +682,7 @@
       line-height: var(--tw-leading, var(--text-4xl--line-height));
       --tw-font-weight: var(--font-weight-semibold);
       font-weight: var(--font-weight-semibold);
-      color: var(--t1);
+      color: var(--text-primary);
       letter-spacing: -0.018em;
     }
     #discuss-comments h2 {
@@ -690,7 +690,7 @@
       line-height: var(--tw-leading, var(--text-3xl--line-height));
       --tw-font-weight: var(--font-weight-semibold);
       font-weight: var(--font-weight-semibold);
-      color: var(--t1);
+      color: var(--text-primary);
       letter-spacing: -0.014em;
     }
     #discuss-comments h3 {
@@ -698,7 +698,7 @@
       line-height: var(--tw-leading, var(--text-2xl--line-height));
       --tw-font-weight: var(--font-weight-semibold);
       font-weight: var(--font-weight-semibold);
-      color: var(--t1);
+      color: var(--text-primary);
       letter-spacing: -0.010em;
     }
     #discuss-comments h4 {
@@ -706,7 +706,7 @@
       line-height: var(--tw-leading, var(--text-xl--line-height));
       --tw-font-weight: var(--font-weight-semibold);
       font-weight: var(--font-weight-semibold);
-      color: var(--t1);
+      color: var(--text-primary);
       letter-spacing: -0.006em;
     }
     #discuss-comments h5 {
@@ -714,7 +714,7 @@
       line-height: var(--tw-leading, var(--text-lg--line-height));
       --tw-font-weight: var(--font-weight-medium);
       font-weight: var(--font-weight-medium);
-      color: var(--t1);
+      color: var(--text-primary);
       letter-spacing: -0.003em;
     }
     #discuss-comments h6 {
@@ -722,7 +722,7 @@
       line-height: var(--tw-leading, var(--text-base--line-height));
       --tw-font-weight: var(--font-weight-medium);
       font-weight: var(--font-weight-medium);
-      color: var(--t1);
+      color: var(--text-primary);
       letter-spacing: 0em;
     }
     #discuss-comments p {
@@ -747,8 +747,8 @@
       font-family: var(--font-mono);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
-      background-color: var(--s3);
-      color: var(--t2);
+      background-color: var(--surface-overlay);
+      color: var(--text-secondary);
     }
     #discuss-comments pre {
       overflow-x: auto;
@@ -772,7 +772,7 @@
       border-width: 0px;
       border-top-style: var(--tw-border-style);
       border-top-width: 1px;
-      border-color: var(--bds);
+      border-color: var(--border-subtle);
     }
   }
   @layer components {
@@ -835,44 +835,44 @@
       display: inline-flex;
     }
     #discuss-comments .discuss-btn-primary {
-      background-color: var(--b600);
+      background-color: var(--brand-600);
       color: var(--on-primary);
-      border-color: var(--b600);
+      border-color: var(--brand-600);
     }
     #discuss-comments .discuss-btn-primary:hover {
-      background-color: var(--b700);
-      border-color: var(--b700);
+      background-color: var(--brand-700);
+      border-color: var(--brand-700);
     }
     #discuss-comments .discuss-btn-primary:active:not(:disabled) {
-      background-color: var(--b800);
-      border-color: var(--b800);
+      background-color: var(--brand-800);
+      border-color: var(--brand-800);
     }
     #discuss-comments .discuss-btn-secondary {
-      background-color: var(--s1);
-      color: var(--t2);
-      border-color: var(--bd-button);
+      background-color: var(--surface-base);
+      color: var(--text-secondary);
+      border-color: var(--border-button);
     }
     #discuss-comments .discuss-btn-secondary:hover {
-      background-color: var(--s3);
-      border-color: var(--bd-control);
+      background-color: var(--surface-overlay);
+      border-color: var(--border-control);
     }
     #discuss-comments .discuss-btn-secondary:active:not(:disabled) {
-      background-color: var(--s2);
-      border-color: var(--bd-control);
+      background-color: var(--surface-inset);
+      border-color: var(--border-control);
     }
     #discuss-comments .discuss-btn-ghost {
       background-color: transparent;
-      color: var(--t3);
-      border-color: var(--bd-button);
+      color: var(--text-tertiary);
+      border-color: var(--border-button);
     }
     #discuss-comments .discuss-btn-ghost:hover {
-      background-color: var(--s3);
-      color: var(--t1);
-      border-color: var(--bd-control);
+      background-color: var(--surface-overlay);
+      color: var(--text-primary);
+      border-color: var(--border-control);
     }
     #discuss-comments .discuss-btn-ghost:active:not(:disabled) {
-      background-color: var(--s2);
-      border-color: var(--bd-control);
+      background-color: var(--surface-inset);
+      border-color: var(--border-control);
     }
     #discuss-comments .discuss-btn-danger {
       background-color: var(--danger-border);
@@ -918,7 +918,7 @@
       padding: 0;
       border-color: transparent;
       background-color: transparent;
-      color: var(--t3);
+      color: var(--text-tertiary);
     }
     #discuss-comments .discuss-btn-sm.btn-icon {
       width: 32px;
@@ -929,8 +929,8 @@
       height: 48px;
     }
     #discuss-comments .discuss-btn-icon:hover {
-      background-color: var(--s3);
-      color: var(--t2);
+      background-color: var(--surface-overlay);
+      color: var(--text-secondary);
     }
     #discuss-comments .discuss-label {
       margin-bottom: var(--spacing);
@@ -939,7 +939,7 @@
       line-height: var(--tw-leading, var(--text-sm--line-height));
       --tw-font-weight: var(--font-weight-medium);
       font-weight: var(--font-weight-medium);
-      color: var(--t2);
+      color: var(--text-secondary);
       letter-spacing: 0.006em;
     }
     #discuss-comments .discuss-label-required::after {
@@ -956,14 +956,14 @@
       --tw-tracking: var(--tracking-widest);
       letter-spacing: var(--tracking-widest);
       text-transform: uppercase;
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-label-mono {
       margin-top: var(--spacing);
       font-family: var(--font-mono);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-section-title {
       margin-bottom: var(--spacing);
@@ -971,13 +971,13 @@
       line-height: var(--tw-leading, var(--text-lg--line-height));
       --tw-font-weight: var(--font-weight-semibold);
       font-weight: var(--font-weight-semibold);
-      color: var(--t1);
+      color: var(--text-primary);
     }
     #discuss-comments .discuss-section-desc {
       margin-bottom: calc(var(--spacing) * 6);
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
-      color: var(--t3);
+      color: var(--text-tertiary);
     }
     #discuss-comments .discuss-input {
       display: block;
@@ -997,17 +997,17 @@
       #discuss-comments &:disabled {
         cursor: not-allowed;
       }
-      color: var(--t1);
-      background-color: var(--s1);
-      border-color: var(--bd-control);
+      color: var(--text-primary);
+      background-color: var(--surface-base);
+      border-color: var(--border-control);
       transition-duration: var(--duration-fast);
       transition-timing-function: var(--ease-DEFAULT);
     }
     #discuss-comments .discuss-input::-moz-placeholder {
-      color: var(--t5);
+      color: var(--text-subtle);
     }
     #discuss-comments .discuss-input::placeholder {
-      color: var(--t5);
+      color: var(--text-subtle);
     }
     #discuss-comments .discuss-input:focus, #discuss-comments .discuss-input:focus-visible {
       border-color: var(--focus-ring);
@@ -1018,8 +1018,8 @@
       outline: none;
     }
     #discuss-comments .discuss-input:disabled {
-      background-color: var(--s2);
-      color: var(--t5);
+      background-color: var(--surface-inset);
+      color: var(--text-subtle);
     }
     #discuss-comments .discuss-input-error {
       border-color: var(--danger-border);
@@ -1083,15 +1083,15 @@
       transition-property: background-color,border-color;
       transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
       transition-duration: var(--tw-duration, var(--default-transition-duration));
-      border: 2px solid var(--bd-control);
-      background-color: var(--s1);
+      border: 2px solid var(--border-control);
+      background-color: var(--surface-base);
       color: var(--on-primary);
       transition-duration: var(--duration-fast);
       transition-timing-function: var(--ease-DEFAULT);
     }
     #discuss-comments .discuss-checkbox-input:checked + .checkbox-box {
-      background-color: var(--b600);
-      border-color: var(--b600);
+      background-color: var(--brand-600);
+      border-color: var(--brand-600);
       animation: checkbox-pop 250ms cubic-bezier(0.16,1,0.3,1) forwards;
     }
     #discuss-comments .discuss-checkbox-input:focus-visible + .checkbox-box {
@@ -1152,13 +1152,13 @@
       transition-property: border-color;
       transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
       transition-duration: var(--tw-duration, var(--default-transition-duration));
-      border: 2px solid var(--bd-control);
-      background-color: var(--s1);
+      border: 2px solid var(--border-control);
+      background-color: var(--surface-base);
       transition-duration: var(--duration-fast);
       transition-timing-function: var(--ease-DEFAULT);
     }
     #discuss-comments .discuss-radio-input:checked + .radio-box {
-      border-color: var(--b600);
+      border-color: var(--brand-600);
     }
     #discuss-comments .discuss-radio-input:focus-visible + .radio-box {
       outline: 2px solid var(--focus-ring);
@@ -1172,7 +1172,7 @@
       height: calc(var(--spacing) * 1.5);
       width: calc(var(--spacing) * 1.5);
       border-radius: calc(infinity * 1px);
-      background-color: var(--b600);
+      background-color: var(--brand-600);
       transform: scale(0);
       transition: transform 100ms ease-in;
     }
@@ -1192,7 +1192,7 @@
       gap: var(--spacing);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
-      color: var(--t4);
+      color: var(--text-muted);
       letter-spacing: 0.010em;
     }
     #discuss-comments .discuss-field-error-text {
@@ -1212,7 +1212,7 @@
     #discuss-comments .discuss-card {
       overflow: hidden;
       border-radius: var(--radius-lg);
-      background-color: var(--s1);
+      background-color: var(--surface-base);
       box-shadow: var(--surface-shadow);
     }
     #discuss-comments .discuss-card-header {
@@ -1222,8 +1222,8 @@
       padding-block: calc(var(--spacing) * 4);
       --tw-font-weight: var(--font-weight-medium);
       font-weight: var(--font-weight-medium);
-      border-color: var(--bds);
-      color: var(--t1);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
     }
     #discuss-comments .discuss-card-body {
       padding-inline: calc(var(--spacing) * 5);
@@ -1234,8 +1234,8 @@
       border-top-width: 1px;
       padding-inline: calc(var(--spacing) * 5);
       padding-block: calc(var(--spacing) * 3);
-      border-color: var(--bds);
-      background-color: var(--s3);
+      border-color: var(--border-subtle);
+      background-color: var(--surface-overlay);
     }
     #discuss-comments .discuss-badge {
       display: inline-flex;
@@ -1255,8 +1255,8 @@
       color: #1e40af;
     }
     #discuss-comments .discuss-badge-neutral {
-      background: var(--s3);
-      color: var(--t2);
+      background: var(--surface-overlay);
+      color: var(--text-secondary);
     }
     #discuss-comments .discuss-badge-brand {
       background: var(--accent-surface);
@@ -1308,7 +1308,7 @@
     #discuss-comments .discuss-table-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--bd);
+      border: 1px solid var(--border-default);
       border-radius: 8px;
     }
     #discuss-comments .discuss-table {
@@ -1321,8 +1321,8 @@
     #discuss-comments .discuss-table thead {
       border-bottom-style: var(--tw-border-style);
       border-bottom-width: 1px;
-      background-color: var(--s3);
-      border-color: var(--bd);
+      background-color: var(--surface-overlay);
+      border-color: var(--border-default);
     }
     #discuss-comments .discuss-table th {
       padding-inline: calc(var(--spacing) * 4);
@@ -1334,7 +1334,7 @@
       --tw-tracking: var(--tracking-wide);
       letter-spacing: var(--tracking-wide);
       text-transform: uppercase;
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-table tbody tr {
       border-bottom-style: var(--tw-border-style);
@@ -1344,10 +1344,10 @@
       transition-duration: var(--tw-duration, var(--default-transition-duration));
       --tw-duration: 100ms;
       transition-duration: 100ms;
-      border-color: var(--bds);
+      border-color: var(--border-subtle);
     }
     #discuss-comments .discuss-table tbody tr:hover {
-      background-color: var(--s2);
+      background-color: var(--surface-inset);
     }
     #discuss-comments .discuss-table tbody tr:last-child {
       border-bottom-style: var(--tw-border-style);
@@ -1356,7 +1356,7 @@
     #discuss-comments .discuss-table td {
       padding-inline: calc(var(--spacing) * 4);
       padding-block: calc(var(--spacing) * 3);
-      color: var(--t2);
+      color: var(--text-secondary);
     }
     #discuss-comments .discuss-avatar {
       display: inline-flex;
@@ -1367,8 +1367,8 @@
       border-radius: calc(infinity * 1px);
       --tw-font-weight: var(--font-weight-medium);
       font-weight: var(--font-weight-medium);
-      background-color: var(--s3);
-      color: var(--t3);
+      background-color: var(--surface-overlay);
+      color: var(--text-tertiary);
     }
     #discuss-comments .discuss-avatar-xs {
       height: calc(var(--spacing) * 6);
@@ -1426,7 +1426,7 @@
     }
     #discuss-comments .discuss-skeleton {
       border-radius: 0.25rem;
-      background-color: var(--s3);
+      background-color: var(--surface-overlay);
       background-image: linear-gradient( 90deg, transparent 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0.55) 55%, transparent 100% );
       background-size: 200% 100%;
       background-position: 200% 0;
@@ -1448,13 +1448,13 @@
       gap: calc(var(--spacing) * 3);
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-divider::before, #discuss-comments .discuss-divider::after {
       content: '';
       height: 1px;
       flex: 1;
-      background-color: var(--bds);
+      background-color: var(--border-subtle);
     }
     #discuss-comments .discuss-tooltip {
       position: relative;
@@ -1499,7 +1499,7 @@
       display: flex;
       border-bottom-style: var(--tw-border-style);
       border-bottom-width: 1px;
-      border-color: var(--bds);
+      border-color: var(--border-subtle);
       gap: 0;
     }
     #discuss-comments .discuss-tab {
@@ -1515,14 +1515,14 @@
       transition-duration: var(--tw-duration, var(--default-transition-duration));
       --tw-duration: 100ms;
       transition-duration: 100ms;
-      color: var(--t4);
+      color: var(--text-muted);
       background: none;
       border: none;
       font-family: inherit;
       letter-spacing: 0.006em;
     }
     #discuss-comments .discuss-tab:hover {
-      color: var(--t1);
+      color: var(--text-primary);
     }
     #discuss-comments .discuss-tab:focus-visible {
       box-shadow: 0 0 0 3px var(--focus-ring);
@@ -1557,8 +1557,8 @@
       padding: var(--spacing);
       top: calc(100% + 6px);
       left: 0;
-      background-color: var(--s1);
-      border: 1px solid var(--bd);
+      background-color: var(--surface-base);
+      border: 1px solid var(--border-default);
       box-shadow: 0 4px 16px rgba(15,23,42,.10), 0 1px 4px rgba(15,23,42,.06);
       opacity: 0;
       visibility: hidden;
@@ -1588,7 +1588,7 @@
       transition-duration: var(--tw-duration, var(--default-transition-duration));
       --tw-duration: 75ms;
       transition-duration: 75ms;
-      color: var(--t2);
+      color: var(--text-secondary);
       outline: none;
       letter-spacing: 0.006em;
     }
@@ -1598,7 +1598,7 @@
       flex-shrink: 0;
     }
     #discuss-comments .discuss-dropdown-item:hover {
-      background-color: var(--s3);
+      background-color: var(--surface-overlay);
     }
     #discuss-comments .discuss-dropdown-item:focus-visible {
       box-shadow: 0 0 0 3px var(--focus-ring);
@@ -1616,7 +1616,7 @@
     #discuss-comments .discuss-dropdown-divider {
       margin-block: var(--spacing);
       height: 1px;
-      background-color: var(--bds);
+      background-color: var(--border-subtle);
     }
     #discuss-comments .discuss-dropdown-header {
       padding-inline: calc(var(--spacing) * 3);
@@ -1628,12 +1628,12 @@
       --tw-tracking: var(--tracking-wide);
       letter-spacing: var(--tracking-wide);
       text-transform: uppercase;
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-stat-label {
       font-size: 0.75rem;
       font-weight: 500;
-      color: var(--t4);
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 0.375rem;
@@ -1642,7 +1642,7 @@
       font-size: 1.875rem;
       line-height: 1;
       font-weight: 700;
-      color: var(--t1);
+      color: var(--text-primary);
       margin-bottom: 0.375rem;
     }
     #discuss-comments .discuss-stat-delta {
@@ -1656,12 +1656,12 @@
       color: var(--color-danger-600);
     }
     #discuss-comments .discuss-stat-delta.flat {
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-page-header {
       padding-bottom: 1.25rem;
       margin-bottom: 1.5rem;
-      border-bottom: 1px solid var(--bds);
+      border-bottom: 1px solid var(--border-subtle);
     }
     #discuss-comments .discuss-page-title-row {
       display: flex;
@@ -1674,7 +1674,7 @@
       margin: 0;
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--t1);
+      color: var(--text-primary);
     }
     #discuss-comments .discuss-page-actions {
       display: flex;
@@ -1702,7 +1702,7 @@
       width: 100%;
       max-width: 480px;
       border-radius: 12px;
-      background-color: var(--s1);
+      background-color: var(--surface-base);
       box-shadow: var(--surface-shadow-lg);
       transform: scale(0.96) translateY(8px);
       transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease-out;
@@ -1719,27 +1719,27 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--bds);
+      border-bottom: 1px solid var(--border-subtle);
     }
     #discuss-comments .discuss-modal-title {
       font-size: 0.9375rem;
       font-weight: 600;
-      color: var(--t1);
+      color: var(--text-primary);
     }
     #discuss-comments .discuss-modal-body {
       padding: 1.25rem;
       font-size: 0.875rem;
       line-height: 1.65;
-      color: var(--t2);
+      color: var(--text-secondary);
     }
     #discuss-comments .discuss-modal-footer {
       display: flex;
       justify-content: flex-end;
       gap: 0.5rem;
       padding: 1rem 1.25rem;
-      border-top: 1px solid var(--bds);
+      border-top: 1px solid var(--border-subtle);
       border-radius: 0 0 12px 12px;
-      background-color: var(--s3);
+      background-color: var(--surface-overlay);
     }
     #discuss-comments .discuss-toast-region {
       position: fixed;
@@ -1804,7 +1804,7 @@
       width: 48px;
       height: 48px;
       margin-bottom: 1rem;
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-empty-icon svg, #discuss-comments .discuss-empty-icon i[data-lucide] {
       width: 32px;
@@ -1813,21 +1813,21 @@
     #discuss-comments .discuss-empty-title {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--t1);
+      color: var(--text-primary);
       margin-bottom: 0.375rem;
     }
     #discuss-comments .discuss-empty-desc {
       max-width: 320px;
       margin: 0 auto 1.25rem;
       font-size: 0.875rem;
-      color: var(--t4);
+      color: var(--text-muted);
     }
     #discuss-comments .discuss-app {
       display: flex;
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
-      background-color: var(--s2);
+      background-color: var(--surface-inset);
     }
     #discuss-comments .discuss-app-navbar {
       display: flex;
@@ -1836,7 +1836,7 @@
       flex-shrink: 0;
       gap: 0.5rem;
       padding: 0 1rem;
-      background-color: var(--s1);
+      background-color: var(--surface-base);
       box-shadow: 0 1px 0 var(--shell-divider);
       z-index: 100;
     }
@@ -1853,7 +1853,7 @@
     }
     #discuss-comments .discuss-app-content-page {
       min-height: 100%;
-      background-color: var(--s1);
+      background-color: var(--surface-base);
     }
     #discuss-comments .discuss-app-content-inner {
       padding: 1.5rem;
@@ -1862,7 +1862,7 @@
       padding: 0.5rem 0.5rem 0.25rem;
       font-size: 0.75rem;
       font-weight: 600;
-      color: var(--t4);
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -1875,7 +1875,7 @@
       font-size: 0.875rem;
       line-height: 1rem;
       letter-spacing: 0em;
-      color: var(--t2);
+      color: var(--text-secondary);
       border-radius: 8px;
       cursor: pointer;
       text-decoration: none;
@@ -1889,7 +1889,7 @@
     }
     #discuss-comments .discuss-sidebar-item:hover {
       background-color: var(--accent-surface);
-      color: var(--t1);
+      color: var(--text-primary);
       transform: scale(1.02);
     }
     #discuss-comments .discuss-sidebar-item:active {
@@ -2361,7 +2361,6 @@
  * This file is appended to the compiled design-system CSS by scripts/build-client-css.cjs.
  */
 
-
 /* ── Widget base reset ── */
 #discuss-comments {
     text-align: left;
@@ -2381,7 +2380,7 @@
 #discuss-comments button { border: none; padding: 0; background: transparent; cursor: pointer; }
 #discuss-comments input:focus, #discuss-comments textarea:focus, #discuss-comments select:focus,
 #discuss-comments button:focus { outline: none; }
-#discuss-comments input::placeholder, #discuss-comments textarea::placeholder { color: var(--t5); opacity: 1; }
+#discuss-comments input::placeholder, #discuss-comments textarea::placeholder { color: var(--text-subtle); opacity: 1; }
 
 /* ── Tooltip arrow ── */
 #discuss-comments .em-tip::after {
@@ -2450,19 +2449,19 @@
 #discuss-comments .discuss-btn svg { width: 1em; height: 1em; flex-shrink: 0; }
 
 #discuss-comments .discuss-btn-primary {
-    background-color: var(--b600);
+    background-color: var(--brand-600);
     color: var(--on-primary);
-    border-color: var(--b600);
+    border-color: var(--brand-600);
 }
-#discuss-comments .discuss-btn-primary:hover { background-color: var(--b700); border-color: var(--b700); }
-#discuss-comments .discuss-btn-primary:active:not(:disabled) { background-color: var(--b800); border-color: var(--b800); }
+#discuss-comments .discuss-btn-primary:hover { background-color: var(--brand-700); border-color: var(--brand-700); }
+#discuss-comments .discuss-btn-primary:active:not(:disabled) { background-color: var(--brand-800); border-color: var(--brand-800); }
 
 #discuss-comments .discuss-btn-secondary {
-    background-color: var(--s1);
-    color: var(--t2);
-    border-color: var(--bd-button);
+    background-color: var(--surface-base);
+    color: var(--text-secondary);
+    border-color: var(--border-button);
 }
-#discuss-comments .discuss-btn-secondary:hover { background-color: var(--s3); }
+#discuss-comments .discuss-btn-secondary:hover { background-color: var(--surface-overlay); }
 
 /* ── Responsive avatar & thread spacing ── */
 #discuss-comments .discuss-comment-row {
@@ -2502,7 +2501,7 @@
 #discuss-comments .discuss-comment-body {
     font-size: 0.9375rem;
     line-height: 1.65;
-    color: var(--t2);
+    color: var(--text-secondary);
     margin: 0 0 0.75rem;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -2510,10 +2509,10 @@
 #discuss-comments .discuss-comment-body p { margin: 0 0 0.5em; }
 #discuss-comments .discuss-comment-body p:last-child { margin-bottom: 0; }
 #discuss-comments .discuss-comment-body blockquote {
-    border-left: 3px solid var(--bds);
+    border-left: 3px solid var(--border-subtle);
     padding-left: 1rem;
     margin: 0.5rem 0;
-    color: var(--t4);
+    color: var(--text-muted);
     font-style: italic;
 }
 #discuss-comments .discuss-comment-body kbd {
@@ -2522,12 +2521,12 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.8125em;
     line-height: 1.4;
-    color: var(--t2);
-    background: var(--s2);
-    border: 1px solid var(--bd);
-    border-bottom: 2px solid var(--bd-strong);
+    color: var(--text-secondary);
+    background: var(--surface-inset);
+    border: 1px solid var(--border-default);
+    border-bottom: 2px solid var(--border-strong);
     border-radius: 4px;
-    box-shadow: inset 0 -1px 0 var(--bd-strong), inset 0 1px 0 #fff;
+    box-shadow: inset 0 -1px 0 var(--border-strong), inset 0 1px 0 #fff;
     white-space: nowrap;
     vertical-align: baseline;
 }
@@ -2545,15 +2544,15 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.875em;
     padding: 0.15em 0.4em;
-    background: var(--s3);
-    color: var(--t2);
+    background: var(--surface-overlay);
+    color: var(--text-secondary);
     border-radius: 4px;
 }
 #discuss-comments .discuss-comment-body pre {
     margin: 0.875em 0;
     padding: 1rem 1.25rem;
-    background: var(--t1);
-    color: var(--s2);
+    background: var(--text-primary);
+    color: var(--surface-inset);
     border-radius: 8px;
     overflow-x: auto;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -2575,7 +2574,7 @@
 #discuss-comments .discuss-comment-body ul { list-style-type: disc; }
 #discuss-comments .discuss-comment-body ol { list-style-type: decimal; }
 #discuss-comments .discuss-comment-body li { margin: 0.3em 0; }
-#discuss-comments .discuss-comment-body del { color: var(--t4); text-decoration: line-through; }
+#discuss-comments .discuss-comment-body del { color: var(--text-muted); text-decoration: line-through; }
 #discuss-comments .discuss-comment-body ins {
     text-decoration: none;
     background: #dcfce7;
@@ -2583,7 +2582,7 @@
     padding: 0.1em 0.2em;
     border-radius: 3px;
 }
-#discuss-comments .discuss-comment-body cite { font-style: italic; color: var(--t3); }
+#discuss-comments .discuss-comment-body cite { font-style: italic; color: var(--text-tertiary); }
 #discuss-comments .discuss-comment-body sup,
 #discuss-comments .discuss-comment-body sub { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
 #discuss-comments .discuss-comment-body sup { top: -0.5em; }
@@ -2630,9 +2629,9 @@
 
 /* ── New comment form ── */
 #discuss-comments .discuss-form-container {
-    border: 1px solid var(--bd-control);
+    border: 1px solid var(--border-control);
     border-radius: 0.5rem;
-    background-color: var(--s1);
+    background-color: var(--surface-base);
     overflow: hidden;
     transition: border-color 150ms, box-shadow 150ms;
 }
@@ -2650,18 +2649,18 @@
     resize: vertical;
     font-size: 0.9375rem;
     line-height: 1.5;
-    color: var(--t1);
+    color: var(--text-primary);
     outline: none;
     box-shadow: none;
 }
-#discuss-comments .discuss-form-textarea::placeholder { color: var(--t5); }
+#discuss-comments .discuss-form-textarea::placeholder { color: var(--text-subtle); }
 #discuss-comments .discuss-form-bottom {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     padding: 1rem;
-    background-color: var(--s2);
-    border-top: 1px solid var(--bds);
+    background-color: var(--surface-inset);
+    border-top: 1px solid var(--border-subtle);
 }
 #discuss-comments .discuss-form-inputs {
     display: flex;
@@ -2706,7 +2705,7 @@
     left: 0.75rem;
     width: 1rem;
     height: 1rem;
-    color: var(--t4);
+    color: var(--text-muted);
     pointer-events: none;
 }
 #discuss-comments .discuss-input-no-icon .discuss-form-input {
@@ -2714,13 +2713,13 @@
 }
 #discuss-comments .discuss-form-input {
     width: 100%;
-    border: 1px solid var(--bd-control);
+    border: 1px solid var(--border-control);
     border-radius: 6px;
     padding: 0.75rem 0.75rem 0.75rem 2.25rem;
     font-size: 1rem;
     line-height: 1rem;
-    background-color: var(--s1);
-    color: var(--t1);
+    background-color: var(--surface-base);
+    color: var(--text-primary);
     outline: none;
     transition: border-color 120ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 120ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -2729,7 +2728,7 @@
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
     outline: none;
 }
-#discuss-comments .discuss-form-input::placeholder { color: var(--t5); }
+#discuss-comments .discuss-form-input::placeholder { color: var(--text-subtle); }
 
 /* ── Nested comment indent ── */
 #discuss-comments .discuss-nested {
@@ -2750,12 +2749,12 @@
     z-index: 10;
 }
 #discuss-comments .discuss-collapse-line:hover .discuss-thread-line {
-    background-color: var(--b400);
+    background-color: var(--brand-400);
 }
 #discuss-comments .discuss-thread-line {
     width: 2px;
     height: 100%;
-    background-color: var(--bds);
+    background-color: var(--border-subtle);
     transition: background-color 150ms;
 }
 
@@ -2769,9 +2768,9 @@
     font-weight: 500;
     line-height: 1.25rem;
     border-radius: 0.375rem;
-    border: 1px solid var(--bd-button);
+    border: 1px solid var(--border-button);
     background: transparent;
-    color: var(--t4);
+    color: var(--text-muted);
     cursor: pointer;
     transition: background-color 120ms, color 120ms, border-color 120ms, box-shadow 120ms;
     white-space: nowrap;
@@ -2779,9 +2778,9 @@
     outline: none;
 }
 #discuss-comments .discuss-action-btn:hover {
-    background-color: var(--s3);
-    color: var(--t1);
-    border-color: var(--bd-control);
+    background-color: var(--surface-overlay);
+    color: var(--text-primary);
+    border-color: var(--border-control);
 }
 #discuss-comments .discuss-action-btn:focus-visible {
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-ring) 25%, transparent);
