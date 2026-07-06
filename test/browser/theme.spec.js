@@ -28,33 +28,35 @@ test.describe('primaryColor option', () => {
     });
 
     test('per-widget color takes priority over server config', async ({ page }) => {
-        // Override config mock for this test only
+        // Widget: vivid pink. Server: blue. Screenshot makes any regression obvious.
+        const WIDGET_COLOR = '#ec4899';
+        const SERVER_COLOR = '#1d4ed8';
+
         await page.route('**/api/comments/config*', route =>
-            route.fulfill({ json: { primary_color: '#1d4ed8', honeypot_question: null } })
+            route.fulfill({ json: { primary_color: SERVER_COLOR, honeypot_question: null } })
         );
 
-        await initWidget(page, { primaryColor: '#d5848e' });
+        await initWidget(page, { primaryColor: WIDGET_COLOR });
 
-        // Value is set synchronously in the constructor before init() fires
-        const b600BeforeResponse = await getInlineVar(page, '--brand-600');
+        // applyTheme is synchronous in the constructor — scale is set before
+        // init()'s fetch resolves. Guard that a real hex was written (not empty).
+        const widgetB600 = await getInlineVar(page, '--brand-600');
+        expect(widgetB600).toMatch(/^#[0-9a-fA-F]{6}$/);
 
-        // Wait for the server response to be processed
+        // After the server response is processed the value must be unchanged.
         await page.waitForSelector('#discuss-comments form');
-        const b600After = await getInlineVar(page, '--brand-600');
+        expect(await getInlineVar(page, '--brand-600')).toBe(widgetB600);
 
-        // Server config must not have overwritten the per-widget colour
-        expect(b600After).toBe(b600BeforeResponse);
-
-        // Verify the server-only colour actually differs (sanity check)
+        // Sanity: server-only path produces a different brand-600.
         await page.goto(BASE);
         await page.route('**/api/comments/config*', route =>
-            route.fulfill({ json: { primary_color: '#1d4ed8', honeypot_question: null } })
+            route.fulfill({ json: { primary_color: SERVER_COLOR, honeypot_question: null } })
         );
         await initWidget(page);
         await page.waitForSelector('#discuss-comments form');
-        const b600ServerOnly = await getInlineVar(page, '--brand-600');
-
-        expect(b600BeforeResponse).not.toBe(b600ServerOnly);
+        const serverB600 = await getInlineVar(page, '--brand-600');
+        expect(serverB600).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(serverB600).not.toBe(widgetB600);
     });
 
     test('server config color applies when no per-widget override', async ({ page }) => {
@@ -112,6 +114,18 @@ test.describe('primaryColor option', () => {
     test('unknown color format sets no palette variables', async ({ page }) => {
         await initWidget(page, { primaryColor: 'not-a-color' });
         expect(await getInlineVar(page, '--brand-600')).toBe('');
+    });
+
+    test('#rgb 3-char shorthand expands to the same palette as its #rrggbb form', async ({ page }) => {
+        // #d58 expands to #dd5588
+        await initWidget(page, { primaryColor: '#dd5588' });
+        const b600Full = await getInlineVar(page, '--brand-600');
+        expect(b600Full).toMatch(/^#[0-9a-fA-F]{6}$/);
+
+        await page.goto(BASE);
+        await mockApi(page);
+        await initWidget(page, { primaryColor: '#d58' });
+        expect(await getInlineVar(page, '--brand-600')).toBe(b600Full);
     });
 });
 
@@ -279,8 +293,11 @@ test.describe('semantic token hierarchy', () => {
         const bgColor = await page.evaluate(() =>
             getComputedStyle(document.querySelector('.discuss-comment-body pre')).backgroundColor
         );
-        // The pre-fix bug produced near-white (~rgb(248,250,252)); must now be dark
+        // The pre-fix bug produced near-white (~rgb(248,250,252)); must now be dark.
+        // Use perceived-luminance formula so any dark surface token passes (not just
+        // one tuned to a specific theme colour).
         const [r, g, b] = bgColor.match(/[\d.]+/g).map(Number);
-        expect(r < 80 && g < 80 && b < 80).toBe(true);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        expect(luminance).toBeLessThan(0.3);
     });
 });

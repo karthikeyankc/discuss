@@ -15,19 +15,20 @@
  * Call this before page.goto() so that the widget's init() fetch is caught.
  */
 export function mockApi(page, { config = {}, comments = [] } = {}) {
+    // Register broad route first so the specific config route wins via LIFO.
     return Promise.all([
+        page.route('**/api/comments*', (route) => {
+            if (route.request().method() === 'GET') {
+                route.fulfill({ json: comments });
+            } else {
+                route.fulfill({ json: { id: 99 } });
+            }
+        }),
         page.route('**/api/comments/config*', route =>
             route.fulfill({
                 json: { primary_color: null, honeypot_question: null, ...config },
             })
         ),
-        page.route('**/api/comments*', (route) => {
-            if (route.request().method() === 'GET') {
-                route.fulfill({ json: comments });
-            } else {
-                route.fulfill({ json: { id: 99, ...comments[0] } });
-            }
-        }),
     ]);
 }
 
@@ -80,35 +81,6 @@ export function getInlineVar(page, name) {
         (n) => document.getElementById('discuss-comments').style.getPropertyValue(n),
         name
     );
-}
-
-/**
- * Toggle a dark-mode class/attribute on <html> and wait until the given inline
- * CSS variable actually changes value — no fixed sleeps.
- *
- * For CSS-cascade-only changes (e.g. --text-primary from an injected <style>), use
- * waitForComputedVarChange() instead.
- */
-export async function toggleDarkAndWaitForVar(page, { selector, attribute, varName, previousValue }) {
-    if (attribute) {
-        await page.evaluate(
-            ({ sel, attr }) => document.querySelector(sel).setAttribute(attr, 'true'),
-            { sel: selector, attr: attribute }
-        );
-    } else {
-        await page.evaluate(
-            (cls) => document.documentElement.classList.add(cls),
-            selector.replace(/^[^.]*\./, '')  // strip leading element selector, get class name
-        );
-    }
-
-    await page.waitForFunction(
-        ({ varN, prev }) =>
-            document.getElementById('discuss-comments').style.getPropertyValue(varN) !== prev,
-        { varN: varName, prev: previousValue }
-    );
-
-    return getInlineVar(page, varName);
 }
 
 /**

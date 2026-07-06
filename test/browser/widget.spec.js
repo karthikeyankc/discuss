@@ -9,14 +9,12 @@ const AUTO = '/test/fixtures/auto.html';
 // ------------------------------------------------------------------
 
 test.describe('rendering', () => {
-    test.beforeEach(async ({ page }) => {
+    test('renders the comment form', async ({ page }) => {
         await mockApi(page);
         await page.goto(BASE);
         await initWidget(page);
         await page.waitForSelector('#discuss-comments form');
-    });
 
-    test('renders the comment form', async ({ page }) => {
         await expect(page.getByRole('heading', { name: 'Leave a comment' })).toBeVisible();
         await expect(page.getByPlaceholder('Name')).toBeVisible();
         await expect(page.getByPlaceholder('Email (optional)')).toBeVisible();
@@ -24,8 +22,8 @@ test.describe('rendering', () => {
     });
 
     test('renders a custom title', async ({ page }) => {
-        await page.goto(BASE);
         await mockApi(page);
+        await page.goto(BASE);
         await initWidget(page, { title: 'Join the discussion' });
         await page.waitForSelector('#discuss-comments form');
 
@@ -34,6 +32,11 @@ test.describe('rendering', () => {
     });
 
     test('renders empty state with form and no comments', async ({ page }) => {
+        await mockApi(page);
+        await page.goto(BASE);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
         await expect(page.getByRole('heading', { name: 'Leave a comment' })).toBeVisible();
         await expect(page.locator('.discuss-comment-body')).toHaveCount(0);
     });
@@ -125,6 +128,28 @@ test.describe('form', () => {
         await expect(honeypot).toHaveAttribute('tabindex', '-1');
     });
 
+    test('placeholder option overrides the default textarea placeholder', async ({ page }) => {
+        await page.goto(BASE);
+        await mockApi(page);
+        await initWidget(page, { placeholder: 'Write something...' });
+        await page.waitForSelector('#discuss-comments form');
+
+        await expect(page.locator('textarea[name="content"]'))
+            .toHaveAttribute('placeholder', 'Write something...');
+    });
+
+    test('honeypot_question config renders a hidden labelled input', async ({ page }) => {
+        await page.goto(BASE);
+        await mockApi(page, { config: { honeypot_question: 'What colour is the sky?', primary_color: null } });
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        const hpInput = page.locator('input[name="honeypot_answer_given"]');
+        await expect(hpInput).toHaveCount(1);
+        await expect(hpInput).not.toBeVisible();
+        await expect(hpInput).toHaveAttribute('placeholder', 'What colour is the sky?');
+    });
+
     test('submit button is disabled while a post is in flight', async ({ page }) => {
         // Delay the POST response so we can observe the disabled state
         await page.route('**/api/comments', async (route) => {
@@ -181,5 +206,78 @@ test.describe('interactions', () => {
         await page.locator('.discuss-reply-btn').first().click();
         const replyForm = page.locator('#discuss-reply-form-1');
         await expect(replyForm.getByRole('button', { name: /post/i })).toBeVisible();
+    });
+
+    test('collapse button toggles comment body and children visibility', async ({ page }) => {
+        const collapseBtn = page.locator('.discuss-collapse-btn').first();
+        // Body is visible initially
+        await expect(page.locator('.discuss-comment-body').first()).toBeVisible();
+
+        await collapseBtn.click();
+        await expect(page.locator('.discuss-comment-body').first()).toBeHidden();
+
+        await collapseBtn.click();
+        await expect(page.locator('.discuss-comment-body').first()).toBeVisible();
+    });
+});
+
+// ------------------------------------------------------------------
+// Form submission
+// ------------------------------------------------------------------
+
+test.describe('form submission', () => {
+    test('successful submit resets the form and re-renders comments', async ({ page }) => {
+        // Use stateful mock: initial GET returns [], POST succeeds, next GET returns the comment.
+        // This also avoids a hidden reply-form Name input interfering with the fill() selector.
+        const postedComment = sampleComment({ id: 99, name: 'Tester', content: '<p>Posted!</p>' });
+        let returnComment = false;
+        await page.route('**/api/comments*', route => {
+            if (route.request().method() === 'GET')
+                return route.fulfill({ json: returnComment ? [postedComment] : [] });
+            returnComment = true;
+            return route.fulfill({ json: { id: 99 } });
+        });
+        await page.route('**/api/comments/config*', route =>
+            route.fulfill({ json: { primary_color: null, honeypot_question: null } })
+        );
+        await page.goto(BASE);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Posted!');
+        await page.getByRole('button', { name: /post/i }).click();
+
+        // Main form resets after success (form[data-parent="0"] scopes away from hidden reply forms)
+        await expect(page.locator('form[data-parent="0"]').getByPlaceholder('Name'))
+            .toHaveValue('', { timeout: 3000 });
+        // init() re-fetches and renders the posted comment
+        await expect(page.getByText('Posted!')).toBeVisible({ timeout: 3000 });
+    });
+
+    test('failed submit shows the error message from the API', async ({ page }) => {
+        await page.route('**/api/comments*', async route => {
+            if (route.request().method() === 'POST')
+                return route.fulfill({ status: 422, json: { error: 'Comment too short.' } });
+            return route.fulfill({ json: [] });
+        });
+        await page.route('**/api/comments/config*', route =>
+            route.fulfill({ json: { primary_color: null, honeypot_question: null } })
+        );
+        await page.goto(BASE);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        let dialogMessage = null;
+        page.on('dialog', async dialog => {
+            dialogMessage = dialog.message();
+            await dialog.dismiss();
+        });
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Hi');
+        await page.getByRole('button', { name: /post/i }).click();
+
+        await expect.poll(() => dialogMessage, { timeout: 3000 }).toBe('Comment too short.');
     });
 });
