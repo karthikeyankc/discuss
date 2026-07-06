@@ -91,6 +91,7 @@
     footer a { color: var(--text-3); text-decoration: none; }
     footer a:hover { color: var(--accent); }
     .widget-note { font-size: 0.8rem; color: var(--text-4); font-style: italic; margin-top: 1.5rem; }
+    html.dark { color-scheme: dark; }
   </style>
 </head>
 <body>
@@ -116,11 +117,11 @@
       <p>Most advice on this topic is either obvious or doesn't survive contact with a real job, real family, or real exhaustion. "Wake up at 5am." "Ship every week." "Treat it like a startup." Sure.</p>
       <p>The reality is messier. Some people batch it into weekend blocks. Some work in short daily sessions before the day starts. Some only make progress when inspiration strikes and have accepted that. Some keep a running backlog; others just open the repo and see what calls to them.</p>
       <p>What actually works for you? Not the ideal version — the real version. How do you keep a side project alive without burning out or abandoning it six weeks in?</p>
-      <p class="widget-note">Widget: <code>primaryColor: 'var(--discuss-brand)'</code> (CSS variable, resolves to red).</p>
+      <p class="widget-note">Widget: <code>primaryColor: 'var(--discuss-brand)'</code> (CSS variable — red in light mode, teal in dark mode via <code>light-dark()</code>).</p>
     </div>
 
     <style>
-      :root { --discuss-brand: #dc2626; }
+      :root { color-scheme: light dark; --discuss-brand: light-dark(#dc2626, #0d9488); }
     </style>
     <div id="discuss-comments" data-is-admin="true"></div>
     <link rel="stylesheet" href="https://discuss.arclind.com/client.css">
