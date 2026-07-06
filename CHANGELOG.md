@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.7] - 2026-07-06
+
+### Fixed
+- **CSS variable `light-dark()` support**: `primaryColor: 'var(--my-brand)'` now works correctly when the variable's value uses `light-dark()` or any other browser-resolved syntax (relative `oklch()`, chained variables, etc.). Previously, `getPropertyValue` returned the raw token string, which the resolver could not parse. The fix applies the variable to a temporary element's `color` property and reads back the browser-computed `rgb()` value instead.
+
+### Changed
+- **hsl/oklch/rgb resolver tests strengthened**: tests now compare `--brand-600` against the browser-computed equivalent rather than just checking the output matches a hex pattern. This validates correctness of the conversion math, not just the output format.
+- **Thread 4 demo page**: `--discuss-brand` now uses `light-dark(#dc2626, #0d9488)` — red in light mode, teal in dark mode — to demonstrate CSS variable + `light-dark()` support end-to-end.
+
+---
+
 ## [0.5.6] - 2026-07-06
 
 ### Added
