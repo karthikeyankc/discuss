@@ -9,10 +9,52 @@
 # Install: cp scripts/pre-commit.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 
 echo "Running tests..."
-npm test
-if [ $? -ne 0 ]; then
+test_output=$(npm test 2>&1)
+echo "$test_output"
+if echo "$test_output" | grep -q "^ℹ fail [^0]"; then
   echo ""
   echo "  Tests failed. Fix all failing tests before committing."
+  echo ""
+  exit 1
+fi
+
+# --- Test quality checks ---
+focused_tests=$(grep -rn "\.only(" test/ 2>/dev/null | grep -v "//")
+if [ -n "$focused_tests" ]; then
+  echo ""
+  echo "  Focused tests (.only) found — these skip all other tests in CI:"
+  echo "$focused_tests" | sed 's/^/    /'
+  echo ""
+  exit 1
+fi
+
+timeout_tests=$(grep -rn "waitForTimeout" test/ 2>/dev/null | grep -v "//")
+if [ -n "$timeout_tests" ]; then
+  echo ""
+  echo "  waitForTimeout() detected in test files (timing antipattern)."
+  echo "  Use expect.poll(), toBeVisible/Hidden(), or waitForRequest() instead."
+  echo "  Affected lines:"
+  echo "$timeout_tests" | sed 's/^/    /'
+  echo ""
+  exit 1
+fi
+
+# --- README badge drift checks ---
+unit_count=$(echo "$test_output" | awk '/^ℹ tests/{print $3}')
+browser_count=$(npx playwright test --list 2>/dev/null | awk '/^Total:/{print $2}')
+
+if [ -n "$unit_count" ] && ! grep -q "unit_tests-${unit_count}%20passing" README.md 2>/dev/null; then
+  echo ""
+  echo "  README unit test badge is stale (actual count: ${unit_count})."
+  echo "  Update the badge: unit_tests-${unit_count}%20passing"
+  echo ""
+  exit 1
+fi
+
+if [ -n "$browser_count" ] && ! grep -q "browser_tests-${browser_count}%20passing" README.md 2>/dev/null; then
+  echo ""
+  echo "  README browser test badge is stale (actual count: ${browser_count})."
+  echo "  Update the badge: browser_tests-${browser_count}%20passing"
   echo ""
   exit 1
 fi
