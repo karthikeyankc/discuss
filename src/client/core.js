@@ -54,12 +54,18 @@ function resolveColor(value, el) {
     value = value.trim();
 
     // CSS variable: var(--foo) or bare --foo
+    // Apply to a temp element and read back the computed color so the browser
+    // resolves light-dark(), relative oklch(), and any other complex syntax.
     if (value.startsWith('var(') || value.startsWith('--')) {
         const prop = value.startsWith('var(')
             ? value.slice(4, -1).split(',')[0].trim()
             : value;
-        const resolved = getComputedStyle(el).getPropertyValue(prop).trim();
-        return resolved ? resolveColor(resolved, el) : null;
+        const tmp = document.createElement('span');
+        tmp.style.cssText = 'position:fixed;left:-9999px;top:-9999px;color:var(' + prop + ')';
+        el.appendChild(tmp);
+        const computed = getComputedStyle(tmp).color;
+        el.removeChild(tmp);
+        return computed ? resolveColor(computed, el) : null;
     }
 
     // #rrggbb
