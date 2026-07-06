@@ -125,7 +125,7 @@ Thanks to [@krisbalintona](https://github.com/krisbalintona) for reporting issue
 
 No manual database changes needed. The trailing-slash migration runs automatically on first server start.
 
-**Apache users:** add `AllowEncodedSlashes NoDecode` to your VirtualHost and append `nocanon` to your `ProxyPass` directive, or admin pages will 404 on direct load or hard refresh. See [docs/deployment.md](docs/deployment.md) for the full example.
+**Apache users:** add `AllowEncodedSlashes NoDecode` to your VirtualHost and append `nocanon` to your `ProxyPass` directive, or admin pages will 404 on direct load or hard refresh. See the Apache configuration section in the README for the full example.
 
 ---
 

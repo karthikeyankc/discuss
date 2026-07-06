@@ -65,7 +65,7 @@ AllowEncodedSlashes NoDecode
 ProxyPass / http://127.0.0.1:3000/ nocanon
 ```
 
-See [deployment.md](deployment.md) for the full example.
+See the Apache configuration section in the README for the full example.
 
 ---
 
@@ -103,4 +103,4 @@ UPDATE comments SET post_url = '/new-path' WHERE post_url = '/old-path';
 
 Run this directly against your SQLite database using the `sqlite3` CLI or any SQLite client.
 
-To avoid this situation in the first place, pin threads to a stable key using the `data-url` attribute. See [Embedding](embed.md).
+To avoid this situation in the first place, pin threads to a stable key using the `data-url` attribute — see the Embedding section in the README.
