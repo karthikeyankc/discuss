@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.6] - 2026-07-06
+
+### Added
+- **Admin UI browser test suite**: 35 automated Playwright tests covering auth flow, overview stats, inbox (approve, delete, pin, edit, bulk approve, bulk delete, tab switch), domain settings (general fields, colour picker with WCAG indicators), domain management, and search (results, empty state, short-query guard, API failure).
+- **Widget browser test suite expanded**: new tests for `placeholder` option, `honeypot_question` config, `handleSubmit` success and failure paths, collapse toggle, and `#rgb` 3-char hex shorthand. Total browser test count raised from 63 to 73.
+- **`npm run bundle-size` script**: prints a formatted table of raw and gzip sizes for `client.js` and `client.css`. Run locally after a build to verify bundle weight before shipping.
+- **Pre-commit test quality checks**: hook now blocks commits that contain focused tests (`.only(`) or `waitForTimeout()` calls in test files. It also verifies README badge counts match the actual unit and browser test totals.
+
+### Fixed
+- **Admin search empty state**: searching with no matching results now shows "No results for..." as expected. Previously it showed "Search failed. Please try again." because `_esc()` was called but never defined on the app object — the `TypeError` was silently swallowed by the surrounding try/catch.
+- **Admin hex colour normalisation**: typing a hex value without a leading `#` in the colour picker input now normalises the displayed field value immediately (e.g. `2563eb` → `#2563eb`). Previously the field showed the bare value while the PATCH body was sent correctly.
+- **Widget `mockApi` route shadowing**: the broad `**/api/comments*` pattern was registered after the specific `**/api/comments/config*` pattern, so Playwright's LIFO handler resolution meant config requests were intercepted by the comments handler. The registration order is now correct — config route is registered last and wins.
+- **Approve URL assertion race**: `expect(approveUrl).toContain(...)` ran synchronously before the route handler had time to capture the URL. Replaced with `expect.poll()`.
+- **Delete test DOM assertion**: added a stateful re-fetch mock so `loadInbox()` returns an empty list after the comment is deleted, allowing the inbox-item count to be asserted as 0.
+
+### Changed
+- **Toast assertions tightened**: tests now assert `.toast-success` / `.toast-error` class and exact message text rather than just checking the toast is visible.
+- **Dark-mode pre assertion**: replaced per-channel threshold (`r < 80 && g < 80 && b < 80`) with a perceived-luminance check (`0.299r + 0.587g + 0.114b < 0.3`). The new threshold is robust across any dark surface token, not just one tuned to a specific colour.
+- **Short-query negative assertion**: replaced `waitForTimeout(600)` with a `page.waitForRequest` race — the search request promise resolves to `false` if no request fires within 500 ms instead of sleeping unconditionally.
+- **README Customisation section**: added `placeholder` option with code example alongside the existing title, icons, and font entries.
+
+---
+
 ## [0.5.5] - 2026-07-05
 
 ### Added
