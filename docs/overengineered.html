@@ -117,10 +117,19 @@
       <p>No judgment — we've all been there, or worked with someone who has. What's the most spectacular case of over-engineering you've encountered? Anonymise it if you need to.</p>
     </div>
 
-    <div id="discuss-comments" data-dark-selector=".dark"></div>
+    <div id="discuss-comments" data-is-admin="true"></div>
     <link rel="stylesheet" href="https://discuss.arclind.com/client.css">
     <script src="https://discuss.arclind.com/client.js"></script>
-    
+    <script>
+      new DiscussWidget({
+        container: document.getElementById('discuss-comments'),
+        darkSelector: '.dark',
+        primaryColor: '#7c3aed',
+        title: 'Join the discussion',
+        placeholder: 'What do you think? Be honest.',
+      });
+    </script>
+
 
   </div>
 
