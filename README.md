@@ -4,12 +4,13 @@
   <p>
     <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
     <img src="https://img.shields.io/badge/unit_tests-167%20passing-brightgreen" alt="Unit Tests">
-    <img src="https://img.shields.io/badge/browser_tests-28%20passing-brightgreen" alt="Browser Tests">
+    <img src="https://img.shields.io/badge/browser_tests-73%20passing-brightgreen" alt="Browser Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
     <img src="https://img.shields.io/github/v/tag/karthikeyankc/discuss?label=version" alt="Version">
   </p>
   <p><a href="https://karthikeyankc.github.io/discuss/">Live Demo</a></p>
+  <img src="docs/screenshot.png" alt="Discuss screenshot" width="720" />
 </div>
 
 ---
@@ -291,6 +292,16 @@ The heading above the comment form defaults to "Leave a comment". Change it with
 ```html
 <script>
   new DiscussWidget({ title: 'Join the discussion' });
+</script>
+```
+
+**Placeholder**
+
+The textarea placeholder defaults to `Share your thoughts... (*markdown* supported)`. Override it with the `placeholder` option:
+
+```html
+<script>
+  new DiscussWidget({ placeholder: 'Leave a comment…' });
 </script>
 ```
 
