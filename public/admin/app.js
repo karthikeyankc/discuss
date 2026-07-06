@@ -309,6 +309,10 @@ const app = {
         } catch (err) { console.error(err); }
     },
 
+    _esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    },
+
     // ── Renderer (shared avatar/tooltip logic from DiscussAdminWidget) ────
     _initRenderer() {
         if (!this._renderer) {
@@ -1003,6 +1007,7 @@ const app = {
     onColorHexInput(raw) {
         const hex = raw.startsWith('#') ? raw : '#' + raw;
         if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+            document.getElementById('settings-color-hex').value = hex;
             document.getElementById('settings-color-picker').value = hex;
             this._applyColorPreview(hex);
             this._updateA11y(hex);
@@ -1098,7 +1103,8 @@ const app = {
         const id  = document.getElementById('settings-domain-id').value;
         const btn = e.target.querySelector('[type="submit"]');
         btn.disabled = true;
-        const hex = document.getElementById('settings-color-hex').value.trim();
+        const rawHex = document.getElementById('settings-color-hex').value.trim();
+        const hex = rawHex.startsWith('#') ? rawHex : '#' + rawHex;
         try {
             // Commit any partially-typed word still in the input field
             this._commitBlockedWord(document.getElementById('blocked-words-field'));

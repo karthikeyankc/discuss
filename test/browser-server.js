@@ -33,8 +33,17 @@ const server = createServer((req, res) => {
         return;
     }
 
-    const filePath = resolve(root, '.' + url);
-    if (existsSync(filePath) && !filePath.includes('..') && statSync(filePath).isFile()) {
+    // Serve the admin SPA — assets resolve via the /public fallback below
+    if (url === '/admin' || url === '/admin/') {
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(readFileSync(resolve(root, 'public/admin/index.html')));
+        return;
+    }
+
+    // Try the path directly, then with a /public prefix (covers /client.css, /admin/app.js, etc.)
+    const candidates = [resolve(root, '.' + url), resolve(root, './public' + url)];
+    const filePath = candidates.find(p => !p.includes('..') && existsSync(p) && statSync(p).isFile());
+    if (filePath) {
         const mime = MIME[extname(filePath)] ?? 'text/plain';
         res.writeHead(200, { 'Content-Type': mime });
         res.end(readFileSync(filePath));
