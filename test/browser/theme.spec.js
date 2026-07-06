@@ -96,19 +96,57 @@ test.describe('primaryColor option', () => {
         expect(await getInlineVar(page, '--brand-600')).toBe(directB600);
     });
 
-    test('hsl() color resolves to a valid hex palette', async ({ page }) => {
-        await initWidget(page, { primaryColor: 'hsl(350, 50%, 68%)' });
-        expect(await getInlineVar(page, '--brand-600')).toMatch(/^#[0-9a-fA-F]{6}$/);
+    test('hsl() color resolves to the same palette as the browser-computed equivalent', async ({ page }) => {
+        const color = 'hsl(350, 50%, 68%)';
+        await page.addStyleTag({ content: `:root { --test-color: ${color}; }` });
+        await initWidget(page, { primaryColor: 'var(--test-color)' });
+        const browserB600 = await getInlineVar(page, '--brand-600');
+        expect(browserB600).toMatch(/^#[0-9a-fA-F]{6}$/);
+
+        await page.goto(BASE);
+        await mockApi(page);
+        await initWidget(page, { primaryColor: color });
+        expect(await getInlineVar(page, '--brand-600')).toBe(browserB600);
     });
 
-    test('oklch() color resolves to a valid hex palette', async ({ page }) => {
-        await initWidget(page, { primaryColor: 'oklch(0.65 0.1 355)' });
-        expect(await getInlineVar(page, '--brand-600')).toMatch(/^#[0-9a-fA-F]{6}$/);
+    test('oklch() color resolves to the same palette as the browser-computed equivalent', async ({ page }) => {
+        const color = 'oklch(0.65 0.1 355)';
+        await page.addStyleTag({ content: `:root { --test-color: ${color}; }` });
+        await initWidget(page, { primaryColor: 'var(--test-color)' });
+        const browserB600 = await getInlineVar(page, '--brand-600');
+        expect(browserB600).toMatch(/^#[0-9a-fA-F]{6}$/);
+
+        await page.goto(BASE);
+        await mockApi(page);
+        await initWidget(page, { primaryColor: color });
+        expect(await getInlineVar(page, '--brand-600')).toBe(browserB600);
     });
 
-    test('rgb() color resolves to a valid hex palette', async ({ page }) => {
+    test('rgb() resolves to the same palette as its hex equivalent', async ({ page }) => {
+        // rgb(213, 132, 142) is exactly #d5848e
+        await initWidget(page, { primaryColor: '#d5848e' });
+        const hexB600 = await getInlineVar(page, '--brand-600');
+
+        await page.goto(BASE);
+        await mockApi(page);
         await initWidget(page, { primaryColor: 'rgb(213, 132, 142)' });
-        expect(await getInlineVar(page, '--brand-600')).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(await getInlineVar(page, '--brand-600')).toBe(hexB600);
+    });
+
+    test('CSS variable with light-dark() resolves to the active mode colour', async ({ page }) => {
+        await page.addStyleTag({ content: ':root { color-scheme: light dark; --brand: light-dark(#d5848e, #2563eb); }' });
+
+        // Baseline: direct hex for the light-mode colour
+        await initWidget(page, { primaryColor: '#d5848e' });
+        const lightB600 = await getInlineVar(page, '--brand-600');
+        expect(lightB600).toMatch(/^#[0-9a-fA-F]{6}$/);
+
+        await page.goto(BASE);
+        await mockApi(page);
+        await page.addStyleTag({ content: ':root { color-scheme: light dark; --brand: light-dark(#d5848e, #2563eb); }' });
+        await initWidget(page, { primaryColor: 'var(--brand)' });
+        // Browser is in light mode by default — should resolve to #d5848e
+        expect(await getInlineVar(page, '--brand-600')).toBe(lightB600);
     });
 
     test('unknown color format sets no palette variables', async ({ page }) => {
