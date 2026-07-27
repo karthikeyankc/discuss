@@ -476,9 +476,6 @@ export class DiscussWidget {
         cancelBtn.addEventListener('click', () => {
             body.innerHTML = originalHtml;
             actionsRow.style.display = '';
-            this.container.querySelectorAll(`.discuss-edit-btn[data-id="${id}"]`).forEach(btn => {
-                btn.addEventListener('click', () => this._startInlineEdit(id));
-            });
         });
     }
 

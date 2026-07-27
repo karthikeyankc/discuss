@@ -451,4 +451,58 @@ test.describe('editing', () => {
 
         await expect.poll(() => dialogMessage, { timeout: 3000 }).toBe('Edit window expired');
     });
+
+    test('action buttons are hidden while edit form is open and restored on cancel', async ({ page }) => {
+        await page.goto(BASE);
+        await setupEditMocks(page);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Original content.');
+        await page.getByRole('button', { name: /post/i }).click();
+
+        const collapseTarget = page.locator(`#discuss-collapse-target-${POSTED_ID}`);
+        const replyBtn = collapseTarget.getByRole('button', { name: /reply/i });
+
+        // Open edit — Reply/Share/Edit buttons should be hidden
+        await page.locator('.discuss-edit-btn').click();
+        await expect(replyBtn).toBeHidden({ timeout: 3000 });
+
+        // Cancel — buttons should come back, no textarea left in body
+        await collapseTarget.getByRole('button', { name: 'Cancel' }).click();
+        await expect(replyBtn).toBeVisible({ timeout: 3000 });
+        await expect(collapseTarget.locator('.discuss-comment-body textarea')).toHaveCount(0);
+    });
+
+    test('cancelling edit multiple times does not accumulate listeners or corrupt content', async ({ page }) => {
+        await page.goto(BASE);
+        await setupEditMocks(page);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Original content.');
+        await page.getByRole('button', { name: /post/i }).click();
+
+        const collapseTarget = page.locator(`#discuss-collapse-target-${POSTED_ID}`);
+        const editArea = collapseTarget.locator('.discuss-comment-body textarea');
+
+        // First edit cycle: open, cancel
+        await page.locator('.discuss-edit-btn').click();
+        await expect(editArea).toBeVisible({ timeout: 3000 });
+        await collapseTarget.getByRole('button', { name: 'Cancel' }).click();
+        await expect(editArea).toHaveCount(0);
+        await expect(page.locator('.discuss-comment-body').first()).toContainText('Original content.');
+
+        // Second edit cycle: open, verify raw content is correct and only one textarea exists
+        await page.locator('.discuss-edit-btn').click();
+        await expect(editArea).toHaveCount(1);
+        await expect(editArea).toHaveValue('Original content.');
+
+        // Cancel again — content still intact
+        await collapseTarget.getByRole('button', { name: 'Cancel' }).click();
+        await expect(editArea).toHaveCount(0);
+        await expect(page.locator('.discuss-comment-body').first()).toContainText('Original content.');
+    });
 });
