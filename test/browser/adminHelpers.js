@@ -83,7 +83,7 @@ export async function mockAdminApi(page, opts = {}) {
 
     // Version + GitHub update check — silence both to keep tests deterministic
     await page.route('**/api/version', route =>
-        route.fulfill({ json: { version: '0.5.7' } })
+        route.fulfill({ json: { version: '0.5.8' } })
     );
     await page.route('**/api.github.com/**', route =>
         route.fulfill({ json: { tag_name: 'v0.5.6' } })

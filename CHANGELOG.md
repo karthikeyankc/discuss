@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.8] - 2026-07-27
+
+### Added
+- **Comment editing**: authors can edit their own comments within 15 minutes of posting. Edits are inline with no page reload. The server issues a stateless HMAC-SHA256 edit token on POST; the token is held in memory on the widget instance and cleared on page reload.
+- **`X-App-Version` response header**: the server now sets `X-App-Version` on every response for easier version introspection.
+
+### Fixed
+- **CORS for PATCH requests**: `X-Edit-Token` was missing from `Access-Control-Allow-Headers`, which caused the preflight check to fail for cross-origin edit requests.
+
+---
+
 ## [0.5.7] - 2026-07-06
 
 ### Fixed

@@ -116,7 +116,7 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
       padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
+      border-radius: 8px;
       margin-bottom: 1rem;
     }
 
@@ -134,8 +134,11 @@
       font-size: 1rem;
       color: var(--text-2);
       line-height: 1.65;
-      margin: 0;
+      margin: 0.25rem 0 0;
     }
+
+    .hero-docs-link { color: var(--accent); text-decoration: none; font-size: 0.875rem; display: inline-block; margin-top: 0.875rem; }
+    .hero-docs-link:hover { text-decoration: underline; }
 
     .posts {
       max-width: 680px;
@@ -235,9 +238,11 @@
 
   <div class="hero">
     <span class="hero-label">Live Demo</span>
-    <h1>Pick a thread. Join the discussion.</h1>
-    <p>These are real comment threads powered by Discuss. Leave a comment and see it appear instantly.</p>
-    <p style="margin-top:0.75rem;font-size:0.875rem;">No tracking. No subscriptions. Free self-hosted alternative to Disqus.</p>
+    <h1>Discuss. Open source, fully customizable, self-hosted comments.</h1>
+    <p>With moderation dashboard, anti-spam measures, multi-site support.</p>
+    <p>The best alternative to Disqus.</p>
+    <p style="margin-top:0.875rem;font-size:0.9375rem;">Pick a thread and try it out</p>
+    <a href="https://github.com/karthikeyankc/discuss#readme" class="hero-docs-link" target="_blank" rel="noopener">View docs on GitHub &rarr;</a>
   </div>
 
   <div class="posts">
