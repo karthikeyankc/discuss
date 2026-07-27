@@ -445,7 +445,7 @@ export class DiscussWidget {
         bottom.style.justifyContent = 'flex-end';
 
         const actionsDiv = document.createElement('div');
-        actionsDiv.className = 'discuss-form-actions';
+        actionsDiv.className = 'discuss-form-actions discuss-gap-2';
 
         const cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';
