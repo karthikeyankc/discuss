@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use('/api/comments', buildCommentsRouter(db));
 
 // Minimal in-process request helper — no network, no supertest needed
-function req(method, path, { body, origin = 'http://example.com', cookies = {} } = {}) {
+function req(method, path, { body, origin = 'http://example.com', cookies = {}, headers = {} } = {}) {
     return new Promise((resolve) => {
         const res = {
             statusCode: 200,
@@ -51,7 +51,7 @@ function req(method, path, { body, origin = 'http://example.com', cookies = {} }
             method,
             url: path,
             path: pathname,
-            headers: { 'content-type': 'application/json', origin },
+            headers: { 'content-type': 'application/json', origin, ...headers },
             cookies,
             body: body || {},
             query: search ? Object.fromEntries(new URLSearchParams(search)) : {},
@@ -433,4 +433,138 @@ test('POST dispatches reply-to-admin notification when parent is_author=1', asyn
     assert.match(sentNotifications[0].subject, /New reply/);
 
     db.prepare('UPDATE domains SET notify_on_reply = 0, smtp_host = NULL, smtp_user = NULL, smtp_pass = NULL, notify_email = NULL WHERE id = ?').run(domainId);
+});
+
+// --- POST returns editToken ---
+
+test('POST returns an editToken alongside the comment id', async () => {
+    const res = await req('POST', '/api/comments', { body: validPost });
+    assert.equal(res.statusCode, 201);
+    assert.ok(typeof res._body.id === 'number');
+    assert.ok(typeof res._body.editToken === 'string');
+    assert.match(res._body.editToken, /^[0-9a-f]{64}$/);
+});
+
+test('GET returns content_raw and edited_at fields', async () => {
+    const post = await req('POST', '/api/comments', {
+        body: { ...validPost, post_url: '/fields-test' },
+    });
+    assert.equal(post.statusCode, 201);
+
+    const get = await req('GET', '/api/comments?post_url=/fields-test');
+    assert.equal(get.statusCode, 200);
+    assert.equal(get._body.length, 1);
+    assert.ok('content_raw' in get._body[0]);
+    assert.ok('edited_at' in get._body[0]);
+    assert.equal(get._body[0].edited_at, null);
+});
+
+// --- PATCH ---
+
+test('PATCH updates comment content with a valid edit token', async () => {
+    const post = await req('POST', '/api/comments', {
+        body: { ...validPost, post_url: '/patch-valid' },
+    });
+    const { id, editToken } = post._body;
+
+    const patch = await req('PATCH', `/api/comments/${id}`, {
+        body: { content: 'fixed typo here' },
+        headers: { 'x-edit-token': editToken },
+    });
+    assert.equal(patch.statusCode, 200);
+    assert.equal(patch._body.id, id);
+    assert.ok(typeof patch._body.edited_at === 'number');
+
+    const row = db.prepare('SELECT content_raw, edited_at FROM comments WHERE id = ?').get(id);
+    assert.equal(row.content_raw, 'fixed typo here');
+    assert.ok(row.edited_at > 0);
+});
+
+test('PATCH returns 403 when no edit token is provided', async () => {
+    const post = await req('POST', '/api/comments', {
+        body: { ...validPost, post_url: '/patch-no-token' },
+    });
+    const { id } = post._body;
+
+    const patch = await req('PATCH', `/api/comments/${id}`, {
+        body: { content: 'sneaky edit' },
+    });
+    assert.equal(patch.statusCode, 403);
+    assert.match(patch._body.error, /token/i);
+});
+
+test('PATCH returns 403 with an incorrect edit token', async () => {
+    const post = await req('POST', '/api/comments', {
+        body: { ...validPost, post_url: '/patch-bad-token' },
+    });
+    const { id } = post._body;
+
+    const badToken = crypto.createHmac('sha256', 'wrong-secret').update(`${id}:0`).digest('hex');
+    const patch = await req('PATCH', `/api/comments/${id}`, {
+        body: { content: 'bad actor edit' },
+        headers: { 'x-edit-token': badToken },
+    });
+    assert.equal(patch.statusCode, 403);
+    assert.match(patch._body.error, /[Ii]nvalid/);
+});
+
+test('PATCH returns 403 when the edit window has expired', async () => {
+    const post = await req('POST', '/api/comments', {
+        body: { ...validPost, post_url: '/patch-expired' },
+    });
+    const { id, editToken } = post._body;
+
+    // Back-date created_at by 16 minutes so the server sees an expired window
+    const expiredCreatedAt = Date.now() - 16 * 60 * 1000;
+    db.prepare('UPDATE comments SET created_at = ? WHERE id = ?').run(expiredCreatedAt, id);
+
+    // Recompute the expected token with the backdated timestamp so we test the window check,
+    // not the token check
+    const validTokenForExpired = crypto
+        .createHmac('sha256', 'test-secret-for-comment-tests')
+        .update(`${id}:${expiredCreatedAt}`)
+        .digest('hex');
+
+    const patch = await req('PATCH', `/api/comments/${id}`, {
+        body: { content: 'too late edit' },
+        headers: { 'x-edit-token': validTokenForExpired },
+    });
+    assert.equal(patch.statusCode, 403);
+    assert.match(patch._body.error, /[Ee]xpired/);
+});
+
+test('PATCH returns 400 when content is empty', async () => {
+    const post = await req('POST', '/api/comments', {
+        body: { ...validPost, post_url: '/patch-empty-content' },
+    });
+    const { id, editToken } = post._body;
+
+    const patch = await req('PATCH', `/api/comments/${id}`, {
+        body: { content: '   ' },
+        headers: { 'x-edit-token': editToken },
+    });
+    assert.equal(patch.statusCode, 400);
+});
+
+test('PATCH returns 404 for a nonexistent comment', async () => {
+    const fakeToken = crypto.createHmac('sha256', 'test-secret-for-comment-tests').update('9999999:0').digest('hex');
+    const patch = await req('PATCH', '/api/comments/9999999', {
+        body: { content: 'ghost edit' },
+        headers: { 'x-edit-token': fakeToken },
+    });
+    assert.equal(patch.statusCode, 404);
+});
+
+test('PATCH returns 404 for a soft-deleted comment', async () => {
+    const post = await req('POST', '/api/comments', {
+        body: { ...validPost, post_url: '/patch-deleted' },
+    });
+    const { id, editToken } = post._body;
+    db.prepare('UPDATE comments SET is_deleted = 1 WHERE id = ?').run(id);
+
+    const patch = await req('PATCH', `/api/comments/${id}`, {
+        body: { content: 'edit deleted comment' },
+        headers: { 'x-edit-token': editToken },
+    });
+    assert.equal(patch.statusCode, 404);
 });

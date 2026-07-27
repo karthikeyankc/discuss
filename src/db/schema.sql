@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS comments (
     is_pinned INTEGER DEFAULT 0,
     is_approved INTEGER DEFAULT 1,
     is_author INTEGER DEFAULT 0,
+    edited_at INTEGER,
     domain_id INTEGER NOT NULL,
     FOREIGN KEY(domain_id) REFERENCES domains(id) ON DELETE CASCADE
 );

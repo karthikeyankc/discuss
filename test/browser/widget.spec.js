@@ -281,3 +281,174 @@ test.describe('form submission', () => {
         await expect.poll(() => dialogMessage, { timeout: 3000 }).toBe('Comment too short.');
     });
 });
+
+// ------------------------------------------------------------------
+// Comment editing
+// ------------------------------------------------------------------
+
+test.describe('editing', () => {
+    const EDIT_TOKEN = 'a'.repeat(64);
+    const POSTED_ID = 42;
+
+    async function setupEditMocks(page, { patchStatus = 200, patchBody = null } = {}) {
+        await page.route('**/api/comments/config*', route =>
+            route.fulfill({ json: { primary_color: null, honeypot_question: null } })
+        );
+
+        let submitted = false;
+        let wasEdited = false;
+
+        // GET and POST on the collection URL — **/api/comments* matches /api/comments and /api/comments?...
+        // but NOT /api/comments/42 (Playwright's * doesn't cross path separators).
+        await page.route('**/api/comments*', route => {
+            const method = route.request().method();
+            if (method === 'POST') {
+                submitted = true;
+                return route.fulfill({ json: { id: POSTED_ID, editToken: EDIT_TOKEN } });
+            }
+            if (method === 'GET') {
+                return route.fulfill({
+                    json: submitted ? [{
+                        id: POSTED_ID,
+                        name: 'Tester',
+                        content: wasEdited ? '<p>Fixed typo here.</p>' : '<p>Original content.</p>',
+                        content_raw: wasEdited ? 'Fixed typo here.' : 'Original content.',
+                        created_at: Date.now(),
+                        edited_at: wasEdited ? Date.now() : null,
+                        parent_id: 0,
+                        fav_count: 0, reply_count: 0, is_pinned: 0, is_author: 0, avatar: '',
+                    }] : [],
+                });
+            }
+            route.fallback();
+        });
+
+        // PATCH on the item URL — needs a separate pattern because * doesn't cross /
+        await page.route(`**/api/comments/${POSTED_ID}*`, route => {
+            if (route.request().method() === 'PATCH') {
+                if (patchStatus === 200) wasEdited = true;
+                const body = patchBody ?? { id: POSTED_ID, edited_at: Date.now() };
+                return route.fulfill({ status: patchStatus, json: body });
+            }
+            route.fallback();
+        });
+    }
+
+    test('edit button appears after submitting a comment', async ({ page }) => {
+        await page.goto(BASE);
+        await setupEditMocks(page);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Original content.');
+        await page.getByRole('button', { name: /post/i }).click();
+
+        await expect(page.locator('.discuss-edit-btn')).toBeVisible({ timeout: 3000 });
+    });
+
+    test('clicking edit shows an inline textarea with the raw content', async ({ page }) => {
+        await page.goto(BASE);
+        await setupEditMocks(page);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Original content.');
+        await page.getByRole('button', { name: /post/i }).click();
+
+        await page.locator('.discuss-edit-btn').click();
+
+        // Edit textarea lives inside .discuss-comment-body (not the reply form)
+        const editArea = page.locator(`#discuss-collapse-target-${POSTED_ID} .discuss-comment-body textarea`);
+        await expect(editArea).toBeVisible({ timeout: 3000 });
+        await expect(editArea).toHaveValue('Original content.');
+    });
+
+    test('saving an edit re-renders the widget', async ({ page }) => {
+        await page.goto(BASE);
+        await setupEditMocks(page);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Original content.');
+        await page.getByRole('button', { name: /post/i }).click();
+        await page.locator('.discuss-edit-btn').click();
+
+        const editArea = page.locator(`#discuss-collapse-target-${POSTED_ID} .discuss-comment-body textarea`);
+        await editArea.fill('Fixed typo here.');
+        await page.locator(`#discuss-collapse-target-${POSTED_ID}`).getByRole('button', { name: 'Save' }).click();
+
+        await expect(page.getByText('Fixed typo here.')).toBeVisible({ timeout: 3000 });
+    });
+
+    test('cancelling edit restores original content', async ({ page }) => {
+        await page.goto(BASE);
+        await setupEditMocks(page);
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Original content.');
+        await page.getByRole('button', { name: /post/i }).click();
+        await page.locator('.discuss-edit-btn').click();
+
+        const editArea = page.locator(`#discuss-collapse-target-${POSTED_ID} .discuss-comment-body textarea`);
+        await editArea.fill('Discard this.');
+        await page.locator(`#discuss-collapse-target-${POSTED_ID}`).getByRole('button', { name: 'Cancel' }).click();
+
+        await expect(page.locator('.discuss-comment-body').first()).toContainText('Original content.');
+        await expect(page.locator(`#discuss-collapse-target-${POSTED_ID} .discuss-comment-body textarea`)).toHaveCount(0);
+    });
+
+    test('(edited) label appears on a comment that has edited_at set', async ({ page }) => {
+        await page.route('**/api/comments/config*', route =>
+            route.fulfill({ json: { primary_color: null, honeypot_question: null } })
+        );
+        await page.route('**/api/comments*', route => {
+            if (route.request().method() === 'GET')
+                return route.fulfill({
+                    json: [{
+                        id: 7,
+                        name: 'Edited User',
+                        content: '<p>Corrected comment.</p>',
+                        content_raw: 'Corrected comment.',
+                        created_at: Date.now(),
+                        edited_at: Date.now(),
+                        parent_id: 0,
+                        fav_count: 0, reply_count: 0, is_pinned: 0, is_author: 0, avatar: '',
+                    }],
+                });
+            route.fulfill({ json: { id: 7 } });
+        });
+        await page.goto(BASE);
+        await initWidget(page);
+        await page.waitForSelector('.discuss-comment-body');
+
+        await expect(page.getByText('(edited)')).toBeVisible();
+    });
+
+    test('failed PATCH shows an error dialog', async ({ page }) => {
+        await page.goto(BASE);
+        await setupEditMocks(page, { patchStatus: 403, patchBody: { error: 'Edit window expired' } }); // patchBody overrides default null
+        await initWidget(page);
+        await page.waitForSelector('#discuss-comments form');
+
+        await page.getByPlaceholder('Name').fill('Tester');
+        await page.getByRole('textbox', { name: /thoughts/i }).fill('Original content.');
+        await page.getByRole('button', { name: /post/i }).click();
+        await page.locator('.discuss-edit-btn').click();
+
+        let dialogMessage = null;
+        page.on('dialog', async dialog => {
+            dialogMessage = dialog.message();
+            await dialog.dismiss();
+        });
+
+        await page.locator(`#discuss-collapse-target-${POSTED_ID} .discuss-comment-body textarea`).fill('Too late edit.');
+        await page.locator(`#discuss-collapse-target-${POSTED_ID}`).getByRole('button', { name: 'Save' }).click();
+
+        await expect.poll(() => dialogMessage, { timeout: 3000 }).toBe('Edit window expired');
+    });
+});
