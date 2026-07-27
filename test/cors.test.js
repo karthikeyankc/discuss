@@ -129,6 +129,12 @@ test('sets Allow-Credentials even for unrecognised origins', async () => {
     assert.equal(res._headers['access-control-allow-credentials'], 'true');
 });
 
+test('Access-Control-Allow-Headers includes X-Edit-Token', async () => {
+    const res = await req('https://example.com');
+    assert.ok(res._headers['access-control-allow-headers']);
+    assert.match(res._headers['access-control-allow-headers'], /X-Edit-Token/i);
+});
+
 // --- Edge cases ---
 
 test('handles a malformed origin URL without crashing', async () => {

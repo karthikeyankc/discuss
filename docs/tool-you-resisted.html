@@ -92,7 +92,11 @@
     footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: var(--text-4); border-top: 1px solid var(--border); margin-top: 4rem; display: flex; flex-direction: column; gap: 0.5rem; }
     footer a { color: var(--text-3); text-decoration: none; }
     footer a:hover { color: var(--accent); }
-    .widget-note { font-size: 0.8rem; color: var(--text-4); font-style: italic; margin-top: 1.5rem; }
+    .widget-note { margin-top: 1.5rem; padding: 0.75rem 1rem; border: 1px solid #0969da; border-radius: 6px; background: #ddf4ff; font-size: 0.8rem; color: var(--text-2); }
+    .widget-note-title { font-weight: 600; color: #0969da; margin: 0 0 0.25rem; display: flex; align-items: center; gap: 0.375rem; }
+    .widget-note p { margin: 0; }
+    html.dark .widget-note { border-color: #388bfd; background: rgba(56, 139, 253, 0.1); }
+    html.dark .widget-note-title { color: #58a6ff; }
   </style>
 </head>
 <body>
@@ -118,7 +122,13 @@
       <p>We all have one. The tool you dismissed, avoided, maybe even argued against — until one day you actually used it properly and couldn't imagine going back.</p>
       <p>For a lot of people it's TypeScript. You thought it was just JavaScript with extra steps. Then a refactor caught a bug at compile time that would have taken hours to trace in production, and something clicked. For others it's Vim, or Docker, or Git itself back in the day.</p>
       <p>What was yours? How long did you resist, and what finally made you give it a real shot?</p>
-      <p class="widget-note">Widget: <code>primaryColor: '#16a34a'</code> (custom green, overrides the server colour).</p>
+      <div class="widget-note">
+        <p class="widget-note-title">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+          Note
+        </p>
+        <p>Widget: <code>primaryColor: '#16a34a'</code> (custom green, overrides the server colour).</p>
+      </div>
     </div>
 
     <div id="discuss-comments" data-is-admin="true"></div>

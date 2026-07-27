@@ -3,8 +3,8 @@
   <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
   <p>
     <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
-    <img src="https://img.shields.io/badge/unit_tests-167%20passing-brightgreen" alt="Unit Tests">
-    <img src="https://img.shields.io/badge/browser_tests-73%20passing-brightgreen" alt="Browser Tests">
+    <img src="https://img.shields.io/badge/unit_tests-177%20passing-brightgreen" alt="Unit Tests">
+    <img src="https://img.shields.io/badge/browser_tests-82%20passing-brightgreen" alt="Browser Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
     <img src="https://img.shields.io/github/v/tag/karthikeyankc/discuss?label=version" alt="Version">
@@ -27,6 +27,7 @@
   - [Programmatic options](#programmatic-options)
   - [Cross-origin setup](#cross-origin-setup)
   - [Local development](#local-development)
+  - [Comment editing](#comment-editing)
 - [Customisation](#customisation)
   - [CSS custom properties](#css-custom-properties)
   - [Colours, title, and icons](#colours-title-and-icons)
@@ -63,6 +64,7 @@
 | **Full customisation** | Every colour, border, and surface is a CSS variable. Swap the widget's icons with your own SVGs, or hide them. Override the form title. Skip `client.css` entirely and write your own styles from scratch. |
 | **Gravatar with initials fallback** | Shows a commenter's Gravatar if they have one. Falls back to a clean initial avatar if they don't. |
 | **Stable thread keys** | Widget reads `<link rel="canonical">` automatically, so threads survive URL changes on Ghost, Hugo, Jekyll, and WordPress with no config. Override manually with `data-url` when needed. |
+| **Comment editing** | Authors can edit their own comments within 15 minutes of posting. Edits are inline with no page reload required. The edit token is stateless: the server derives it from an HMAC-SHA256 of the comment ID and timestamp, so nothing extra is stored in the database. The token lives in memory only, so reloading the page clears it. |
 | **MIT licensed** | Free to use, self-host, and modify. |
 
 ---
@@ -188,6 +190,18 @@ To test comments on a local dev server, add it as an allowed origin:
 
 Origins are scoped to the domain they're added to, so an origin you add to `myblog.com` can't reach a different domain on the same Discuss instance.
 
+### Comment editing
+
+Authors can edit their own comments within 15 minutes of posting. An edit button appears next to the timestamp immediately after a comment is posted. Clicking it opens an inline edit form in place, reusing the same form styles as the create form.
+
+**How the token works**
+
+When a comment is created, the server returns a one-time edit token alongside the comment ID. The token is an HMAC-SHA256 of `"${id}:${created_at}"` signed with the server's `JWT_SECRET`. The server never stores it; it re-derives the expected token on each PATCH request and compares with `crypto.timingSafeEqual`. A token for comment 42 cannot authenticate a PATCH to comment 43 because the HMAC binds both the ID and the creation timestamp.
+
+The token is held in memory on the widget instance. It is not written to `localStorage` or any cookie, so it is gone after a page reload. This is intentional: the 15-minute window is meant for quick typo fixes right after posting, not for indefinite revision.
+
+The edit window is enforced server-side. If more than 15 minutes have elapsed since `created_at`, the PATCH returns `403` regardless of whether the token is valid.
+
 ---
 
 ## Customisation
@@ -263,7 +277,7 @@ new DiscussWidget({ darkSelector: '.dark' });
 new DiscussWidget({ darkSelector: '[data-theme="dark"]' });
 ```
 
-When that selector matches an ancestor of the widget, the full set of dark colour tokens kicks in automatically. The widget injects a scoped `<style>` tag at runtime, so it works with any selector your site uses — class, attribute, or otherwise.
+When that selector matches an ancestor of the widget, the full set of dark colour tokens kicks in automatically. The widget injects a scoped `<style>` tag at runtime, so it works with any selector your site uses: class, attribute, or otherwise.
 
 To override individual dark mode tokens on top of the defaults, target the same selector yourself in your stylesheet:
 
@@ -835,6 +849,12 @@ sudo systemctl restart discuss
 sudo systemctl status discuss
 ```
 
+### v0.5.8
+
+**New:** Comment editing. Authors can edit their own comments within 15 minutes of posting. The edit button appears right after posting and stays until the window expires. Edits are inline with no page reload. See [Comment editing](#comment-editing) for details on how the stateless token works.
+
+**Fix:** `X-Edit-Token` added to `Access-Control-Allow-Headers` so cross-origin PATCH requests pass the preflight check.
+
 ### v0.5.2
 
 **Fix:** `darkSelector` was silently ignored when using the default auto-init (dropping in the script tag with no manual `new DiscussWidget()` call). Set the selector via `data-dark-selector` on the container instead:
@@ -845,7 +865,7 @@ sudo systemctl status discuss
 
 ### v0.5.1
 
-**New:** `darkSelector` option. Pass any CSS selector to `new DiscussWidget({ darkSelector: '...' })` and the widget switches to its dark colour scheme when that selector matches an ancestor element. No default — the widget is always light unless you opt in. Works with any class-based or attribute-based dark mode toggle on your site.
+**New:** `darkSelector` option. Pass any CSS selector to `new DiscussWidget({ darkSelector: '...' })` and the widget switches to its dark colour scheme when that selector matches an ancestor element. No default. The widget is always light unless you opt in. Works with any class-based or attribute-based dark mode toggle on your site.
 
 ### v0.5.0
 

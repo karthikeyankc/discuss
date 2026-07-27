@@ -58,8 +58,8 @@ router.get('/', (req, res) => {
     // For now, we'll fetch approved comments for the post_url that are not deleted.
     try {
         const comments = db.prepare(`
-            SELECT id, name, avatar, content, created_at, parent_id, fav_count, reply_count, is_pinned, is_author 
-            FROM comments 
+            SELECT id, name, avatar, content, content_raw, created_at, edited_at, parent_id, fav_count, reply_count, is_pinned, is_author
+            FROM comments
             WHERE post_url = ? AND is_approved = 1 AND is_deleted = 0
             ORDER BY is_pinned DESC, created_at ASC
         `).all(post_url);
@@ -159,10 +159,14 @@ router.post('/', (req, res) => {
             db.prepare('UPDATE comments SET reply_count = reply_count + 1 WHERE id = ?').run(pId);
         }
 
-        res.status(201).json({ message: 'Comment posted successfully', id: info.lastInsertRowid });
+        const newId = info.lastInsertRowid;
+        const editToken = crypto.createHmac('sha256', JWT_SECRET)
+            .update(`${newId}:${now}`)
+            .digest('hex');
+        res.status(201).json({ id: newId, editToken });
 
         // Fire notifications asynchronously — don't block the response
-        const newComment = { id: info.lastInsertRowid, name, content: cleanHtml, post_url, parent_id: pId };
+        const newComment = { id: newId, name, content: cleanHtml, post_url, parent_id: pId };
         const isReply = pId > 0;
 
         if (!isReply && domain.notify_on_comment) {
@@ -186,6 +190,42 @@ router.post('/', (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Failed to post comment' });
     }
+});
+
+const EDIT_WINDOW_MS = 15 * 60 * 1000;
+
+router.patch('/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const token = req.headers['x-edit-token'];
+    const { content } = req.body;
+
+    if (!token) return res.status(403).json({ error: 'Edit token required' });
+    if (!content || !content.trim()) return res.status(400).json({ error: 'Content is required' });
+
+    const comment = db.prepare('SELECT id, created_at, is_deleted FROM comments WHERE id = ?').get(id);
+    if (!comment || comment.is_deleted) return res.status(404).json({ error: 'Comment not found' });
+
+    const elapsed = Date.now() - comment.created_at;
+    if (elapsed > EDIT_WINDOW_MS) return res.status(403).json({ error: 'Edit window expired' });
+
+    const expected = crypto.createHmac('sha256', JWT_SECRET)
+        .update(`${id}:${comment.created_at}`)
+        .digest('hex');
+
+    let tokensMatch = false;
+    try {
+        tokensMatch = crypto.timingSafeEqual(Buffer.from(token, 'hex'), Buffer.from(expected, 'hex'));
+    } catch {
+        tokensMatch = false;
+    }
+    if (!tokensMatch) return res.status(403).json({ error: 'Invalid edit token' });
+
+    const cleanHtml = renderMarkdown(content.trim());
+    const now = Date.now();
+    db.prepare('UPDATE comments SET content = ?, content_raw = ?, edited_at = ?, updated_at = ? WHERE id = ?')
+        .run(cleanHtml, content.trim(), now, now, id);
+
+    res.json({ id, edited_at: now });
 });
 
 // Needs a route to get the honeypot question for the domain

@@ -151,6 +151,9 @@ export class DiscussWidget {
             submit: options.icons?.submit !== undefined ? options.icons.submit : ICONS.send,
         };
 
+        this.editTokens = new Map();
+        this._rawContent = new Map();
+
         this.init = this.init.bind(this);
         this.render = this.render.bind(this);
         this.renderComment = this.renderComment.bind(this);
@@ -255,6 +258,7 @@ export class DiscussWidget {
     }
 
     render(comments) {
+        comments.forEach(c => { if (c.content_raw) this._rawContent.set(c.id, c.content_raw); });
         const roots = this.buildTree(comments);
 
         this.container.innerHTML = `
@@ -338,6 +342,13 @@ export class DiscussWidget {
             el.addEventListener('click', collapseAction);
         });
 
+        this.container.querySelectorAll('.discuss-edit-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const id = parseInt(e.currentTarget.dataset.id, 10);
+                this._startInlineEdit(id);
+            });
+        });
+
         this.container.querySelectorAll('.discuss-share-btn').forEach(btn => {
             btn.addEventListener('click', async e => {
                 const shareBtn = e.currentTarget;
@@ -405,10 +416,106 @@ export class DiscussWidget {
     getAdminTooltip(c) { return ''; }
     getAdminControls(c) { return ''; }
 
+    // Edit Hooks
+    getEditButton(c) {
+        if (!this.editTokens.has(c.id)) return '';
+        return `<button class="discuss-action-btn discuss-edit-btn" data-id="${c.id}">${ICONS.edit} <span>Edit</span></button>`;
+    }
+
+    _startInlineEdit(id) {
+        const collapseTarget = document.getElementById(`discuss-collapse-target-${id}`);
+        if (!collapseTarget) return;
+        const body = collapseTarget.querySelector('.discuss-comment-body');
+        const actionsRow = collapseTarget.querySelector('.discuss-flex.discuss-gap-2');
+        if (!body || !actionsRow) return;
+
+        const originalHtml = body.innerHTML;
+        const raw = this._rawContent.get(id) || '';
+
+        // Reuse form CSS — same structure as renderForm(), content-only (no name/email)
+        const formDiv = document.createElement('div');
+        formDiv.className = 'discuss-form-container';
+
+        const textarea = document.createElement('textarea');
+        textarea.className = 'discuss-form-textarea';
+        textarea.value = raw;
+
+        const bottom = document.createElement('div');
+        bottom.className = 'discuss-form-bottom';
+        bottom.style.justifyContent = 'flex-end';
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'discuss-form-actions discuss-gap-2';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'discuss-action-btn';
+        cancelBtn.textContent = 'Cancel';
+
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'discuss-btn discuss-btn-primary';
+        saveBtn.textContent = 'Save';
+
+        actionsDiv.appendChild(cancelBtn);
+        actionsDiv.appendChild(saveBtn);
+        bottom.appendChild(actionsDiv);
+        formDiv.appendChild(textarea);
+        formDiv.appendChild(bottom);
+
+        body.innerHTML = '';
+        body.appendChild(formDiv);
+        actionsRow.style.display = 'none';
+
+        textarea.focus();
+        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+
+        saveBtn.addEventListener('click', () => {
+            this._saveEdit(id, textarea.value, saveBtn, body, actionsRow, originalHtml);
+        });
+        cancelBtn.addEventListener('click', () => {
+            body.innerHTML = originalHtml;
+            actionsRow.style.display = '';
+        });
+    }
+
+    async _saveEdit(id, content, saveBtn, body, actionsRow, originalHtml) {
+        const token = this.editTokens.get(id);
+        if (!token || !content.trim()) return;
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving…';
+
+        try {
+            const res = await fetch(`${this.serverUrl}/api/comments/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'X-Edit-Token': token },
+                credentials: 'include',
+                body: JSON.stringify({ content: content.trim() })
+            });
+
+            if (res.ok) {
+                this._rawContent.set(id, content.trim());
+                this.init();
+            } else {
+                const err = await res.json();
+                alert(err.error || 'Failed to save edit.');
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save';
+            }
+        } catch (err) {
+            console.error('[Discuss]', err);
+            alert('Network error. Please try again.');
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save';
+        }
+    }
+
     renderComment(c, depth, replyToName, replyToId) {
         depth = depth || 0;
         const pinBadge = c.is_pinned ? `<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>` : '';
         const authorBadge = c.is_author ? `<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>` : '';
+        const editedBadge = c.edited_at ? `<span style="font-size:0.8125rem;color:var(--text-muted)">(edited)</span>` : '';
         const dateStr = new Date(c.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 
         const adminBadges = this.getAdminBadges(c);
@@ -465,7 +572,7 @@ export class DiscussWidget {
                 <div class="discuss-comment-content" style="min-width:0">
                     <div style="display:flex;align-items:center;gap:0.375rem;flex-wrap:wrap;margin-bottom:0.375rem">
                         <span style="font-weight:600;font-size:0.875rem;color:var(--text-primary)">${c.name}</span>
-                        ${authorBadge}${pinBadge}${adminBadges}${adminTooltip}
+                        ${authorBadge}${pinBadge}${editedBadge}${adminBadges}${adminTooltip}
                         <span style="color:var(--text-subtle);font-size:0.75rem">·</span>
                         <span style="font-size:0.8125rem;color:var(--text-muted)">${dateStr}</span>
                         ${chevron}
@@ -480,6 +587,7 @@ export class DiscussWidget {
                             <button class="discuss-action-btn discuss-share-btn" data-id="${c.id}">
                                 ${ICONS.share} <span>Share</span>
                             </button>
+                            ${this.getEditButton(c)}
                             ${adminControls}
                         </div>
 
@@ -560,6 +668,8 @@ export class DiscussWidget {
             });
 
             if (res.ok) {
+                const data = await res.json();
+                if (data.editToken) this.editTokens.set(data.id, data.editToken);
                 form.reset();
                 if (parseInt(parentId, 10) !== 0) {
                     const wrapper = document.getElementById(`discuss-reply-form-${parentId}`);
