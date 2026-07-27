@@ -31,6 +31,7 @@ app.use((req, res, next) => {
     res.setHeader('Content-Security-Policy',
         "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.gravatar.com data:; font-src 'self'; connect-src 'self' https://api.github.com; frame-ancestors 'none'"
     );
+    res.setHeader('X-App-Version', APP_VERSION);
     res.removeHeader('X-Powered-By');
     next();
 });

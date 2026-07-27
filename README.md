@@ -3,8 +3,8 @@
   <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
   <p>
     <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
-    <img src="https://img.shields.io/badge/unit_tests-167%20passing-brightgreen" alt="Unit Tests">
-    <img src="https://img.shields.io/badge/browser_tests-73%20passing-brightgreen" alt="Browser Tests">
+    <img src="https://img.shields.io/badge/unit_tests-177%20passing-brightgreen" alt="Unit Tests">
+    <img src="https://img.shields.io/badge/browser_tests-80%20passing-brightgreen" alt="Browser Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
     <img src="https://img.shields.io/github/v/tag/karthikeyankc/discuss?label=version" alt="Version">
