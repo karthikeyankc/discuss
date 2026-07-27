@@ -430,52 +430,64 @@ export class DiscussWidget {
         if (!body || !actionsRow) return;
 
         const originalHtml = body.innerHTML;
-        const originalActionsHtml = actionsRow.innerHTML;
         const raw = this._rawContent.get(id) || '';
+
+        // Reuse form CSS — same structure as renderForm(), content-only (no name/email)
+        const formDiv = document.createElement('div');
+        formDiv.className = 'discuss-form-container';
 
         const textarea = document.createElement('textarea');
         textarea.className = 'discuss-form-textarea';
-        textarea.style.marginBottom = '0.5rem';
         textarea.value = raw;
 
-        body.innerHTML = '';
-        body.appendChild(textarea);
+        const bottom = document.createElement('div');
+        bottom.className = 'discuss-form-bottom';
+        bottom.style.justifyContent = 'flex-end';
 
-        const saveBtn = document.createElement('button');
-        saveBtn.className = 'discuss-btn discuss-btn-primary';
-        saveBtn.style.cssText = 'font-size:0.8125rem;padding:0.25rem 0.75rem;margin-right:0.5rem';
-        saveBtn.textContent = 'Save';
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'discuss-form-actions';
 
         const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
         cancelBtn.className = 'discuss-action-btn';
-        cancelBtn.style.cssText = 'font-size:0.8125rem';
         cancelBtn.textContent = 'Cancel';
 
-        actionsRow.innerHTML = '';
-        actionsRow.appendChild(saveBtn);
-        actionsRow.appendChild(cancelBtn);
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'discuss-btn discuss-btn-primary';
+        saveBtn.textContent = 'Save';
+
+        actionsDiv.appendChild(cancelBtn);
+        actionsDiv.appendChild(saveBtn);
+        bottom.appendChild(actionsDiv);
+        formDiv.appendChild(textarea);
+        formDiv.appendChild(bottom);
+
+        body.innerHTML = '';
+        body.appendChild(formDiv);
+        actionsRow.style.display = 'none';
 
         textarea.focus();
         textarea.setSelectionRange(textarea.value.length, textarea.value.length);
 
         saveBtn.addEventListener('click', () => {
-            this._saveEdit(id, textarea.value, actionsRow, originalHtml, originalActionsHtml);
+            this._saveEdit(id, textarea.value, saveBtn, body, actionsRow, originalHtml);
         });
         cancelBtn.addEventListener('click', () => {
             body.innerHTML = originalHtml;
-            actionsRow.innerHTML = originalActionsHtml;
+            actionsRow.style.display = '';
             this.container.querySelectorAll(`.discuss-edit-btn[data-id="${id}"]`).forEach(btn => {
                 btn.addEventListener('click', () => this._startInlineEdit(id));
             });
         });
     }
 
-    async _saveEdit(id, content, actionsRow, originalHtml, originalActionsHtml) {
+    async _saveEdit(id, content, saveBtn, body, actionsRow, originalHtml) {
         const token = this.editTokens.get(id);
         if (!token || !content.trim()) return;
 
-        const saveBtn = actionsRow.querySelector('button');
-        if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Saving…'; }
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving…';
 
         try {
             const res = await fetch(`${this.serverUrl}/api/comments/${id}`, {
@@ -491,12 +503,14 @@ export class DiscussWidget {
             } else {
                 const err = await res.json();
                 alert(err.error || 'Failed to save edit.');
-                if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save';
             }
         } catch (err) {
             console.error('[Discuss]', err);
             alert('Network error. Please try again.');
-            if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save';
         }
     }
 

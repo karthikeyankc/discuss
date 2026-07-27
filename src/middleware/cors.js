@@ -32,7 +32,7 @@ export function buildCorsMiddleware(db) {
         }
 
         res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, DELETE, PATCH, PUT');
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Edit-Token');
         res.header('Access-Control-Allow-Credentials', 'true');
 
         if (req.method === 'OPTIONS') {
