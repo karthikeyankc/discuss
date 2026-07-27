@@ -518,7 +518,7 @@ export class DiscussWidget {
         depth = depth || 0;
         const pinBadge = c.is_pinned ? `<span class="discuss-badge discuss-badge-info" style="margin-left:0.375rem">Pinned</span>` : '';
         const authorBadge = c.is_author ? `<span class="discuss-badge discuss-badge-success" style="margin-left:0.375rem">Author</span>` : '';
-        const editedBadge = c.edited_at ? `<span style="margin-left:0.375rem;font-size:0.6875rem;color:var(--text-subtle);font-style:italic">(edited)</span>` : '';
+        const editedBadge = c.edited_at ? `<span style="font-size:0.8125rem;color:var(--text-muted)">(edited)</span>` : '';
         const dateStr = new Date(c.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 
         const adminBadges = this.getAdminBadges(c);
