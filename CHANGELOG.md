@@ -19,6 +19,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Writes stuck in the `-wal` file**: discuss never closed its database, so SQLite only folded the `-wal` file into `discuss.db` once it grew past about 4 MB, which a quiet site never reaches. `discuss.db` on its own could be months behind. discuss now folds the `-wal` file in when it starts, and closes the database on SIGTERM and SIGINT.
 - **Backup instructions**: README.md and docs/upgrading.md said to back up with `cp discuss.db`, which misses whatever sits in the `-wal` file. They now stop discuss before copying, or use `sqlite3 discuss.db ".backup ..."`, which works while it runs.
 
+### Security
+- **Integrity hashes in package-lock.json**: 148 runtime packages had no `integrity` hash, so `npm ci` installed them without checking their checksums. The hashes and tarball URLs are back, taken from the npm registry for the same versions.
+
 ---
 
 ## [0.5.8] - 2026-07-27
