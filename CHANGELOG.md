@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+- **`DB_PATH` environment variable**: sets where the SQLite database lives, so it can sit outside the code folder. It defaults to `discuss.db` in the project root as before, so existing installs need no change.
+
+---
+
 ## [0.5.8] - 2026-07-27
 
 ### Added

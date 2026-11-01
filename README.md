@@ -644,6 +644,7 @@ All configuration is done via environment variables. Copy `.env.example` to `.en
 | `ENCRYPTION_KEY` | *(none)* | Recommended | 32-byte hex key for encrypting SMTP credentials at rest (AES-256-GCM). Generate the same way as `JWT_SECRET`. If not set, credentials are stored as plaintext. |
 | `PORT` | `3000` | No | Port the server listens on. |
 | `HOST` | `127.0.0.1` | No | Interface the server binds to. The default is localhost-only, which is correct behind a reverse proxy. Don't set to `0.0.0.0` unless you have a specific reason to expose the port directly. |
+| `DB_PATH` | `discuss.db` in the project root | No | Path to the SQLite database. Set it to keep the database outside the code folder, for example when a deploy replaces that folder. SQLite writes its `-wal` and `-shm` files next to the database, so its folder must be writable by the server. |
 | `APP_URL` | *(none)* | No | Public URL of your Discuss instance, e.g. `https://discuss.example.com`. Used to generate dashboard links and the logo in notification emails. |
 | `NODE_ENV` | `development` | No | Set to `production` for production deployments. |
 
