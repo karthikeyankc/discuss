@@ -1,5 +1,21 @@
 # Upgrading
 
+## Upgrading to v0.5.9
+
+v0.5.9 needs Node.js 22 or later, because Node 20 reached end of life on 30 April 2026.
+
+```bash
+node --version   # must be 22 or later
+```
+
+v0.5.8 and earlier leave recent writes in `discuss.db-wal`, so back up with `sqlite3 discuss.db ".backup discuss.db.bak"` before upgrading, as [Before you upgrade](#before-you-upgrade) describes. From v0.5.9, discuss folds the `-wal` file into `discuss.db` when it starts and when it stops, and its first start folds in everything waiting there.
+
+`DB_PATH` is new. It sets where the database lives, and unset it stays at `discuss.db` in the project root.
+
+No manual database changes are needed.
+
+---
+
 ## Upgrading to v0.5.0
 
 The big change in v0.5.0 is that CSS is no longer bundled inside `client.js`. It's now a separate `client.css` file. Update your embed snippet to include the stylesheet:
@@ -71,22 +87,26 @@ See the Apache configuration section in the README for the full example.
 
 ## Before you upgrade
 
-Always back up your database first:
+Always back up your database first. discuss runs SQLite in WAL mode, which keeps recent writes in `discuss.db-wal` until it folds them into `discuss.db`, so a copy of `discuss.db` alone can miss them. Stop discuss before copying it.
 
 ```bash
+sudo systemctl stop discuss
 cp discuss.db discuss.db.bak
 ```
+
+discuss folds the `-wal` file into `discuss.db` when it stops and when it starts. Versions up to v0.5.8 don't, so on those, or to back up without stopping discuss, use SQLite's own copy, which includes the `-wal` file.
+
+```bash
+sqlite3 discuss.db ".backup discuss.db.bak"
+```
+
+If you set `DB_PATH`, use that path in place of `discuss.db`.
 
 ## Upgrade steps
 
 ```bash
 git pull origin main
 npm install --production
-```
-
-If running under systemd:
-
-```bash
 sudo systemctl restart discuss
 sudo systemctl status discuss
 ```

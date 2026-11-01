@@ -12,7 +12,7 @@ Thanks for your interest in contributing. Here's everything you need to know.
 
 ### Prerequisites
 
-- Node.js ≥ 20.6.0
+- Node.js ≥ 22.0.0
 - npm
 
 ### Steps

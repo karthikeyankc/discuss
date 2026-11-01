@@ -3,7 +3,7 @@
   <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
   <p>
     <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
-    <img src="https://img.shields.io/badge/unit_tests-177%20passing-brightgreen" alt="Unit Tests">
+    <img src="https://img.shields.io/badge/unit_tests-179%20passing-brightgreen" alt="Unit Tests">
     <img src="https://img.shields.io/badge/browser_tests-82%20passing-brightgreen" alt="Browser Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
@@ -644,6 +644,7 @@ All configuration is done via environment variables. Copy `.env.example` to `.en
 | `ENCRYPTION_KEY` | *(none)* | Recommended | 32-byte hex key for encrypting SMTP credentials at rest (AES-256-GCM). Generate the same way as `JWT_SECRET`. If not set, credentials are stored as plaintext. |
 | `PORT` | `3000` | No | Port the server listens on. |
 | `HOST` | `127.0.0.1` | No | Interface the server binds to. The default is localhost-only, which is correct behind a reverse proxy. Don't set to `0.0.0.0` unless you have a specific reason to expose the port directly. |
+| `DB_PATH` | `discuss.db` in the project root | No | Path to the SQLite database. Set it to keep the database outside the code folder, for example when a deploy replaces that folder. SQLite writes its `-wal` and `-shm` files next to the database, so its folder must be writable by the server. |
 | `APP_URL` | *(none)* | No | Public URL of your Discuss instance, e.g. `https://discuss.example.com`. Used to generate dashboard links and the logo in notification emails. |
 | `NODE_ENV` | `development` | No | Set to `production` for production deployments. |
 
@@ -726,7 +727,7 @@ Use **Send test email** in the Notifications tab to verify your settings. The **
 
 ### Requirements
 
-- Node.js >= 20.6.0
+- Node.js >= 22.0.0
 - A Linux server
 - A reverse proxy (Nginx recommended)
 
@@ -832,22 +833,36 @@ Then add a VirtualHost. Replace `discuss.example.com` with your domain and fill 
 
 ## Upgrading
 
-Always back up your database before upgrading:
+Always back up your database before upgrading. discuss runs SQLite in WAL mode, which keeps recent writes in `discuss.db-wal` until it folds them into `discuss.db`, so copy the database while discuss is stopped.
 
 ```bash
+sudo systemctl stop discuss
 cp discuss.db discuss.db.bak
 git pull origin main
 npm install --production
+sudo systemctl start discuss
+sudo systemctl status discuss
 ```
 
 Schema migrations run automatically on startup. No manual SQL is needed.
 
-If running under systemd:
+discuss folds the `-wal` file into `discuss.db` when it stops and when it starts. Versions up to v0.5.8 don't, so on those, or to back up without stopping discuss, use SQLite's own copy, which includes the `-wal` file.
 
 ```bash
-sudo systemctl restart discuss
-sudo systemctl status discuss
+sqlite3 discuss.db ".backup discuss.db.bak"
 ```
+
+If you set `DB_PATH`, use that path in place of `discuss.db`.
+
+### v0.5.9
+
+**Breaking:** Node.js 22 or later is required. Node 20 reached end of life on 30 April 2026. Check with `node --version` before upgrading.
+
+**Fix:** discuss now folds its `-wal` file into `discuss.db` when it starts and when it stops. Earlier versions left recent writes in `discuss.db-wal`, so a copy of `discuss.db` alone could be months behind. Back up with `sqlite3` before this upgrade, as described above. The first start afterwards folds in everything waiting in the `-wal` file.
+
+**New:** `DB_PATH` sets where the database lives, so it can sit outside the code folder. Unset, it stays at `discuss.db` in the project root.
+
+**Security:** dependency updates clear 13 audit advisories, one of them critical. nodemailer moves to 10.x.
 
 ### v0.5.8
 

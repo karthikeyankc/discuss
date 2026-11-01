@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
 import { dynamicCors } from './middleware/cors.js';
 import { PORT, HOST } from './config.js';
+import db from './db/index.js';
 
 const require = createRequire(import.meta.url);
 const { version: APP_VERSION } = require('../package.json');
@@ -91,3 +92,12 @@ app.use(express.static(path.join(__dirname, '../public'), {
 app.listen(PORT, HOST, () => {
     console.log(`Discuss server running on http://${HOST}:${PORT}`);
 });
+
+// Close the database on shutdown, so SQLite folds the -wal file into the
+// database file and a copy of that file alone is complete.
+for (const signal of ['SIGTERM', 'SIGINT']) {
+    process.once(signal, () => {
+        db.close();
+        process.exit(0);
+    });
+}

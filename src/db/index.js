@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize database
-const dbPath = path.join(__dirname, '../../discuss.db');
+// Initialize database (DB_PATH overrides the default location in the project root)
+const dbPath = process.env.DB_PATH || path.join(__dirname, '../../discuss.db');
 const db = new Database(dbPath);
 
 // Enable WAL mode and foreign keys
@@ -55,5 +55,10 @@ try {
         `).run(firstDomain.id);
     }
 } catch {}
+
+// Fold the -wal file into the database file. That covers the migrations above,
+// and any writes a previous run left there by exiting without closing the
+// database.
+db.pragma('wal_checkpoint(TRUNCATE)');
 
 export default db;
