@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - **`DB_PATH` environment variable**: sets where the SQLite database lives, so it can sit outside the code folder. It defaults to `discuss.db` in the project root as before, so existing installs need no change.
 
+### Changed
+- **`allowScripts` in package.json**: approves the install scripts of `better-sqlite3` and `argon2`, which fetch or build their native binaries. npm 11 runs unreviewed install scripts with a warning for now, and its docs describe blocking them by default.
+
+### Removed
+- **`@karthikeyankc/ken-design-system` dependency**: its `file:../../ken-design-system` path only resolved on the author's machine, and only the CSS build uses it. CONTRIBUTING.md already describes linking it locally for design system work.
+
 ---
 
 ## [0.5.8] - 2026-07-27

@@ -41,7 +41,6 @@
   },
   "homepage": "https://github.com/KarthikeyanKC/discuss#readme",
   "dependencies": {
-    "@karthikeyankc/ken-design-system": "file:../../ken-design-system",
     "argon2": "^0.44.0",
     "better-sqlite3": "^12.9.0",
     "cookie-parser": "^1.4.7",
@@ -62,5 +61,9 @@
     "postcss": "^8.5.10",
     "postcss-prefix-selector": "^2.1.1",
     "tailwindcss": "^4.3.0"
+  },
+  "allowScripts": {
+    "better-sqlite3": true,
+    "argon2": true
   }
 }
