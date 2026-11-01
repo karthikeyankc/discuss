@@ -56,4 +56,9 @@ try {
     }
 } catch {}
 
+// Fold the -wal file into the database file. That covers the migrations above,
+// and any writes a previous run left there by exiting without closing the
+// database.
+db.pragma('wal_checkpoint(TRUNCATE)');
+
 export default db;

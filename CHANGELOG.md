@@ -15,6 +15,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Removed
 - **`@karthikeyankc/ken-design-system` dependency**: its `file:../../ken-design-system` path only resolved on the author's machine, and only the CSS build uses it. CONTRIBUTING.md already describes linking it locally for design system work.
 
+### Fixed
+- **Writes stuck in the `-wal` file**: discuss never closed its database, so SQLite only folded the `-wal` file into `discuss.db` once it grew past about 4 MB, which a quiet site never reaches. `discuss.db` on its own could be months behind. discuss now folds the `-wal` file in when it starts, and closes the database on SIGTERM and SIGINT.
+
 ---
 
 ## [0.5.8] - 2026-07-27
