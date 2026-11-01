@@ -71,22 +71,26 @@ See the Apache configuration section in the README for the full example.
 
 ## Before you upgrade
 
-Always back up your database first:
+Always back up your database first. discuss runs SQLite in WAL mode, which keeps recent writes in `discuss.db-wal` until it folds them into `discuss.db`, so a copy of `discuss.db` alone can miss them. Stop discuss before copying it.
 
 ```bash
+sudo systemctl stop discuss
 cp discuss.db discuss.db.bak
 ```
+
+discuss folds the `-wal` file into `discuss.db` when it stops and when it starts. Versions up to v0.5.8 don't, so on those, or to back up without stopping discuss, use SQLite's own copy, which includes the `-wal` file.
+
+```bash
+sqlite3 discuss.db ".backup discuss.db.bak"
+```
+
+If you set `DB_PATH`, use that path in place of `discuss.db`.
 
 ## Upgrade steps
 
 ```bash
 git pull origin main
 npm install --production
-```
-
-If running under systemd:
-
-```bash
 sudo systemctl restart discuss
 sudo systemctl status discuss
 ```
