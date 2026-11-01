@@ -1,5 +1,21 @@
 # Upgrading
 
+## Upgrading to v0.5.9
+
+v0.5.9 needs Node.js 22 or later, because Node 20 reached end of life on 30 April 2026.
+
+```bash
+node --version   # must be 22 or later
+```
+
+v0.5.8 and earlier leave recent writes in `discuss.db-wal`, so back up with `sqlite3 discuss.db ".backup discuss.db.bak"` before upgrading, as [Before you upgrade](#before-you-upgrade) describes. From v0.5.9, discuss folds the `-wal` file into `discuss.db` when it starts and when it stops, and its first start folds in everything waiting there.
+
+`DB_PATH` is new. It sets where the database lives, and unset it stays at `discuss.db` in the project root.
+
+No manual database changes are needed.
+
+---
+
 ## Upgrading to v0.5.0
 
 The big change in v0.5.0 is that CSS is no longer bundled inside `client.js`. It's now a separate `client.css` file. Update your embed snippet to include the stylesheet:

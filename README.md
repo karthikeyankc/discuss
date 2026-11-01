@@ -3,7 +3,7 @@
   <p>Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.</p>
   <p>
     <img src="https://img.shields.io/github/actions/workflow/status/karthikeyankc/discuss/ci.yml?branch=main&label=CI" alt="CI">
-    <img src="https://img.shields.io/badge/unit_tests-177%20passing-brightgreen" alt="Unit Tests">
+    <img src="https://img.shields.io/badge/unit_tests-179%20passing-brightgreen" alt="Unit Tests">
     <img src="https://img.shields.io/badge/browser_tests-82%20passing-brightgreen" alt="Browser Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/github/license/karthikeyankc/discuss" alt="License">
@@ -853,6 +853,16 @@ sqlite3 discuss.db ".backup discuss.db.bak"
 ```
 
 If you set `DB_PATH`, use that path in place of `discuss.db`.
+
+### v0.5.9
+
+**Breaking:** Node.js 22 or later is required. Node 20 reached end of life on 30 April 2026. Check with `node --version` before upgrading.
+
+**Fix:** discuss now folds its `-wal` file into `discuss.db` when it starts and when it stops. Earlier versions left recent writes in `discuss.db-wal`, so a copy of `discuss.db` alone could be months behind. Back up with `sqlite3` before this upgrade, as described above. The first start afterwards folds in everything waiting in the `-wal` file.
+
+**New:** `DB_PATH` sets where the database lives, so it can sit outside the code folder. Unset, it stays at `discuss.db` in the project root.
+
+**Security:** dependency updates clear 13 audit advisories, one of them critical. nodemailer moves to 10.x.
 
 ### v0.5.8
 
