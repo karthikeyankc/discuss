@@ -727,7 +727,7 @@ Use **Send test email** in the Notifications tab to verify your settings. The **
 
 ### Requirements
 
-- Node.js >= 20.6.0
+- Node.js >= 22.0.0
 - A Linux server
 - A reverse proxy (Nginx recommended)
 

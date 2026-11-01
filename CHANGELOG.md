@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - **`allowScripts` in package.json**: approves the install scripts of `better-sqlite3` and `argon2`, which fetch or build their native binaries. npm 11 runs unreviewed install scripts with a warning for now, and its docs describe blocking them by default.
+- **Node.js 22 or later**: Node 20 reached end of life on 30 April 2026. `engines` now asks for Node 22, the oldest line that still gets security fixes, and CI runs the unit tests on Node 22, 24, and 26 and everything else on 26.
 
 ### Removed
 - **`@karthikeyankc/ken-design-system` dependency**: its `file:../../ken-design-system` path only resolved on the author's machine, and only the CSS build uses it. CONTRIBUTING.md already describes linking it locally for design system work.
