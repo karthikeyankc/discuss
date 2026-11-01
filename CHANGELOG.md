@@ -18,9 +18,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 - **Writes stuck in the `-wal` file**: discuss never closed its database, so SQLite only folded the `-wal` file into `discuss.db` once it grew past about 4 MB, which a quiet site never reaches. `discuss.db` on its own could be months behind. discuss now folds the `-wal` file in when it starts, and closes the database on SIGTERM and SIGINT.
 - **Backup instructions**: README.md and docs/upgrading.md said to back up with `cp discuss.db`, which misses whatever sits in the `-wal` file. They now stop discuss before copying, or use `sqlite3 discuss.db ".backup ..."`, which works while it runs.
+- **Dependabot updates**: every weekly Dependabot run since at least August 2026 failed on the `file:` link to ken-design-system, so it proposed no dependency updates. With the link gone it can read package.json again.
 
 ### Security
 - **Integrity hashes in package-lock.json**: 148 runtime packages had no `integrity` hash, so `npm ci` installed them without checking their checksums. The hashes and tarball URLs are back, taken from the npm registry for the same versions.
+- **Dependency advisories**: `npm audit fix` and nodemailer 10.3.1 clear 13 of the 17 advisories `npm audit` reported, among them a critical one in `proxy-addr`, which Express uses for `trust proxy`, and high ones in `body-parser`, `markdown-it`, `ip-address`, `nanoid`, and `nodemailer`. nodemailer moves from 9.x to 10.x, whose only breaking change is requiring Node.js 20 or later. The 4 left are moderate, in `c8`'s dev-only `glob` and `minimatch`, and fixing them would downgrade `c8`.
 
 ---
 
